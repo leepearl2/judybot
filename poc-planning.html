@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>디지털 워크플레이스 PoC 기획 문서</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap');
+  :root {
+    --bg: #F5F2ED;
+    --white: #FFFFFF;
+    --dark: #333333;
+    --gray: #555555;
+    --blue: #2C5F7C;
+    --navy: #3D4F5F;
+    --green: #4A7C59;
+    --red: #CC3300;
+    --orange: #C07530;
+    --accent: #CC3300;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #E8E4DD; font-family: 'Noto Sans KR', sans-serif; color: var(--dark); padding: 24px; }
+  .container { max-width: 1100px; margin: 0 auto; }
+  .header { background: var(--navy); color: white; padding: 32px 40px; border-radius: 12px; margin-bottom: 24px; }
+  .header h1 { font-size: 24px; font-weight: 700; margin-bottom: 8px; }
+  .header p { font-size: 14px; opacity: 0.8; }
+  .section { background: var(--white); border-radius: 12px; padding: 28px 32px; margin-bottom: 20px; box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
+  .section-title { font-size: 18px; font-weight: 700; color: var(--navy); margin-bottom: 20px; padding-bottom: 12px; border-bottom: 2px solid var(--bg); display: flex; align-items: center; gap: 8px; }
+  .section-title .badge { background: var(--navy); color: white; font-size: 11px; padding: 2px 8px; border-radius: 20px; font-weight: 500; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; margin-top: 8px; }
+  th { background: var(--navy); color: white; padding: 10px 14px; text-align: left; font-weight: 500; font-size: 13px; }
+  td { padding: 9px 14px; border-bottom: 1px solid #E8E4DD; vertical-align: top; }
+  tr:nth-child(even) { background: #FAFAF8; }
+  tr:hover { background: #F0EDE8; }
+  .stage { background: var(--bg); border-radius: 8px; padding: 16px 20px; margin-bottom: 12px; }
+  .stage-title { font-size: 15px; font-weight: 700; color: var(--navy); margin-bottom: 12px; }
+  .stage-1 { border-left: 4px solid var(--blue); }
+  .stage-2 { border-left: 4px solid var(--orange); }
+  .stage-3 { border-left: 4px solid var(--green); }
+  .stage-4 { border-left: 4px solid #6554c0; }
+  .tag { display: inline-block; padding: 2px 8px; border-radius: 12px; font-size: 11px; font-weight: 600; }
+  .tag-r { background: #FFE0D0; color: #8B2200; }
+  .tag-a { background: #D0E8F0; color: #1A4F6E; }
+  .tag-c { background: #E0ECD0; color: #2D5F1A; }
+  .tag-i { background: #E8E4DD; color: #555; }
+  .new { background: #FFF3CD; color: #856404; font-size: 11px; padding: 1px 6px; border-radius: 4px; font-weight: 600; margin-left: 4px; }
+  .folder-tree { font-family: 'Courier New', monospace; font-size: 13px; background: #F8F8F6; border-radius: 8px; padding: 20px; line-height: 1.8; color: var(--dark); }
+  .principle-box { background: var(--bg); border-radius: 8px; padding: 16px 20px; margin-top: 16px; }
+  .principle-box h4 { font-size: 13px; font-weight: 700; color: var(--navy); margin-bottom: 10px; }
+  .principle-box ul { padding-left: 18px; }
+  .principle-box li { font-size: 13px; color: var(--gray); margin-bottom: 6px; line-height: 1.6; }
+  .go-table td:nth-child(2) { color: var(--green); font-weight: 600; }
+  .go-table td:nth-child(3) { color: var(--orange); font-weight: 600; }
+  .go-table td:nth-child(4) { color: var(--red); font-weight: 600; }
+  .nav { display: flex; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; }
+  .nav a { background: var(--white); padding: 8px 16px; border-radius: 20px; font-size: 13px; color: var(--navy); text-decoration: none; font-weight: 500; box-shadow: 0 1px 4px rgba(0,0,0,0.1); }
+  .nav a:hover { background: var(--navy); color: white; }
+  .updated { font-size: 11px; color: var(--orange); font-weight: 600; margin-left: 6px; }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div class="header">
+    <h1>🚀 디지털 워크플레이스 PoC 기획 문서</h1>
+    <p>GWS + Slack 도입 검증 계획 | CMO본부 + 기획관리본부 155명 | 4월 1일 ~ 5월 27일</p>
+    <p style="margin-top:6px; opacity:0.6; font-size:12px;">AI센터 기술파트 | 2026. 03. 17</p>
+  </div>
+
+  <div class="nav">
+    <a href="#wbs">📋 WBS</a>
+    <a href="#raci">👤 RACI</a>
+    <a href="#drive">📁 Drive 폴더 구조</a>
+    <a href="#security">🔒 보안·운영 협의사항</a>
+    <a href="#gonogo">✅ Go/No-Go 기준</a>
+  </div>
+
+  <!-- WBS -->
+  <div class="section" id="wbs">
+    <div class="section-title">📋 PoC WBS <span class="badge">Work Breakdown Structure</span></div>
+
+    <div class="stage stage-1">
+      <div class="stage-title">1️⃣ 준비 단계 (3/17 ~ 3/31)</div>
+      <table>
+        <thead><tr><th>업무</th><th>담당</th><th>기간</th></tr></thead>
+        <tbody>
+          <tr><td>Slack Business+ 라이선스 구매</td><td>Judy</td><td>~3/21</td></tr>
+          <tr><td>PoC 참여자 명단 확정 + 외부 메일 계정 취합 (155명)</td><td>각 본부 담당자</td><td>~3/18</td></tr>
+          <tr><td><strong>내부 킥오프 미팅</strong> (AI센터 + 정보보호팀 + IT운영팀) <span class="new">NEW</span></td><td>Judy</td><td>3/23~24</td></tr>
+          <tr><td>GWS 테넌트 생성 요청 (메가존)</td><td>Judy</td><td>3/23</td></tr>
+          <tr><td>테넌트 DLP 설정</td><td>Judy</td><td>3/23~31</td></tr>
+          <tr><td>보안·운영 통합 워크샵 사전 협의</td><td>Judy + 정보보호팀 + IT운영팀</td><td>3/23~31</td></tr>
+          <tr><td>계정 일괄 생성 (GWS + Slack)</td><td>Judy</td><td>3/23~31</td></tr>
+          <tr><td>Slack 채널 구성 세팅 (32개)</td><td>Judy</td><td>3/23~31</td></tr>
+          <tr><td>GWS Drive 폴더 구조 세팅</td><td>Judy</td><td>3/23~31</td></tr>
+          <tr><td>권한 설정 (채널/폴더)</td><td>Judy</td><td>3/23~31</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="stage stage-2">
+      <div class="stage-title">2️⃣ 교육 단계 (4/1 ~ 4/2주)</div>
+      <table>
+        <thead><tr><th>업무</th><th>담당</th><th>기간</th></tr></thead>
+        <tbody>
+          <tr><td>전체 사용자 VOD 교육 (155명)</td><td>메가존</td><td>4/1주</td></tr>
+          <tr><td>부서 챔피언 오프라인 워크숍</td><td>메가존</td><td>4/2주</td></tr>
+          <tr><td>Slack 교육 방식 확정 및 진행</td><td>Judy + Slack 영업팀</td><td>4/2주</td></tr>
+          <tr><td>보안·운영 통합 워크샵 (보안정책 + 운영기능)</td><td>정보보호팀 + IT운영팀 + PoC 담당자</td><td>4/1~2주</td></tr>
+          <tr><td>사용 가이드 배포</td><td>Judy</td><td>4/1</td></tr>
+          <tr><td>층별 상주 지원 (AI Crew)</td><td>AI센터</td><td>4/1~2주</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="stage stage-3">
+      <div class="stage-title">3️⃣ 검증 단계 (4/3주 ~ 5/2주)</div>
+      <table>
+        <thead><tr><th>업무</th><th>담당</th><th>기간</th></tr></thead>
+        <tbody>
+          <tr><td>시나리오 A. 월간 경영보고</td><td>전략기획 + CMO전략</td><td>4/3주~</td></tr>
+          <tr><td>시나리오 B. 디자인 에셋 협업</td><td>디자인 + 영업</td><td>4/3주~</td></tr>
+          <tr><td>시나리오 C. 거래처 계약·견적</td><td>F&B영업 + 영업지원</td><td>4/3주~</td></tr>
+          <tr><td>시나리오 D. 캠페인 기획~실행</td><td>CMO 전체</td><td>4/3주~</td></tr>
+          <tr><td>보안 중간 점검 (DLP 로그 리뷰)</td><td>Judy + 정보보호팀 + IT운영팀</td><td>4/4주</td></tr>
+          <tr><td><strong>#poc-질문문의 채널 운영</strong> <span class="new">NEW</span></td><td>Judy, Daisy, Linus, Noah</td><td>매주</td></tr>
+          <tr><td>KPI 중간 점검</td><td>Judy</td><td>5/1주</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="stage stage-4">
+      <div class="stage-title">4️⃣ 평가 단계 (5/3주 ~ 5/27)</div>
+      <table>
+        <thead><tr><th>업무</th><th>담당</th><th>기간</th></tr></thead>
+        <tbody>
+          <tr><td>만족도 설문 진행 (전체 155명)</td><td>Judy</td><td>5/3주</td></tr>
+          <tr><td><strong>Go/No-Go 판정 기준 사전 공유</strong> <span class="new">NEW</span></td><td>Judy + 제리</td><td>5/3주</td></tr>
+          <tr><td>KPI 최종 분석</td><td>Judy</td><td>5/4주</td></tr>
+          <tr><td>보안 최종 점검 보고</td><td>Judy + 정보보호팀 + IT운영팀</td><td>5/4주</td></tr>
+          <tr><td>Go/No-Go 판정 (기준: 만족도 4.0↑ / 기능충족 90%↑ / KPI 3개↑ / 보안유출 0건 / 수용도 70%↑)</td><td>제리</td><td>5/4주</td></tr>
+          <tr><td>결과 보고서 작성</td><td>Judy + 제리</td><td>5/4주~27</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- RACI -->
+  <div class="section" id="raci">
+    <div class="section-title">👤 운영 RACI <span class="badge">역할 분담</span></div>
+    <p style="font-size:13px; color:var(--gray); margin-bottom:16px;">
+      <span class="tag tag-r">R</span> Responsible (실행) &nbsp;
+      <span class="tag tag-a">A</span> Accountable (최종책임) &nbsp;
+      <span class="tag tag-c">C</span> Consulted (협의) &nbsp;
+      <span class="tag tag-i">I</span> Informed (공유)
+    </p>
+    <table>
+      <thead><tr><th>업무 영역</th><th>세부 항목</th><th>AI센터(Judy)</th><th>IT운영팀</th><th>정보보호팀</th><th>제리(센터장)</th></tr></thead>
+      <tbody>
+        <tr><td rowspan="4"><strong>계정 관리</strong></td><td>GWS/Slack 계정 생성·삭제</td><td><span class="tag tag-r">R</span></td><td><span class="tag tag-c">C</span></td><td><span class="tag tag-i">I</span></td><td><span class="tag tag-a">A</span></td></tr>
+        <tr><td>권한 설정 (역할 배분)</td><td><span class="tag tag-r">R</span></td><td><span class="tag tag-c">C</span></td><td><span class="tag tag-i">I</span></td><td><span class="tag tag-a">A</span></td></tr>
+        <tr><td>퇴사자 계정 처리</td><td><span class="tag tag-r">R</span></td><td><span class="tag tag-c">C</span></td><td><span class="tag tag-i">I</span></td><td><span class="tag tag-a">A</span></td></tr>
+        <tr><td>SSO 연동 검증 (PoC)</td><td><span class="tag tag-r">R</span></td><td><span class="tag tag-c">C</span></td><td><span class="tag tag-i">I</span></td><td><span class="tag tag-a">A</span></td></tr>
+        <tr><td rowspan="3"><strong>Admin 검증</strong></td><td>Admin Console 기능 검증</td><td><span class="tag tag-r">R</span></td><td><span class="tag tag-r">R</span></td><td><span class="tag tag-i">I</span></td><td><span class="tag tag-a">A</span></td></tr>
+        <tr><td>Slack Workspace 관리자 기능 검증</td><td><span class="tag tag-r">R</span></td><td><span class="tag tag-r">R</span></td><td><span class="tag tag-i">I</span></td><td><span class="tag tag-a">A</span></td></tr>
+        <tr><td>계정·권한 관리 기능 검증</td><td><span class="tag tag-r">R</span></td><td><span class="tag tag-r">R</span></td><td><span class="tag tag-i">I</span></td><td><span class="tag tag-a">A</span></td></tr>
+        <tr><td rowspan="4"><strong>보안·컴플라이언스</strong></td><td>DLP 정책 설정</td><td><span class="tag tag-c">C</span></td><td><span class="tag tag-i">I</span></td><td><span class="tag tag-r">R</span></td><td><span class="tag tag-a">A</span></td></tr>
+        <tr><td>보안 모니터링 (로그 리뷰)</td><td><span class="tag tag-i">I</span></td><td><span class="tag tag-i">I</span></td><td><span class="tag tag-r">R</span></td><td><span class="tag tag-a">A</span></td></tr>
+        <tr><td>접근 제어 정책</td><td><span class="tag tag-c">C</span></td><td><span class="tag tag-c">C</span></td><td><span class="tag tag-r">R</span></td><td><span class="tag tag-a">A</span></td></tr>
+        <tr><td>보안 이슈 에스컬레이션 <span class="new">수정</span></td><td><span class="tag tag-i">I</span></td><td><span class="tag tag-i">I</span></td><td><span class="tag tag-r">R</span></td><td><span class="tag tag-a">A</span></td></tr>
+        <tr><td rowspan="2"><strong>앱 연동</strong></td><td>앱 승인·반려</td><td><span class="tag tag-r">R</span></td><td><span class="tag tag-i">I</span></td><td><span class="tag tag-r">R</span></td><td><span class="tag tag-a">A</span></td></tr>
+        <tr><td>Slack Connect 외부 채널 승인</td><td><span class="tag tag-r">R</span></td><td><span class="tag tag-i">I</span></td><td><span class="tag tag-r">R</span></td><td><span class="tag tag-a">A</span></td></tr>
+        <tr><td rowspan="2"><strong>운영 지원</strong></td><td>사용자 문의 1차 대응</td><td><span class="tag tag-r">R</span></td><td><span class="tag tag-i">I</span></td><td><span class="tag tag-i">I</span></td><td><span class="tag tag-a">A</span></td></tr>
+        <tr><td>PoC 모니터링 (주차별)</td><td><span class="tag tag-r">R</span></td><td><span class="tag tag-c">C</span></td><td><span class="tag tag-c">C</span></td><td><span class="tag tag-a">A</span></td></tr>
+        <tr><td rowspan="2"><strong>교육·온보딩</strong></td><td>사용자 교육 운영</td><td><span class="tag tag-r">R</span></td><td><span class="tag tag-i">I</span></td><td><span class="tag tag-i">I</span></td><td><span class="tag tag-a">A</span></td></tr>
+        <tr><td>보안·운영 워크샵</td><td><span class="tag tag-c">C</span></td><td><span class="tag tag-r">R</span></td><td><span class="tag tag-r">R</span></td><td><span class="tag tag-a">A</span></td></tr>
+        <tr><td rowspan="3"><strong>평가·보고</strong></td><td>KPI 측정 및 분석</td><td><span class="tag tag-r">R</span></td><td><span class="tag tag-i">I</span></td><td><span class="tag tag-c">C</span></td><td><span class="tag tag-a">A</span></td></tr>
+        <tr><td>Go/No-Go 판정 <span class="new">NEW</span></td><td><span class="tag tag-r">R</span></td><td><span class="tag tag-i">I</span></td><td><span class="tag tag-c">C</span></td><td><span class="tag tag-a">A</span></td></tr>
+        <tr><td>최종 결과 보고</td><td><span class="tag tag-r">R</span></td><td><span class="tag tag-c">C</span></td><td><span class="tag tag-c">C</span></td><td><span class="tag tag-a">A</span></td></tr>
+      </tbody>
+    </table>
+    <div class="principle-box">
+      <h4>💡 핵심 원칙</h4>
+      <ul>
+        <li><strong>Judy(AI센터):</strong> PoC 전반 실무 리딩, 운영 총괄</li>
+        <li><strong>IT운영팀:</strong> PoC 기간 Admin 기능 공동 검증(R) → 본 도입 확정(Go 판정) 후 Admin·계정·권한 관리 이관</li>
+        <li><strong>정보보호팀:</strong> 보안 정책·DLP·모니터링·이슈 대응 최종 결정권</li>
+        <li><strong>제리:</strong> 모든 항목 최종 승인권 (A)</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Drive 폴더 구조 -->
+  <div class="section" id="drive">
+    <div class="section-title">📁 GWS Drive 폴더 구조</div>
+    <div class="folder-tree">
+📁 [광동제약] PoC 공용 드라이브<br>
+│<br>
+├── 📁 00_공통자료<br>
+│&nbsp;&nbsp;&nbsp;├── 📁 사용가이드<br>
+│&nbsp;&nbsp;&nbsp;├── 📁 교육자료<br>
+│&nbsp;&nbsp;&nbsp;└── 📁 공지사항<br>
+│<br>
+├── 📁 CMO본부<br>
+│&nbsp;&nbsp;&nbsp;├── 📁 삼다수사업부문<br>
+│&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;├── 📁 삼다수마케팅팀<br>
+│&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;└── 📁 삼다수대리점팀<br>
+│&nbsp;&nbsp;&nbsp;│<br>
+│&nbsp;&nbsp;&nbsp;├── 📁 디자인혁신부문<br>
+│&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;├── 📁 디자인1팀<br>
+│&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;└── 📁 디자인2팀<br>
+│&nbsp;&nbsp;&nbsp;│<br>
+│&nbsp;&nbsp;&nbsp;├── 📁 F&amp;B사업본부<br>
+│&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;├── 📁 F&amp;B마케팅부문<br>
+│&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;├── 📁 BM1팀<br>
+│&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;├── 📁 BM2팀<br>
+│&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;└── 📁 CMC팀<br>
+│&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;├── 📁 온라인영업부문<br>
+│&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;├── 📁 E-커머스팀<br>
+│&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;└── 📁 브랜드커머스팀<br>
+│&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;├── 📁 음료시판팀<br>
+│&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;├── 📁 할인점팀<br>
+│&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;├── 📁 편의점팀<br>
+│&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;└── 📁 F&amp;B영업기획팀<br>
+│&nbsp;&nbsp;&nbsp;│<br>
+│&nbsp;&nbsp;&nbsp;└── 📁 CMO전략부문<br>
+│&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├── 📁 CMO지원팀<br>
+│&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├── 📁 해외사업팀<br>
+│&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└── 📁 신사업운영팀<br>
+│<br>
+├── 📁 기획관리본부<br>
+│&nbsp;&nbsp;&nbsp;├── 📁 IT운영팀<br>
+│&nbsp;&nbsp;&nbsp;├── 📁 R&amp;D사업추진팀<br>
+│&nbsp;&nbsp;&nbsp;├── 📁 영업지원팀<br>
+│&nbsp;&nbsp;&nbsp;├── 📁 총무팀<br>
+│&nbsp;&nbsp;&nbsp;├── 📁 차량관리과<br>
+│&nbsp;&nbsp;&nbsp;└── 📁 전략기획부문<br>
+│&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├── 📁 전략기획팀<br>
+│&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└── 📁 성장전략팀<br>
+│<br>
+└── 📁 크로스협업<br>
+&nbsp;&nbsp;&nbsp;&nbsp;├── 📁 A_월간경영보고<br>
+&nbsp;&nbsp;&nbsp;&nbsp;├── 📁 B_디자인에셋<br>
+&nbsp;&nbsp;&nbsp;&nbsp;├── 📁 C_거래처계약견적<br>
+&nbsp;&nbsp;&nbsp;&nbsp;└── 📁 D_캠페인기획실행
+    </div>
+    <div class="principle-box" style="margin-top:16px;">
+      <h4>💡 각 팀 폴더 내부 공통 구조</h4>
+      <div class="folder-tree" style="margin-top:8px;">
+📁 [팀명]<br>
+├── 📁 01_업무자료<br>
+├── 📁 02_회의록<br>
+└── 📁 03_참고자료
+      </div>
+    </div>
+  </div>
+
+  <!-- 보안·운영 협의사항 -->
+  <div class="section" id="security">
+    <div class="section-title">🔒 보안·운영 협의 체크리스트 <span class="badge">워크샵 이후 협의용</span></div>
+
+    <p style="font-size:13px; color:var(--gray); margin-bottom:16px;">보안·운영 통합 워크샵 이후 정보보호팀 · IT운영팀 협의용</p>
+
+    <div class="stage stage-1" style="margin-bottom:12px;">
+      <div class="stage-title">GWS 보안 설정</div>
+      <table>
+        <thead><tr><th>#</th><th>협의 항목</th><th>주요 내용</th><th>결정 필요 사항</th><th>담당</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>문서 보안 등급 기준</td><td>1등급 저장 금지 / 2등급 조건부 / 3등급 자유</td><td>등급별 허용 범위 최종 확정</td><td>정보보호팀</td></tr>
+          <tr><td>2</td><td>DLP 정책</td><td>주민번호·카드번호 자동 감지/차단, 외부 공유 기본값 OFF</td><td>추가 감지 키워드/패턴 정의</td><td>정보보호팀 + Judy</td></tr>
+          <tr><td>3</td><td>접근 제어</td><td>기기·IP 기반 Context-Aware Access</td><td>사무실 외 접속 허용 범위</td><td>정보보호팀</td></tr>
+          <tr><td>4</td><td>2단계 인증</td><td>전 사용자 필수 적용</td><td><strong>예외 없음</strong></td><td>정보보호팀</td></tr>
+          <tr><td>5</td><td>감사 로그</td><td>Admin Console 모니터링 주체·주기</td><td>로그 검토 담당자 및 주기</td><td>정보보호팀</td></tr>
+          <tr><td>6</td><td>퇴사자 처리</td><td>계정 비활성화 및 데이터 보존 절차</td><td>처리 절차 및 권한 이관 기준</td><td>정보보호팀</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="stage stage-2" style="margin-bottom:12px;">
+      <div class="stage-title">Slack 앱 연동 정책</div>
+      <table>
+        <thead><tr><th>#</th><th>협의 항목</th><th>주요 내용</th><th>결정 필요 사항</th><th>담당</th></tr></thead>
+        <tbody>
+          <tr><td>7</td><td>필수 허용 앱 목록</td><td>GWS(Drive·Calendar) 등 사전 승인 앱 지정</td><td>PoC 기간 허용 앱 목록 확정</td><td>정보보호팀 + Judy</td></tr>
+          <tr><td>8</td><td>앱 권한 검토 기준</td><td>메시지 읽기·파일 접근 과도 요청 앱 반려 기준</td><td>반려 기준 및 보안 검토 프로세스</td><td>정보보호팀</td></tr>
+          <tr><td>9</td><td>Slack Connect 정책</td><td>외부 파트너 채널 앱 사용 제한, 사전 승인</td><td>외부 채널 개설 승인 주체</td><td>정보보호팀</td></tr>
+          <tr><td>10</td><td>민감 정보 게시 제한</td><td>1·2등급 문서 업로드 금지, 비공개 채널 활용</td><td>위반 시 대응 절차</td><td>정보보호팀 + Judy</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="stage stage-3">
+      <div class="stage-title">공통 운영 체계</div>
+      <table>
+        <thead><tr><th>#</th><th>협의 항목</th><th>주요 내용</th><th>결정 필요 사항</th><th>담당</th></tr></thead>
+        <tbody>
+          <tr><td>11</td><td>운영 주체</td><td>GWS/Slack Admin 담당자 지정</td><td>PoC 종료 후 운영 이관 여부</td><td>Judy + IT운영팀</td></tr>
+          <tr><td>12</td><td>보안 이슈 에스컬레이션</td><td>이슈 발생 시 보고 체계 설정</td><td>보고 경로 및 대응 SLA 정의</td><td>정보보호팀</td></tr>
+          <tr><td>13</td><td>PoC 모니터링</td><td>DLP 로그 리뷰 주기 및 담당자</td><td>검토 주기 (주 1회 권장)</td><td>Judy + 정보보호팀 + IT운영팀</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Go/No-Go -->
+  <div class="section" id="gonogo">
+    <div class="section-title">✅ Go/No-Go 판정 기준</div>
+    <table class="go-table">
+      <thead><tr><th>판단 기준</th><th>✅ Go</th><th>⚠️ 조건부 Go</th><th>❌ No-Go</th></tr></thead>
+      <tbody>
+        <tr><td><strong>사용자 만족도</strong></td><td>4.0점 이상</td><td>3.0~3.9점</td><td>3.0점 미만</td></tr>
+        <tr><td><strong>기능 충족률</strong></td><td>90% 이상</td><td>70~89%</td><td>70% 미만</td></tr>
+        <tr><td><strong>효율 KPI</strong></td><td>3개 이상 달성</td><td>2개 달성</td><td>1개 이하</td></tr>
+        <tr><td><strong>보안 이슈</strong></td><td>실제 유출 0건</td><td>차단된 시도만 존재</td><td>실제 데이터 유출 발생</td></tr>
+        <tr><td><strong>사용자 수용도</strong></td><td>70% 이상</td><td>50~69%</td><td>50% 미만</td></tr>
+      </tbody>
+    </table>
+    <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px; margin-top:16px;">
+      <div class="stage stage-3" style="margin:0;">
+        <div class="stage-title" style="font-size:14px;">✅ Go → 전사 확대</div>
+        <p style="font-size:13px; color:var(--gray);">PoC 부서 유지 + 확산 범위·일정·예산 기획</p>
+      </div>
+      <div class="stage stage-2" style="margin:0;">
+        <div class="stage-title" style="font-size:14px;">⚠️ 조건부 Go → 보완</div>
+        <p style="font-size:13px; color:var(--gray);">미충족 항목 원인 분석 → 2~4주 보완 후 재평가</p>
+      </div>
+      <div class="stage stage-1" style="margin:0; border-left-color:var(--red);">
+        <div class="stage-title" style="font-size:14px; color:var(--red);">❌ No-Go → 대안 검토</div>
+        <p style="font-size:13px; color:var(--gray);">원인 분석 보고서 → M365 등 대안 솔루션 검토</p>
+      </div>
+    </div>
+  </div>
+
+  <p style="text-align:center; font-size:12px; color:#999; margin-top:16px;">AI센터 기술파트 · JudyBot 생성 · 2026.03.17</p>
+
+</div>
+</body>
+</html>
