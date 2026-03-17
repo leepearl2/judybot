@@ -331,6 +331,100 @@
     </div>
   </div>
 
+  <!-- SSO 테스트 항목 -->
+  <div class="section" id="sso">
+    <div class="section-title">🔐 GWS SSO 테스트 항목 <span class="badge">AWS AD 연동</span></div>
+    <p style="font-size:13px; color:var(--gray); margin-bottom:16px;">AI센터 자체 AD 구축 후 SSO 연동 테스트 진행 예정. 본 도입 시 기존 AD에 Join하는 방안 추가 검토.</p>
+
+    <div class="stage stage-1" style="margin-bottom:12px;">
+      <div class="stage-title">1. 기본 인증</div>
+      <table>
+        <thead><tr><th>#</th><th>테스트 항목</th><th>확인 내용</th></tr></thead>
+        <tbody>
+          <tr><td>1-1</td><td>정상 로그인</td><td>AD 계정으로 GWS 로그인 성공 여부</td></tr>
+          <tr><td>1-2</td><td>잘못된 비밀번호</td><td>로그인 실패 및 오류 메시지 정상 출력</td></tr>
+          <tr><td>1-3</td><td>비활성화 계정</td><td>AD에서 비활성화된 계정 접근 차단 여부</td></tr>
+          <tr><td>1-4</td><td>비밀번호 만료 계정</td><td>만료 계정 로그인 시 변경 유도 또는 차단</td></tr>
+          <tr><td>1-5</td><td>대소문자 구분</td><td>이메일/계정명 대소문자 처리 정상 여부</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="stage stage-2" style="margin-bottom:12px;">
+      <div class="stage-title">2. SSO 세션 관리</div>
+      <table>
+        <thead><tr><th>#</th><th>테스트 항목</th><th>확인 내용</th></tr></thead>
+        <tbody>
+          <tr><td>2-1</td><td>세션 유지</td><td>로그인 후 GWS 서비스 간 이동 시 재로그인 없이 유지</td></tr>
+          <tr><td>2-2</td><td>세션 만료</td><td>설정된 시간 후 자동 로그아웃</td></tr>
+          <tr><td>2-3</td><td>다중 브라우저</td><td>동일 계정 여러 브라우저 동시 접속 처리</td></tr>
+          <tr><td>2-4</td><td>강제 로그아웃</td><td>AD에서 세션 강제 종료 시 GWS 로그아웃 여부</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="stage stage-3" style="margin-bottom:12px;">
+      <div class="stage-title">3. 계정 동기화</div>
+      <table>
+        <thead><tr><th>#</th><th>테스트 항목</th><th>확인 내용</th></tr></thead>
+        <tbody>
+          <tr><td>3-1</td><td>신규 계정 생성</td><td>AD에 신규 계정 추가 시 GWS 자동 프로비저닝</td></tr>
+          <tr><td>3-2</td><td>계정 비활성화</td><td>AD에서 계정 비활성화 시 GWS 접근 차단 반영</td></tr>
+          <tr><td>3-3</td><td>계정 삭제</td><td>AD 계정 삭제 시 GWS 계정 처리 (삭제 or 정지)</td></tr>
+          <tr><td>3-4</td><td>정보 변경</td><td>이름·부서·직책 변경 시 GWS 반영 여부</td></tr>
+          <tr><td>3-5</td><td>동기화 주기</td><td>변경사항이 GWS에 반영되는 소요 시간</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="stage stage-4" style="margin-bottom:12px;">
+      <div class="stage-title">4. 그룹/권한 동기화</div>
+      <table>
+        <thead><tr><th>#</th><th>테스트 항목</th><th>확인 내용</th></tr></thead>
+        <tbody>
+          <tr><td>4-1</td><td>AD 그룹 → GWS 그룹</td><td>AD 보안 그룹이 GWS OU/그룹으로 매핑 여부</td></tr>
+          <tr><td>4-2</td><td>그룹 추가</td><td>AD 그룹 멤버 추가 시 GWS 권한 자동 부여</td></tr>
+          <tr><td>4-3</td><td>그룹 제거</td><td>AD 그룹 멤버 제거 시 GWS 권한 자동 회수</td></tr>
+          <tr><td>4-4</td><td>Admin 권한</td><td>특정 AD 그룹에 GWS Admin 권한 매핑</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="stage stage-1" style="margin-bottom:12px;">
+      <div class="stage-title">5. 보안 설정</div>
+      <table>
+        <thead><tr><th>#</th><th>테스트 항목</th><th>확인 내용</th></tr></thead>
+        <tbody>
+          <tr><td>5-1</td><td>MFA 연동</td><td>AD MFA 설정이 GWS에도 적용되는지</td></tr>
+          <tr><td>5-2</td><td>IP 제한</td><td>사무실 IP 외 접속 차단 정책 동작</td></tr>
+          <tr><td>5-3</td><td>비밀번호 정책</td><td>AD 비밀번호 정책 변경 시 GWS 반영</td></tr>
+          <tr><td>5-4</td><td>감사 로그</td><td>SSO 로그인 이벤트 GWS Admin Console 기록 확인</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="stage stage-2" style="margin-bottom:12px;">
+      <div class="stage-title">6. 장애 대응</div>
+      <table>
+        <thead><tr><th>#</th><th>테스트 항목</th><th>확인 내용</th></tr></thead>
+        <tbody>
+          <tr><td>6-1</td><td>AD 서버 다운</td><td>AWS AD 장애 시 GWS 로그인 불가 여부 및 오류 메시지</td></tr>
+          <tr><td>6-2</td><td>네트워크 단절</td><td>AWS 연결 지연/단절 시 로그인 처리 방식</td></tr>
+          <tr><td>6-3</td><td>폴백 계정</td><td>AD 장애 시 비상용 로컬 Admin 계정 접근 가능 여부</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="principle-box">
+      <h4>📌 추후 논의사항</h4>
+      <ul>
+        <li><strong>PoC 단계:</strong> AI센터 자체 AD 구축 후 GWS SSO 연동 테스트 진행</li>
+        <li><strong>본 도입 시:</strong> AI센터 AD를 기존 사내 AD(AWS)에 Join하는 방안 추가 검토 필요</li>
+        <li>Join 방식 확정 전 IT운영팀 · 정보보호팀 협의 필요</li>
+      </ul>
+    </div>
+  </div>
+
   <p style="text-align:center; font-size:12px; color:#999; margin-top:16px;">AI센터 기술파트 · JudyBot 생성 · 2026.03.17</p>
 
 </div>
