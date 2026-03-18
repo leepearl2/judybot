@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>협업툴 도입 검토 보고서 — 광동제약 AI센터</title>
+  <title>협업툴 도입 비용 및 대체 시스템 검토 — 광동제약 AI센터</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
@@ -217,82 +217,12 @@
   <!-- Hero -->
   <div class="hero">
     <div class="tag">INTERNAL REVIEW</div>
-    <h1>협업툴 도입 검토 보고서</h1>
-    <p>Slack · Google Workspace 본도입 비용 분석 및 추진 배경</p>
+    <h1>협업툴 도입 비용 및 대체 시스템 검토</h1>
+    <p>Slack · Google Workspace 본도입 비용 분석 및 기존 시스템 대체 현황</p>
     <div class="meta">광동제약 AI센터 · 기준 환율 1,450원/USD · 2026년 3월</div>
   </div>
 
-  <!-- 1. 왜 지금인가 -->
-  <div class="section">
-    <div class="section-title"><span class="icon">🎯</span> 왜 지금인가 — 디지털 워크플레이스 전략</div>
-
-    <p style="margin-bottom:20px; color:#444;">협업툴 도입은 단순한 메신저 교체가 아닙니다. <strong>AI가 실제로 일할 수 있는 업무 인프라를 구축하는 것</strong>입니다. 현재 광동제약의 소통 방식은 메일·메신저·구두 보고로 파편화되어 있어 AI가 작동할 기반이 없습니다.</p>
-
-    <div class="problem-grid">
-      <div class="problem-card">
-        <h4>📧 커뮤니케이션 분절</h4>
-        <p>메일, 메신저, 구두 보고 등 채널 다변화로 정보 히스토리 파편화. 결정 이력이 남지 않음.</p>
-      </div>
-      <div class="problem-card">
-        <h4>📁 파일 버전 혼선</h4>
-        <p>첨부파일 위주 공유로 '최종_최최종_진짜최종.pptx' 반복. 중복 작업 및 오류 위험.</p>
-      </div>
-      <div class="problem-card">
-        <h4>🏭 현장-사무실 단절</h4>
-        <p>품질관리 현장과 사무실 간 실시간 데이터 동기화 부족. 이슈 대응 지연.</p>
-      </div>
-    </div>
-
-    <div class="vision-box">
-      <p style="font-weight:700; font-size:15px; color:#1a73e8;">AI센터가 그리는 그림</p>
-      <div class="flow">
-        <div class="flow-step">모든 소통·문서가<br>하나의 플랫폼에 축적</div>
-        <div class="flow-arrow">→</div>
-        <div class="flow-step">AI 에이전트가<br>그 위에서 실제로 일함</div>
-        <div class="flow-arrow">→</div>
-        <div class="flow-step">사람은 판단과<br>창의에 집중</div>
-      </div>
-      <p style="margin-top:16px; font-size:13px; color:#555;">GWS + Slack은 이 그림의 <strong>토대 레이어</strong>입니다. 이것 없이는 AI 에이전트, Gemini 활용, 자동화 모두 반쪽짜리가 됩니다.</p>
-    </div>
-  </div>
-
-  <!-- 2. 와우 시나리오 -->
-  <div class="section">
-    <div class="section-title"><span class="icon">⚡</span> 와우 시나리오 — 이렇게 달라집니다</div>
-    <div class="scenario-grid">
-
-      <div class="scenario-card">
-        <div class="num">SCENARIO 01</div>
-        <h4>공장 품질 이상, 3분 내 전달</h4>
-        <p>GMP 라인 온도·습도 이상 감지 즉시 품질관리 담당자 + 생산팀장 Slack 동시 알림. 현장 스마트폰으로 확인 → 조치 지시 → 완료 보고까지 하나의 채널에서. 이슈 대응 이력이 자동 기록되어 감사(Audit) 자료로 활용 가능.</p>
-        <span class="effect-tag">대응 시간 단축 · GMP Audit 대응</span>
-      </div>
-
-      <div class="scenario-card">
-        <div class="num">SCENARIO 02</div>
-        <h4>신제품 출시, 부서 사일로가 사라진다</h4>
-        <p>출시 D-30. 마케팅·영업·생산·허가팀이 하나의 채널에서 진행상황 공유. 생산 일정 변경 → 영업팀 즉시 인지 → 마케팅 대응 → 허가 서류 공동 편집. "이거 누가 알고 있어요?" 질문이 사라짐.</p>
-        <span class="effect-tag">크로스팀 지연 제거 · 출시 리드타임 단축</span>
-      </div>
-
-      <div class="scenario-card">
-        <div class="num">SCENARIO 03</div>
-        <h4>임원이 매일 아침 브리핑을 받는다</h4>
-        <p>매일 오전 8시, 임원 전용 채널에 자동 메시지 발송: 전국 영업 실적 요약 / 목표 대비 달성률 / 주요 이슈. ERP 연동으로 데이터 자동 집계. 별도 보고 대기 없이 현황 파악 후 하루 시작.</p>
-        <span class="effect-tag">보고 대기 제거 · 의사결정 속도 향상</span>
-      </div>
-
-      <div class="scenario-card">
-        <div class="num">SCENARIO 04</div>
-        <h4>온보딩이 자동으로 돌아간다</h4>
-        <p>신입사원 입사 당일, 워크플로우 자동 실행. IT팀 계정 세팅 요청 / HR팀 교육 일정 안내 / 팀장 온보딩 체크리스트 발송이 동시에. 첫날부터 누락 없이 온보딩 완료.</p>
-        <span class="effect-tag">HR·IT 반복 업무 자동화</span>
-      </div>
-
-    </div>
-  </div>
-
-  <!-- 3. 비용 분석 -->
+  <!-- 비용 분석 -->
   <div class="section">
     <div class="section-title"><span class="icon">💰</span> 본도입 비용 상세 (3안 기준)</div>
 
