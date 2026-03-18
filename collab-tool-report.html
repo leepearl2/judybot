@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>협업툴 도입 검토 보고서 — 광동제약 AI센터</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif;
+      background: #f5f6fa;
+      color: #2d2d2d;
+      line-height: 1.7;
+    }
+    .container { max-width: 960px; margin: 0 auto; padding: 40px 24px; }
+
+    /* Hero */
+    .hero {
+      background: linear-gradient(135deg, #1a73e8 0%, #0d47a1 100%);
+      color: white;
+      border-radius: 16px;
+      padding: 48px 40px;
+      margin-bottom: 36px;
+    }
+    .hero .tag {
+      display: inline-block;
+      background: rgba(255,255,255,0.2);
+      border-radius: 20px;
+      padding: 4px 14px;
+      font-size: 12px;
+      letter-spacing: 1px;
+      margin-bottom: 16px;
+    }
+    .hero h1 { font-size: 28px; font-weight: 700; margin-bottom: 10px; }
+    .hero p { font-size: 15px; opacity: 0.85; }
+    .hero .meta { margin-top: 20px; font-size: 13px; opacity: 0.7; }
+
+    /* Section */
+    .section {
+      background: white;
+      border-radius: 12px;
+      padding: 32px;
+      margin-bottom: 24px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+    }
+    .section-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: #1a73e8;
+      margin-bottom: 20px;
+      padding-bottom: 12px;
+      border-bottom: 2px solid #e8f0fe;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .section-title .icon { font-size: 20px; }
+
+    /* Problem cards */
+    .problem-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+    .problem-card {
+      background: #fef7f0;
+      border-left: 4px solid #f4a021;
+      border-radius: 8px;
+      padding: 16px;
+    }
+    .problem-card h4 { font-size: 14px; font-weight: 700; margin-bottom: 6px; color: #d4780a; }
+    .problem-card p { font-size: 13px; color: #555; }
+
+    /* Vision box */
+    .vision-box {
+      background: linear-gradient(135deg, #e8f0fe, #f0f4ff);
+      border-radius: 12px;
+      padding: 24px;
+      margin: 20px 0;
+      text-align: center;
+    }
+    .vision-box .flow {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 16px;
+    }
+    .flow-step {
+      background: white;
+      border-radius: 8px;
+      padding: 10px 16px;
+      font-size: 13px;
+      font-weight: 600;
+      color: #1a73e8;
+      box-shadow: 0 2px 8px rgba(26,115,232,0.15);
+    }
+    .flow-arrow { color: #1a73e8; font-size: 18px; font-weight: 700; }
+
+    /* Tables */
+    table { width: 100%; border-collapse: collapse; font-size: 14px; }
+    th {
+      background: #1a73e8;
+      color: white;
+      padding: 12px 14px;
+      text-align: left;
+      font-weight: 600;
+    }
+    th:first-child { border-radius: 6px 0 0 0; }
+    th:last-child { border-radius: 0 6px 0 0; }
+    td { padding: 11px 14px; border-bottom: 1px solid #eee; }
+    tr:last-child td { border-bottom: none; }
+    tr:nth-child(even) td { background: #f8faff; }
+    .amount { text-align: right; font-weight: 600; font-family: monospace; font-size: 13px; }
+    .subtotal td { background: #fff8e1 !important; font-weight: 700; }
+    .total-row td { background: #e8f0fe !important; font-weight: 700; font-size: 15px; color: #1a73e8; }
+    .saving-row td { background: #e8f5e9 !important; color: #2e7d32; font-weight: 600; }
+    .net-row td { background: #1a73e8 !important; color: white !important; font-weight: 700; font-size: 15px; }
+
+    /* Cost summary cards */
+    .cost-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin: 24px 0;
+    }
+    .cost-card {
+      border-radius: 10px;
+      padding: 20px;
+      text-align: center;
+    }
+    .cost-card.add { background: #fce8e6; border: 2px solid #ea4335; }
+    .cost-card.save { background: #e6f4ea; border: 2px solid #34a853; }
+    .cost-card.net { background: #e8f0fe; border: 2px solid #1a73e8; }
+    .cost-card .label { font-size: 12px; font-weight: 600; margin-bottom: 8px; opacity: 0.75; }
+    .cost-card .value { font-size: 22px; font-weight: 800; }
+    .cost-card.add .value { color: #ea4335; }
+    .cost-card.save .value { color: #34a853; }
+    .cost-card.net .value { color: #1a73e8; }
+    .cost-card .sub { font-size: 11px; margin-top: 4px; opacity: 0.65; }
+
+    /* Comment */
+    .comment {
+      background: #fff8e1;
+      border-left: 4px solid #f4a021;
+      border-radius: 6px;
+      padding: 10px 14px;
+      font-size: 12px;
+      color: #795548;
+      margin-top: 8px;
+    }
+    .comment strong { color: #d4780a; }
+
+    /* Scenario */
+    .scenario-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 16px;
+    }
+    .scenario-card {
+      border: 1px solid #e0e0e0;
+      border-radius: 10px;
+      padding: 20px;
+      position: relative;
+      overflow: hidden;
+    }
+    .scenario-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, #1a73e8, #34a853);
+    }
+    .scenario-card .num {
+      font-size: 11px;
+      font-weight: 700;
+      color: #1a73e8;
+      letter-spacing: 1px;
+      margin-bottom: 8px;
+    }
+    .scenario-card h4 { font-size: 15px; font-weight: 700; margin-bottom: 10px; }
+    .scenario-card p { font-size: 13px; color: #555; margin-bottom: 12px; }
+    .effect-tag {
+      display: inline-block;
+      background: #e8f0fe;
+      color: #1a73e8;
+      border-radius: 20px;
+      padding: 3px 12px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    /* Footer */
+    .footer {
+      text-align: center;
+      font-size: 12px;
+      color: #999;
+      margin-top: 40px;
+      padding-top: 20px;
+      border-top: 1px solid #eee;
+    }
+
+    @media (max-width: 600px) {
+      .hero { padding: 32px 24px; }
+      .hero h1 { font-size: 22px; }
+      .section { padding: 24px 16px; }
+      table { font-size: 12px; }
+      td, th { padding: 9px 10px; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+
+  <!-- Hero -->
+  <div class="hero">
+    <div class="tag">INTERNAL REVIEW</div>
+    <h1>협업툴 도입 검토 보고서</h1>
+    <p>Slack · Google Workspace 본도입 비용 분석 및 추진 배경</p>
+    <div class="meta">광동제약 AI센터 · 기준 환율 1,450원/USD · 2026년 3월</div>
+  </div>
+
+  <!-- 1. 왜 지금인가 -->
+  <div class="section">
+    <div class="section-title"><span class="icon">🎯</span> 왜 지금인가 — 디지털 워크플레이스 전략</div>
+
+    <p style="margin-bottom:20px; color:#444;">협업툴 도입은 단순한 메신저 교체가 아닙니다. <strong>AI가 실제로 일할 수 있는 업무 인프라를 구축하는 것</strong>입니다. 현재 광동제약의 소통 방식은 메일·메신저·구두 보고로 파편화되어 있어 AI가 작동할 기반이 없습니다.</p>
+
+    <div class="problem-grid">
+      <div class="problem-card">
+        <h4>📧 커뮤니케이션 분절</h4>
+        <p>메일, 메신저, 구두 보고 등 채널 다변화로 정보 히스토리 파편화. 결정 이력이 남지 않음.</p>
+      </div>
+      <div class="problem-card">
+        <h4>📁 파일 버전 혼선</h4>
+        <p>첨부파일 위주 공유로 '최종_최최종_진짜최종.pptx' 반복. 중복 작업 및 오류 위험.</p>
+      </div>
+      <div class="problem-card">
+        <h4>🏭 현장-사무실 단절</h4>
+        <p>품질관리 현장과 사무실 간 실시간 데이터 동기화 부족. 이슈 대응 지연.</p>
+      </div>
+    </div>
+
+    <div class="vision-box">
+      <p style="font-weight:700; font-size:15px; color:#1a73e8;">AI센터가 그리는 그림</p>
+      <div class="flow">
+        <div class="flow-step">모든 소통·문서가<br>하나의 플랫폼에 축적</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step">AI 에이전트가<br>그 위에서 실제로 일함</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step">사람은 판단과<br>창의에 집중</div>
+      </div>
+      <p style="margin-top:16px; font-size:13px; color:#555;">GWS + Slack은 이 그림의 <strong>토대 레이어</strong>입니다. 이것 없이는 AI 에이전트, Gemini 활용, 자동화 모두 반쪽짜리가 됩니다.</p>
+    </div>
+  </div>
+
+  <!-- 2. 와우 시나리오 -->
+  <div class="section">
+    <div class="section-title"><span class="icon">⚡</span> 와우 시나리오 — 이렇게 달라집니다</div>
+    <div class="scenario-grid">
+
+      <div class="scenario-card">
+        <div class="num">SCENARIO 01</div>
+        <h4>공장 품질 이상, 3분 내 전달</h4>
+        <p>GMP 라인 온도·습도 이상 감지 즉시 품질관리 담당자 + 생산팀장 Slack 동시 알림. 현장 스마트폰으로 확인 → 조치 지시 → 완료 보고까지 하나의 채널에서. 이슈 대응 이력이 자동 기록되어 감사(Audit) 자료로 활용 가능.</p>
+        <span class="effect-tag">대응 시간 단축 · GMP Audit 대응</span>
+      </div>
+
+      <div class="scenario-card">
+        <div class="num">SCENARIO 02</div>
+        <h4>신제품 출시, 부서 사일로가 사라진다</h4>
+        <p>출시 D-30. 마케팅·영업·생산·허가팀이 하나의 채널에서 진행상황 공유. 생산 일정 변경 → 영업팀 즉시 인지 → 마케팅 대응 → 허가 서류 공동 편집. "이거 누가 알고 있어요?" 질문이 사라짐.</p>
+        <span class="effect-tag">크로스팀 지연 제거 · 출시 리드타임 단축</span>
+      </div>
+
+      <div class="scenario-card">
+        <div class="num">SCENARIO 03</div>
+        <h4>임원이 매일 아침 브리핑을 받는다</h4>
+        <p>매일 오전 8시, 임원 전용 채널에 자동 메시지 발송: 전국 영업 실적 요약 / 목표 대비 달성률 / 주요 이슈. ERP 연동으로 데이터 자동 집계. 별도 보고 대기 없이 현황 파악 후 하루 시작.</p>
+        <span class="effect-tag">보고 대기 제거 · 의사결정 속도 향상</span>
+      </div>
+
+      <div class="scenario-card">
+        <div class="num">SCENARIO 04</div>
+        <h4>온보딩이 자동으로 돌아간다</h4>
+        <p>신입사원 입사 당일, 워크플로우 자동 실행. IT팀 계정 세팅 요청 / HR팀 교육 일정 안내 / 팀장 온보딩 체크리스트 발송이 동시에. 첫날부터 누락 없이 온보딩 완료.</p>
+        <span class="effect-tag">HR·IT 반복 업무 자동화</span>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- 3. 비용 분석 -->
+  <div class="section">
+    <div class="section-title"><span class="icon">💰</span> 본도입 비용 상세 (3안 기준)</div>
+
+    <!-- Summary Cards -->
+    <div class="cost-cards">
+      <div class="cost-card add">
+        <div class="label">연간 라이선스 비용</div>
+        <div class="value">3억 154만</div>
+        <div class="sub">GWS Starter + Standard + Slack</div>
+      </div>
+      <div class="cost-card save">
+        <div class="label">기존 솔루션 절감</div>
+        <div class="value">△1억 310만</div>
+        <div class="sub">기존 7개 솔루션 대체</div>
+      </div>
+      <div class="cost-card net">
+        <div class="label">연간 순 추가 비용</div>
+        <div class="value">1억 9,844만</div>
+        <div class="sub">첫해 +교육비 2억 1,524만</div>
+      </div>
+    </div>
+
+    <!-- 신규 도입 비용 -->
+    <h3 style="font-size:15px; margin-bottom:12px; color:#333;">📥 신규 도입 비용 (연간 라이선스)</h3>
+    <table style="margin-bottom:24px;">
+      <thead>
+        <tr>
+          <th>항목</th>
+          <th>단가</th>
+          <th>인원</th>
+          <th>산출 근거</th>
+          <th class="amount">연간 비용</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>GWS Starter</td>
+          <td>$8.80/인</td>
+          <td>600명</td>
+          <td>$8.80 × 600 × 12 × 1,450</td>
+          <td class="amount">91,872,000원</td>
+        </tr>
+        <tr>
+          <td>GWS Standard</td>
+          <td>$21.60/인</td>
+          <td>500명</td>
+          <td>$21.60 × 500 × 12 × 1,450</td>
+          <td class="amount">187,920,000원</td>
+        </tr>
+        <tr>
+          <td>Slack Business+</td>
+          <td>$25.00/인</td>
+          <td>50명</td>
+          <td>$25 × 50 × 12 × 1,450</td>
+          <td class="amount">21,750,000원</td>
+        </tr>
+        <tr class="subtotal">
+          <td colspan="4"><strong>라이선스 소계</strong></td>
+          <td class="amount"><strong>301,542,000원</strong></td>
+        </tr>
+        <tr>
+          <td>교육/변경관리</td>
+          <td>—</td>
+          <td>—</td>
+          <td>일회성 (첫해만)</td>
+          <td class="amount">16,800,000원</td>
+        </tr>
+        <tr class="total-row">
+          <td colspan="4"><strong>신규 도입 총계 (첫해)</strong></td>
+          <td class="amount"><strong>318,342,000원</strong></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- 절감 비용 -->
+    <h3 style="font-size:15px; margin-bottom:12px; color:#333;">📤 절감 비용 (기존 솔루션 전체 대체 가정)</h3>
+    <table style="margin-bottom:12px;">
+      <thead>
+        <tr>
+          <th>기존 항목</th>
+          <th>현재 용도</th>
+          <th>대체 솔루션</th>
+          <th>대체 여부</th>
+          <th class="amount">연간 절감액</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>사무용 Office (MS)</td>
+          <td>PC 설치형 문서도구</td>
+          <td>Docs / Sheets / Slides</td>
+          <td>병용</td>
+          <td class="amount">58,000,000원</td>
+        </tr>
+        <tr>
+          <td>사내 메신저</td>
+          <td>업무 소통</td>
+          <td>Google Chat</td>
+          <td>대체</td>
+          <td class="amount">5,380,000원</td>
+        </tr>
+        <tr>
+          <td>화상회의 (Webex)</td>
+          <td>웹 기반 화상회의</td>
+          <td>Google Meet</td>
+          <td>대체</td>
+          <td class="amount">4,000,000원</td>
+        </tr>
+        <tr>
+          <td>그룹웨어 (이메일)</td>
+          <td>사내 이메일</td>
+          <td>Gmail / Calendar</td>
+          <td>대체</td>
+          <td class="amount">9,000,000원</td>
+        </tr>
+        <tr>
+          <td>외부메일</td>
+          <td>외부 이메일</td>
+          <td>Gmail</td>
+          <td>대체</td>
+          <td class="amount">3,300,000원</td>
+        </tr>
+        <tr>
+          <td>스팸메일 차단 (Spam Sniper)</td>
+          <td>스팸차단</td>
+          <td>Gmail Security</td>
+          <td>대체</td>
+          <td class="amount">5,000,000원</td>
+        </tr>
+        <tr>
+          <td>ECM / DRM</td>
+          <td>문서 저장 및 보안</td>
+          <td>Google Drive</td>
+          <td>점진적 대체</td>
+          <td class="amount">18,420,000원</td>
+        </tr>
+        <tr class="saving-row">
+          <td colspan="4"><strong>절감 소계</strong></td>
+          <td class="amount"><strong>△103,100,000원</strong></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="comment">
+      <strong>※ ECM/DRM 유의사항:</strong> 사내 문서보안 기준 또는 GxP 규정에 따라 병행 사용이 필요한 경우, 해당 비용은 절감 항목에서 제외되어 유지될 수 있음.
+    </div>
+
+    <!-- 순 비용 -->
+    <h3 style="font-size:15px; margin:24px 0 12px; color:#333;">📊 순 비용 요약</h3>
+    <table>
+      <thead>
+        <tr>
+          <th colspan="2">구분</th>
+          <th class="amount">금액</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td colspan="2">연간 라이선스 비용</td>
+          <td class="amount">301,542,000원</td>
+        </tr>
+        <tr class="saving-row">
+          <td colspan="2">기존 솔루션 절감</td>
+          <td class="amount">△103,100,000원</td>
+        </tr>
+        <tr class="subtotal">
+          <td colspan="2"><strong>연간 순 추가 비용</strong></td>
+          <td class="amount"><strong>198,442,000원</strong></td>
+        </tr>
+        <tr>
+          <td colspan="2">교육/변경관리 (일회성, 첫해만)</td>
+          <td class="amount">+16,800,000원</td>
+        </tr>
+        <tr class="net-row">
+          <td colspan="2"><strong>첫해 실질 추가 비용</strong></td>
+          <td class="amount"><strong>215,242,000원</strong></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="comment" style="margin-top:12px;">
+      <strong>📌 참고:</strong> 공장 현장직 등 PC 미사용 인원은 Starter 계정 대상에서 제외 검토 중. 확정 인원 반영 시 GWS Starter 비용 추가 절감 가능. / 환율 기준: 1,450원/USD
+    </div>
+
+  </div>
+
+  <div class="footer">
+    광동제약 AI센터 내부 검토용 · 2026년 3월 작성 · 수치는 확정 전 추정값으로 변경될 수 있음
+  </div>
+
+</div>
+</body>
+</html>
