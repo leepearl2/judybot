@@ -214,29 +214,45 @@
     </table>
 
     <div style="margin-top: 24px;">
-      <div style="font-size: 14px; font-weight: 700; color: #333; margin-bottom: 14px;">📅 PoC 일정</div>
+      <div style="font-size: 14px; font-weight: 700; color: #333; margin-bottom: 14px;">📅 PoC 타임라인</div>
       <div class="timeline">
         <div class="tl-item">
-          <div class="tl-dot">4/1</div>
-          <div class="tl-date">4월 1주차</div>
-          <div class="tl-desc">환경 오픈<br>가이드 배포<br>계정 안내</div>
+          <div class="tl-dot">3/31</div>
+          <div class="tl-date">3/31(화)</div>
+          <div class="tl-desc">환경 세팅<br>완료</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot">준비</div>
+          <div class="tl-date">4/1~4/4</div>
+          <div class="tl-desc">PoC 준비<br>기간</div>
         </div>
         <div class="tl-item green">
           <div class="tl-dot">교육</div>
           <div class="tl-date">4월 2주차</div>
-          <div class="tl-desc">GWS 기본 교육<br>(메가존 진행)</div>
+          <div class="tl-desc">GWS+Slack 교육<br>매뉴얼 배포<br>보안 설정 완료</div>
         </div>
         <div class="tl-item orange">
-          <div class="tl-dot">테스트</div>
-          <div class="tl-date">4월 3주차~</div>
-          <div class="tl-desc">시나리오 테스트<br>2주 안정화 후</div>
+          <div class="tl-dot">Day1</div>
+          <div class="tl-date">4/14(월)</div>
+          <div class="tl-desc">사용자 PoC<br>시작 (Day 1)</div>
+        </div>
+        <div class="tl-item orange">
+          <div class="tl-dot">검증</div>
+          <div class="tl-date">4/14~</div>
+          <div class="tl-desc">실사용 및<br>크로스협업<br>시나리오 테스트</div>
         </div>
         <div class="tl-item red">
-          <div class="tl-dot">종료</div>
-          <div class="tl-date">5월 18일</div>
-          <div class="tl-desc">PoC 종료<br>결과 보고</div>
+          <div class="tl-dot">5/23</div>
+          <div class="tl-date">5/23(금)</div>
+          <div class="tl-desc">Slack PoC 종료<br>(계정 원복)</div>
+        </div>
+        <div class="tl-item red">
+          <div class="tl-dot">5/27</div>
+          <div class="tl-date">5/27(화)</div>
+          <div class="tl-desc">GWS PoC 종료<br>결과 보고</div>
         </div>
       </div>
+      <div style="font-size: 12px; color: #888; margin-top: 10px;">※ PoC 기간: GWS 4/1~5/27, Slack 4/1~5/23</div>
     </div>
   </div>
 
@@ -402,7 +418,53 @@
     </div>
 
     <div class="notice" style="margin-top: 20px;">
-      <strong>Go/No-Go 판단:</strong> KPI 목표 달성 + 사용자 수용도 70% 이상 시 본도입 권장 · 5/18 PoC 종료 후 결과 보고를 통해 최종 의사결정
+      <strong>Go/No-Go 판단:</strong> KPI 목표 달성 + 사용자 수용도 70% 이상 시 본도입 권장 · GWS 5/27 PoC 종료 후 결과 보고를 통해 최종 의사결정 (Slack 종료: 5/23)
+    </div>
+  </div>
+
+  <!-- 6. 사용자 온보딩 체크리스트 -->
+  <div class="section">
+    <div class="section-title">✅ 6. 사용자 온보딩 체크리스트</div>
+
+    <div style="margin-bottom: 20px;">
+      <div style="font-size: 14px; font-weight: 700; color: #333; margin-bottom: 12px;">📋 GWS 공통 — CMO본부 + 기획관리본부 (4/14 Day 1 ~)</div>
+      <table>
+        <thead>
+          <tr><th>일정</th><th>항목</th><th>담당</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>4/14(월) Day 1</strong></td><td>GWS 계정 활성화 (초기 비밀번호 변경)</td><td>Judy (계정 생성), 사용자 (직접 설정)</td></tr>
+          <tr><td><strong>4/14(월) Day 1</strong></td><td>Google Drive 앱 설치 (PC + 모바일)</td><td>사용자</td></tr>
+          <tr><td><strong>4/14(월) Day 1</strong></td><td>부서 공유 드라이브 접근 확인</td><td>Judy</td></tr>
+          <tr><td><strong>4/14(월) Day 1</strong></td><td>PoC 기간 중 기존 사내메일 ↔ GWS 병행 운영 가이드 확인</td><td>Judy</td></tr>
+          <tr><td><strong>4/15(화) Day 2</strong></td><td>Google Docs / Sheets / Slides 기본 실습</td><td>사용자</td></tr>
+          <tr><td><strong>4/15(화) Day 2</strong></td><td>Google Calendar 일정 생성 및 공유 실습</td><td>사용자</td></tr>
+          <tr><td><strong>4/15(화) Day 2</strong></td><td>Meet 화상회의 테스트</td><td>사용자</td></tr>
+          <tr><td><strong>4/16(수) Day 3</strong></td><td>공동 문서 편집 테스트</td><td>사용자</td></tr>
+          <tr><td><strong>4/16(수) Day 3</strong></td><td>드라이브 파일 공유 권한 테스트</td><td>사용자</td></tr>
+          <tr><td><strong>(수시)</strong></td><td>협업·AI 활용에 필요한 업무문서/파일 Drive 개별 업로드</td><td>사용자</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div>
+      <div style="font-size: 14px; font-weight: 700; color: #333; margin-bottom: 12px;">💬 Slack 전용 — CMO본부 (4/15 Day 2 ~)</div>
+      <table>
+        <thead>
+          <tr><th>일정</th><th>항목</th><th>담당</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>4/15(화) Day 2</strong></td><td>Slack 가입 및 프로필 설정</td><td>사용자</td></tr>
+          <tr><td><strong>4/15(화) Day 2</strong></td><td>Slack 모바일 앱 설치</td><td>사용자</td></tr>
+          <tr><td><strong>4/15(화) Day 2</strong></td><td>소속 부서 채널 입장</td><td>사용자</td></tr>
+          <tr><td><strong>4/15(화) Day 2</strong></td><td>#00_poc-질문문의 채널 입장</td><td>사용자</td></tr>
+          <tr><td><strong>4/16(수) Day 3</strong></td><td>기본 Slack 사용자 교육</td><td>세일즈포스 교육</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="notice" style="margin-top: 16px;">
+      <strong>운영 일정:</strong> 보안 모니터링·Q&A 오피스아워·GWS Admin Console 모니터링 전 기간 운영 (4/14~5/27 매주) · Slack 종료: 5/23(금) 계정 원복
     </div>
   </div>
 

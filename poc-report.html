@@ -1,0 +1,1235 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>업무 생산성 혁신을 위한 디지털 워크플레이스 전환 검증 계획</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap');
+
+  :root {
+    --kd-bg: #EDE8E0;
+    --kd-bg-light: #F5F2ED;
+    --kd-white: #FFFFFF;
+    --kd-dark: #333333;
+    --kd-gray: #555555;
+    --kd-gray-light: #8a8580;
+    --kd-accent: #CC3300;
+    --kd-accent-soft: #E8D5C8;
+    --kd-blue: #2C5F7C;
+    --kd-green: #4A7C59;
+    --kd-navy: #3D4F5F;
+    --kd-red: #CC3300;
+    --kd-orange: #C07530;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #C8C3BB; font-family: 'Noto Sans KR', sans-serif; color: var(--kd-dark); }
+
+  /* ── Page (A4 Landscape: 297mm × 210mm) ── */
+  .page {
+    width: 297mm; min-height: 210mm;
+    background: var(--kd-white);
+    margin: 16px auto;
+    padding: 0;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.12);
+    border-radius: 4px;
+    overflow: hidden;
+    position: relative;
+    page-break-after: always;
+    page-break-inside: avoid;
+  }
+  .page-inner {
+    padding: 56px 40px 32px 40px;
+    min-height: calc(210mm - 56px);
+    display: flex;
+    flex-direction: column;
+  }
+  .page-inner > *:last-child { margin-top: auto; }
+  .page-inner > h2 { flex-shrink: 0; }
+  .page-inner .card-grid,
+  .page-inner .card-grid-3,
+  .page-inner .compare,
+  .page-inner table { flex: 1; }
+  .page-inner .card-grid,
+  .page-inner .card-grid-3 { align-content: start; }
+
+  /* ── Top Bar (beige) ── */
+  .page::before {
+    content: '';
+    display: block;
+    height: 52px;
+    background: var(--kd-bg);
+    width: 100%;
+  }
+
+  /* ── Logo (top-right) ── */
+  .page-logo {
+    position: absolute;
+    top: 6px;
+    right: 36px;
+  }
+  .page-logo img { height: 38px; }
+
+  /* ── Page Number ── */
+  .page-num {
+    position: absolute;
+    bottom: 12px;
+    right: 36px;
+    font-size: 11px;
+    color: var(--kd-gray-light);
+  }
+
+  /* ── Typography ── */
+  h1 { font-size: 32px; font-weight: 700; letter-spacing: -0.02em; line-height: 1.35; }
+  h2 { font-size: 26px; font-weight: 700; letter-spacing: -0.02em; color: var(--kd-dark); margin: 0 0 16px 0; line-height: 1.2; position: relative; top: -8px; }
+  h3 { font-size: 18px; font-weight: 700; color: var(--kd-navy); margin: 0 0 10px 0; }
+  h4 { font-size: 15px; font-weight: 700; color: var(--kd-dark); margin: 0 0 6px 0; }
+  p { font-size: 15px; line-height: 1.75; color: var(--kd-gray); }
+  ul, ol { font-size: 15px; color: var(--kd-gray); padding-left: 22px; line-height: 1.85; }
+  li { margin-bottom: 4px; }
+
+  /* ── Cover ── */
+  .cover { background: var(--kd-bg) !important; text-align: left; display: flex; flex-direction: column; justify-content: center; }
+  .cover::before { display: none; }
+  .cover .page-inner { padding: 60px 60px 40px 60px; display: flex; flex-direction: column; justify-content: center; min-height: 210mm; }
+  .cover h1 { font-size: 36px; margin-bottom: 16px; }
+  .cover .subtitle { font-size: 16px; color: var(--kd-gray); font-weight: 500; margin-bottom: 48px; }
+  .cover .meta { font-size: 14px; color: var(--kd-gray-light); }
+  .cover .company { font-size: 16px; font-weight: 700; color: var(--kd-dark); margin-bottom: 6px; }
+  .cover svg { position: absolute; bottom: 0; left: 0; width: 100%; }
+  .cover .logo-bottom { position: absolute; bottom: 20px; right: 48px; z-index: 2; }
+  .cover .logo-bottom img { height: 44px; }
+
+  /* ── Section Divider ── */
+  .divider { background: var(--kd-bg) !important; text-align: center; display: flex; align-items: center; justify-content: center; }
+  .divider::before { display: none; }
+  .divider .page-inner { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 210mm; padding-top: 0; }
+  .divider .section-num { font-size: 120px; font-weight: 900; color: var(--kd-accent); opacity: 0.1; }
+  .divider h2 { font-size: 32px; top: 0; margin-top: -24px; }
+  .divider p { font-size: 17px; color: var(--kd-gray); margin-top: 10px; }
+
+  /* ── Cards ── */
+  .card-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 14px; }
+  .card-grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; margin-top: 14px; }
+  .card { background: var(--kd-bg-light); border-radius: 8px; padding: 18px 20px; border-left: 4px solid var(--kd-blue); }
+  .card.green { border-left-color: var(--kd-green); }
+  .card.red { border-left-color: var(--kd-red); }
+  .card.orange { border-left-color: var(--kd-orange); }
+  .card h3 { margin: 0 0 10px 0; font-size: 17px; }
+  .card p, .card li { font-size: 14px; color: var(--kd-gray); margin: 4px 0; line-height: 1.7; }
+  .card ul { padding-left: 18px; margin: 8px 0; }
+
+  /* ── Big Numbers ── */
+  .big-num { font-size: 48px; font-weight: 900; color: var(--kd-blue); line-height: 1; }
+  .big-num.red { color: var(--kd-red); }
+  .big-num.green { color: var(--kd-green); }
+  .num-label { font-size: 15px; color: var(--kd-gray); margin-top: 8px; line-height: 1.5; }
+
+  /* ── Tables ── */
+  table { font-size: 14px; border-collapse: collapse; width: 100%; margin-top: 14px; }
+  th { background: var(--kd-navy); color: white; padding: 12px 16px; text-align: left; font-weight: 500; font-size: 14px; }
+  td { padding: 10px 16px; border-bottom: 1px solid #D8D3CC; font-size: 14px; }
+  tr:nth-child(even) { background: var(--kd-bg-light); }
+  .winner { background: #E8F0E4 !important; font-weight: 500; }
+
+  /* ── Tags ── */
+  .tag { display: inline-block; padding: 2px 8px; border-radius: 20px; font-size: 11px; font-weight: 500; }
+  .tag-blue { background: #D8E8F0; color: var(--kd-blue); }
+  .tag-green { background: #E0ECDF; color: #2D5F3A; }
+  .tag-red { background: #F5DDD5; color: #8B2200; }
+  .tag-gray { background: #E8E4DD; color: var(--kd-gray); }
+
+  /* ── Flow ── */
+  .flow { display: flex; align-items: center; justify-content: center; gap: 8px; margin: 16px 0; flex-wrap: wrap; }
+  .flow-step { background: var(--kd-bg-light); padding: 14px 28px; border-radius: 8px; font-size: 15px; font-weight: 500; }
+  .flow-step.active { background: var(--kd-navy); color: white; }
+  .flow-arrow { font-size: 16px; color: var(--kd-gray-light); }
+
+  /* ── Compare ── */
+  .compare { display: grid; grid-template-columns: 1fr 40px 1fr; gap: 0; margin-top: 12px; align-items: start; }
+  .compare-left, .compare-right { padding: 20px; border-radius: 8px; font-size: 14px; }
+  .compare-left { background: var(--kd-bg-light); border: 1px solid #D8D3CC; }
+  .compare-right { background: #E8F0E4; }
+  .compare-mid { display: flex; align-items: center; justify-content: center; font-size: 20px; color: var(--kd-gray-light); padding-top: 30px; }
+  .compare h3 { margin: 0 0 8px 0; font-size: 15px; }
+
+  /* ── Quote ── */
+  .exec-quote { background: var(--kd-bg-light); border-left: 4px solid var(--kd-accent); padding: 16px 24px; border-radius: 0 8px 8px 0; margin: 20px 0; font-style: italic; font-size: 14px; color: var(--kd-gray); line-height: 1.8; }
+
+  /* ── Scenario ── */
+  .scenario-box { background: var(--kd-bg-light); border-radius: 8px; padding: 18px 20px; margin: 5px 0; }
+  .scenario-box h4 { margin: 0 0 8px; font-size: 15px; }
+  .scenario-box p { font-size: 13px; margin: 4px 0; line-height: 1.7; }
+
+  /* ── Risk ── */
+  .risk-high { color: var(--kd-red); font-weight: 700; }
+  .risk-mid { color: var(--kd-orange); font-weight: 700; }
+  .risk-low { color: var(--kd-green); font-weight: 700; }
+
+  /* ── Gantt colors ── */
+  .g-prep { background: var(--kd-navy); color: white; text-align: center; }
+  .g-edu { background: var(--kd-orange); color: white; text-align: center; }
+  .g-verify { background: var(--kd-green); color: white; text-align: center; }
+  .g-eval { background: #6554c0; color: white; text-align: center; }
+
+  /* ── Print ── */
+  @media print {
+    @page { size: A4 landscape; margin: 0; }
+    body { background: white; }
+    .page { margin: 0; box-shadow: none; border-radius: 0; width: 100%; min-height: 100vh; }
+  }
+
+  /* ── Helpers ── */
+  .mt-4 { margin-top: 4px; }
+  .mt-8 { margin-top: 8px; }
+  .mt-12 { margin-top: 12px; }
+  .mt-16 { margin-top: 16px; }
+  .text-center { text-align: center; }
+  .text-sm { font-size: 11px; }
+  .text-xs { font-size: 10px; color: var(--kd-gray-light); }
+</style>
+</head>
+<body>
+
+<!-- COVER -->
+<div class="page cover">
+  <div class="page-inner">
+    <h1>AI 시대 업무 환경 전환을 위한<br>디지털 워크플레이스 PoC 계획</h1>
+    <div class="subtitle"></div>
+    <div class="company">AI센터</div>
+    <div class="meta">2026. 03</div>
+  </div>
+  <svg viewBox="0 0 1200 100" preserveAspectRatio="none" style="position:absolute;bottom:0;left:0;width:100%;z-index:1;">
+    <path d="M0,100 L0,70 C200,50 400,35 600,45 C800,55 1000,30 1200,40 L1200,100 Z" fill="#FFFFFF"/>
+  </svg>
+  <div class="logo-bottom"><img src="logo-horizontal.png" alt="Kwangdong"></div>
+</div>
+
+<!-- 핵심 요약 -->
+<div class="page">
+  <div class="page-logo"><img src="logo-vertical.png" alt="Kwangdong"></div>
+  <div class="page-inner">
+    <h2>핵심 요약</h2>
+    <p style="margin-bottom:8px;">155명이 10주간 GWS+Slack을 실제 업무에 사용하여, 전사 도입 여부를 판단합니다</p>
+    <div class="card-grid">
+      <div class="card" style="text-align:center; border-left-color:var(--kd-accent);">
+        <div class="big-num" style="color:var(--kd-accent);">155명</div>
+        <div class="num-label">PoC 참여 인원<br>CMO본부 95 + 기획관리 60</div>
+      </div>
+      <div class="card" style="text-align:center; border-left-color:var(--kd-blue);">
+        <div class="big-num">~10주</div>
+        <div class="num-label">준비 1주 (3.23~31)<br>+ 본 검증 8주 (4.1~5.27)</div>
+      </div>
+      <div class="card" style="text-align:center; border-left-color:var(--kd-green);">
+        <div class="big-num green">GWS</div>
+        <div class="num-label">Google Workspace<br>Enterprise Standard</div>
+      </div>
+      <div class="card" style="text-align:center; border-left-color:var(--kd-navy);">
+        <div class="big-num" style="color:var(--kd-navy); font-size:36px;">Slack</div>
+        <div class="num-label">Business+<br>AI·시스템 통합 인터페이스</div>
+      </div>
+    </div>
+    <div class="card-grid mt-16">
+      <div class="card green">
+        <h3>🎯 PoC 목적</h3>
+        <ul>
+          <li>AI 시대에 맞는 <strong>클라우드 기반 업무 인프라</strong> 전환 가능성 검증</li>
+          <li>실시간 협업, 문서 공동편집, AI 자동화가 실제 업무에서 작동하는지 확인</li>
+          <li>전사 도입 전 <strong>제한된 범위에서 먼저 증명</strong></li>
+        </ul>
+      </div>
+      <div class="card orange">
+        <h3>💰 PoC 비용</h3>
+        <ul>
+          <li><strong>GWS:</strong> 무상 (트라이얼)</li>
+          <li><strong>Slack:</strong> 약 560만원 ($12.50 × 155명 × 2개월)</li>
+          <li><strong>교육:</strong> 무상 (메가존 서비스)</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 1-1 -->
+<div class="page">
+  <div class="page-logo"><img src="logo-vertical.png" alt="Kwangdong"></div>
+  <div class="page-inner">
+    <h2><span class="tag tag-blue" style="font-size:12px; vertical-align:middle; margin-right:8px;">01 현황 인식</span> 왜 지금 업무 환경을 전환하는가</h2>
+    <p style="margin-bottom:8px;">현재 업무 환경은 AI 활용·실시간 협업에 구조적 한계가 있습니다</p>
+    <div class="compare">
+      <div class="compare-left">
+        <h3>📌 현재: 개별 중심 업무 환경</h3>
+        <p style="font-style:italic; color:#42526e;">"각자의 방식으로 잘 해왔지만, 다음 단계가 필요합니다"</p>
+        <ul class="mt-8">
+          <li><strong>개별 소통</strong> — 메일·개인 메신저 중심</li>
+          <li><strong>로컬 저장</strong> — PC 기반, 공유에 추가 작업 필요</li>
+          <li><strong>순차 처리</strong> — 자료 취합·합본 등 수작업 단계</li>
+        </ul>
+      </div>
+      <div class="compare-mid">→</div>
+      <div class="compare-right">
+        <h3>🟢 미래: AI가 함께 일하는 환경</h3>
+        <p style="font-style:italic; color:#006644;">"AI 비서·자동화가 일상이 되는 업무 인프라"</p>
+        <ul class="mt-8">
+          <li><strong>실시간 연결</strong> — 클라우드 기반 즉시 소통·공유</li>
+          <li><strong>AI 통합</strong> — 문서 요약, 데이터 분석, 보고서 초안 자동화</li>
+          <li><strong>확장 가능</strong> — AI 에이전트·워크플로우 자동화 즉시 적용</li>
+        </ul>
+      </div>
+    </div>
+    <div class="exec-quote mt-12">
+      "AI가 업무의 인프라가 되는 시대, 클라우드 기반 통합 환경이 그 전제 조건입니다.<br>
+      지금 준비하는 기업이 AI 활용에서 앞서갑니다."
+    </div>
+  </div>
+  <div class="page-num">1</div>
+</div>
+
+<!-- 1-2 -->
+<div class="page">
+  <div class="page-logo"><img src="logo-vertical.png" alt="Kwangdong"></div>
+  <div class="page-inner">
+    <h2>현재 업무 방식의 구체적 비효율</h2>
+    <p style="margin-bottom:8px;">보고서 합본, 소통 지연, 파일 검색, AI 기반 부재 — 4가지 핵심 비효율을 해소합니다</p>
+    <div class="card-grid">
+      <div class="card red">
+        <h3>📄 보고서 취합·합본</h3>
+        <p>각 부서가 PPT/엑셀을 메일로 회신 → 담당자가 수작업으로 합본</p>
+        <p><strong>문제:</strong> "최종_v3_진짜.pptx" 버전 혼선, 서식 불일치, 반복 수정</p>
+        <p style="color:var(--kd-green);"><strong>→ GWS:</strong> Slides 동시 편집으로 합본 작업 자체를 제거</p>
+      </div>
+      <div class="card red">
+        <h3>💬 정보 전달·의사결정 지연</h3>
+        <p>메일 기반 소통 → 회신 대기, 참조 누락, 히스토리 단절</p>
+        <p><strong>문제:</strong> 긴급 이슈도 메일/개인 메신저 산재, 사후 추적 불가</p>
+        <p style="color:var(--kd-green);"><strong>→ Slack:</strong> 채널 기반 실시간 소통 + 스레드로 이력 자동 보존</p>
+      </div>
+      <div class="card red">
+        <h3>📁 파일·지식 검색</h3>
+        <p>PC 로컬 저장 → 담당자 부재 시 파일 위치 모름</p>
+        <p><strong>문제:</strong> 과거 문서 찾기에 상당한 시간 소요, 퇴사 시 지식 유실</p>
+        <p style="color:var(--kd-green);"><strong>→ Drive:</strong> 클라우드 단일 저장소 + 전문 검색 + 퇴사자 데이터 보존</p>
+      </div>
+      <div class="card red">
+        <h3>🤖 AI 활용 기반 부재</h3>
+        <p>현재 인프라에서는 AI 도구를 업무에 즉시 연동할 수 없음</p>
+        <p><strong>문제:</strong> AI 활용이 개인 수준에 머무르고, 업무 프로세스에 내장 불가</p>
+        <p style="color:var(--kd-green);"><strong>→ GWS+Slack:</strong> Gemini·AI 에이전트가 업무 흐름 안에서 직접 동작</p>
+      </div>
+    </div>
+    <p class="text-xs mt-8">※ 각 항목의 정확한 현재 수치는 PoC 시작 전 사전 설문으로 측정합니다 (별첨 A 참조)</p>
+  </div>
+  <div class="page-num">2</div>
+</div>
+
+<!-- 1-3 -->
+<div class="page">
+  <div class="page-logo"><img src="logo-vertical.png" alt="Kwangdong"></div>
+  <div class="page-inner">
+    <h2>Google Workspace 도입 사례</h2>
+    <p style="margin-bottom:8px;">제약·소비재·금융 등 글로벌 기업들이 GWS 전환으로 협업 생산성을 입증했습니다</p>
+    <div class="card-grid-3">
+      <div class="card">
+        <h3>🏥 제약·바이오</h3>
+        <ul>
+          <li><strong>Sanofi</strong> — Google Cloud 기반 AI 연구 협업, Healthcare Innovation Lab 공동 설립</li>
+          <li><strong>JW중외제약</strong> — GWS 도입, AI 스마트랩 기반 연구 협업</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>🏭 제조·식품</h3>
+        <ul>
+          <li><strong>하림그룹</strong> — 전사 GWS 도입, 현장-본사 실시간 연결</li>
+          <li><strong>Colgate-Palmolive</strong> — 2.8만 명 GWS 전환 (6개월), Drive 활용률 94%+</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>🏢 국내 대기업</h3>
+        <ul>
+          <li><strong>카카오</strong> — GWS 기반 전사 협업</li>
+          <li><strong>당근</strong> — GWS + Slack 병행 운영</li>
+          <li><strong>토스</strong> — GWS + Slack 병행 운영</li>
+        </ul>
+      </div>
+    </div>
+    <div class="exec-quote mt-12">
+      "제약·제조·IT 업종을 불문하고, 클라우드 기반 업무 환경으로의 전환은 이미 글로벌 표준입니다."
+    </div>
+    <p class="text-xs mt-4">출처: Google 하림사례 · Google Workspace Customers</p>
+  </div>
+  <div class="page-num">3</div>
+</div>
+
+<!-- ══════════════════════════════════════════ -->
+<!-- SECTION 2 -->
+<!-- ══════════════════════════════════════════ -->
+
+
+<!-- 2-1 -->
+<div class="page">
+  <div class="page-logo"><img src="logo-vertical.png" alt="Kwangdong"></div>
+  <div class="page-inner">
+    <h2><span class="tag tag-blue" style="font-size:12px; vertical-align:middle; margin-right:8px;">02 해결 방향</span> Google Workspace + Slack을 선택한 이유</h2>
+    <p style="margin-bottom:8px;">실시간 협업·AI 통합·모바일·보안 — 4가지 핵심 강점이 당사 업무에 부합합니다</p>
+    <div class="card-grid mt-12">
+      <div class="card" style="text-align:center;">
+        <div class="big-num green" style="font-size:28px;">통합</div>
+        <div class="num-label">메일·문서·화상회의·드라이브<br>하나의 플랫폼에서 해결</div>
+      </div>
+      <div class="card" style="text-align:center;">
+        <div class="big-num green" style="font-size:28px;">실시간</div>
+        <div class="num-label">공동편집 · 버전 자동관리<br>취합·합본 작업 자체를 제거</div>
+      </div>
+      <div class="card" style="text-align:center;">
+        <div class="big-num green" style="font-size:28px;">보안</div>
+        <div class="num-label">DLP · 감사 로그 · 접근 제어<br>제약업계 규제 대응 가능</div>
+      </div>
+      <div class="card" style="text-align:center;">
+        <div class="big-num green" style="font-size:28px;">AI</div>
+        <div class="num-label">Gemini · AI 에이전트 연동<br>생성형 AI 즉시 활용 가능</div>
+      </div>
+    </div>
+    <div class="exec-quote mt-16">
+      "단순히 도구를 바꾸는 것이 아니라, AI를 활용할 수 있는 <strong>업무 인프라의 기반</strong>을 구축하는 것입니다."
+    </div>
+  </div>
+  <div class="page-num">4</div>
+</div>
+
+<!-- 2-2 -->
+<div class="page">
+  <div class="page-logo"><img src="logo-vertical.png" alt="Kwangdong"></div>
+  <div class="page-inner">
+    <h2>솔루션 비교 검토 결과</h2>
+    <p style="margin-bottom:8px;">M365의 기존 문서 호환·사용자 익숙함을 인정하되, AI·협업·관리·TCO 총합으로 GWS가 우위입니다</p>
+    <table>
+      <thead>
+        <tr><th>평가 기준</th><th>Google Workspace</th><th>Microsoft 365</th><th>적합도</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>실시간 협업</strong></td><td class="winner">클라우드 네이티브 동시편집</td><td>데스크톱 앱 기반, 온라인 동시편집 가능</td><td><span class="tag tag-green">GWS ✓</span></td></tr>
+        <tr><td><strong>AI 활용 (R&D)</strong></td><td class="winner">Gemini · NotebookLM · AI Studio 연동</td><td>Copilot (오피스 보조 중심)</td><td><span class="tag tag-green">GWS ✓</span></td></tr>
+        <tr><td><strong>기존 문서 호환</strong></td><td>MS 오피스 파일 열기/변환 지원</td><td class="winner"><strong>기존 오피스(PPT·엑셀) 네이티브 호환</strong></td><td><span class="tag tag-blue">M365 ✓</span></td></tr>
+        <tr><td><strong>현장-사무실</strong></td><td class="winner">모바일 네이티브, 기기 독립적</td><td>앱 설치 필요, 데스크톱 최적화</td><td><span class="tag tag-green">GWS ✓</span></td></tr>
+        <tr><td><strong>보안/관리</strong></td><td class="winner">단일 Admin Console, DLP</td><td>복잡한 관리 구조 (Azure AD 등)</td><td><span class="tag tag-green">GWS ✓</span></td></tr>
+        <tr><td><strong>사용자 익숙함</strong></td><td>학습 필요 (전환 비용 존재)</td><td class="winner"><strong>Outlook·Excel·PPT 기존 사용 경험</strong></td><td><span class="tag tag-blue">M365 ✓</span></td></tr>
+        <tr><td><strong>TCO(총비용)</strong></td><td class="winner">설치 불필요, 통합 패키지 우위</td><td>PC별 설치 관리 공수</td><td><span class="tag tag-green">GWS ✓</span></td></tr>
+      </tbody>
+    </table>
+    <p class="text-xs mt-4">※ M365는 기존 문서 호환성과 사용자 익숙함에 강점이 있으나, AI 확장성·실시간 협업·모바일·관리 편의성·TCO를 종합하면 <strong>GWS가 당사 환경에 적합</strong>하다고 판단합니다</p>
+  </div>
+  <div class="page-num">5</div>
+</div>
+
+<!-- 2-3 -->
+<div class="page">
+  <div class="page-logo"><img src="logo-vertical.png" alt="Kwangdong"></div>
+  <div class="page-inner">
+    <h2>Slack 병행 테스트의 목적</h2>
+    <p style="margin-bottom:8px;">Slack은 단순 메신저가 아닌, AI·시스템이 업무 흐름 안에서 동작하는 통합 인터페이스입니다</p>
+    <div class="card-grid">
+      <div class="card">
+        <h3>🤖 AI 에이전트 통합 허브</h3>
+        <ul>
+          <li>Slack은 글로벌 기업에서 <strong>AI 비서의 대화 창구</strong>로 활용 중</li>
+          <li>Salesforce Agentforce, OpenAI ChatGPT 등 <strong>AI 에이전트가 Slack 안에서 직접 동작</strong></li>
+          <li>직원이 채널에서 질문하면 AI가 사내 데이터를 검색·요약·답변</li>
+          <li><strong>광동 활용:</strong> 논문 요약, 시장 데이터 조회, 보고서 초안 생성을 Slack 채널 안에서 수행</li>
+        </ul>
+      </div>
+      <div class="card green">
+        <h3>🔗 시스템 연동 플랫폼</h3>
+        <ul>
+          <li>ERP·MES·SFA 등 기존 시스템의 <strong>알림과 워크플로우를 한 곳으로</strong> 통합</li>
+          <li>공장 장애 → 자동 알림 → 스레드 대응 → 화상회의(Huddle) 즉시 전환</li>
+          <li>외부 파트너와 <strong>Slack Connect</strong>로 보안 유지하며 협업</li>
+          <li><strong>광동 활용:</strong> 현장 이슈 실시간 대응, 대행사 협업 채널 운영</li>
+        </ul>
+      </div>
+    </div>
+    <div class="card-grid-3 mt-8">
+      <div class="scenario-box">
+        <h4>📌 Salesforce · Agentforce</h4>
+        <p>Slack 채널에서 AI 에이전트가 CRM 데이터 조회·고객 응대 자동화</p>
+      </div>
+      <div class="scenario-box">
+        <h4>📌 OpenAI · ChatGPT for Slack</h4>
+        <p>채널 대화 요약, 문서 초안 생성, 리서치를 Slack 안에서 즉시 수행</p>
+      </div>
+      <div class="scenario-box">
+        <h4>📌 Anthropic · Claude for Slack</h4>
+        <p>장문 분석, 코드 리뷰, 보고서 검토를 팀 채널에서 바로 요청</p>
+      </div>
+    </div>
+  </div>
+  <div class="page-num">6</div>
+</div>
+
+<!-- ══════════════════════════════════════════ -->
+<!-- SECTION 3 -->
+<!-- ══════════════════════════════════════════ -->
+
+
+<!-- 3-2 -->
+<div class="page">
+  <div class="page-logo"><img src="logo-vertical.png" alt="Kwangdong"></div>
+  <div class="page-inner">
+    <h2><span class="tag tag-blue" style="font-size:12px; vertical-align:middle; margin-right:8px;">03 검증 계획</span> 부서별 핵심 검증 시나리오</h2>
+    <p style="margin-bottom:6px;">8개 부서의 실제 업무를 GWS+Slack으로 수행하고, AS-IS 대비 개선을 측정합니다</p>
+    <table>
+      <thead>
+        <tr><th>부서</th><th>검증 시나리오</th><th>현재 방식 (AS-IS)</th><th>PoC 방식 (TO-BE)</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>전략기획</strong></td><td>경영보고서 공동 작성</td><td>각 부서 PPT 메일 회신 → 수작업 합본</td><td>Slides 공동편집, 합본 작업 제거</td></tr>
+        <tr><td><strong>영업지원</strong></td><td>견적서·계약서 검토</td><td>메일 첨부 핑퐁, 최종본 혼선</td><td>Docs 제안 모드, 버전 자동 관리</td></tr>
+        <tr><td><strong>총무/디자인</strong></td><td>규정 관리 · 시안 버전 관리</td><td>메일 배포, 구버전 혼재</td><td>Docs 단일본 + Drive 버전 자동 추적</td></tr>
+        <tr><td><strong>F&B영업</strong></td><td>미팅 기록 + 프로모션</td><td>개인 노트, 정보 분리</td><td>모바일 Docs + 통합 캘린더</td></tr>
+        <tr><td><strong>브랜드/CMO</strong></td><td>캠페인 기획 + 주간 보고</td><td>순차 메일, 수작업 취합</td><td>프로젝트 채널 + Slides 동시 편집</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="page-num">7</div>
+</div>
+
+<!-- 3-3 -->
+<div class="page">
+  <div class="page-logo"><img src="logo-vertical.png" alt="Kwangdong"></div>
+  <div class="page-inner">
+    <h2>크로스 본부 검증 시나리오</h2>
+    <p style="margin-bottom:8px;">본부 간 협업(경영보고·캠페인·계약)이 얼마나 빨라지는지가 핵심 검증 포인트입니다</p>
+    <div class="card-grid">
+      <div class="scenario-box">
+        <h4>📊 A. 월간 경영보고 프로세스</h4>
+        <p>전략기획 + CMO전략 + 각 본부</p>
+        <p>Slides 공동편집으로 수작업 합본 제거, 리마인더로 마감 관리</p>
+        <p><strong>검증:</strong> 보고서 취합 시간, 마감 준수율</p>
+      </div>
+      <div class="scenario-box">
+        <h4>🎨 B. 디자인 에셋 협업 프로세스</h4>
+        <p>브랜드전략 + 디자인 + 영업 + CMO전략</p>
+        <p>요청 양식 통일 → Drive 단일 버전 관리 → 스레드 피드백</p>
+        <p><strong>검증:</strong> 파일 버전 오류 건수, 시안 피드백 리드타임</p>
+      </div>
+      <div class="scenario-box">
+        <h4>📝 C. 거래처 계약·견적 프로세스</h4>
+        <p>F&B영업 + 영업지원 + 전략기획</p>
+        <p>Docs 제안 모드로 검토~확정, 버전 혼선 원천 제거</p>
+        <p><strong>검증:</strong> 검토 리드타임, 버전 혼선 건수</p>
+      </div>
+      <div class="scenario-box">
+        <h4>🚀 D. 캠페인 기획~실행 통합</h4>
+        <p>브랜드전략 + 디자인 + 영업 + CMO전략</p>
+        <p>프로젝트 채널에서 기획→실행→분석까지 전 부서 동시 진행</p>
+        <p><strong>검증:</strong> 기획~론칭 리드타임, 부서 간 정보 누락 건수</p>
+      </div>
+    </div>
+    <p class="text-xs mt-8">※ 시나리오별 상세 워크플로우, Slack 채널 구성, GWS 활용 방안은 별첨 가이드 참조</p>
+  </div>
+  <div class="page-num">8</div>
+</div>
+
+<!-- 3-4 -->
+<div class="page">
+  <div class="page-logo"><img src="logo-vertical.png" alt="Kwangdong"></div>
+  <div class="page-inner">
+    <h2>검증 프레임워크: 두 가지 축</h2>
+    <p style="margin-bottom:8px;">정량(시간·건수) + 정성(만족도·수용도), 두 축으로 PoC 성과를 객관적으로 측정합니다</p>
+    <div class="card-grid mt-8">
+      <div class="card">
+        <h3>👥 임직원 체감 검증</h3>
+        <ul>
+          <li>메신저 → <strong>Slack</strong></li>
+          <li>문서 작성 → <strong>Google Docs/Sheets</strong></li>
+          <li>화상회의 → <strong>Google Meet</strong></li>
+          <li>파일 공유 → <strong>Google Drive</strong></li>
+          <li>협업 효율성 → <strong>부서 간 공동작업 속도·편의성 체감</strong></li>
+        </ul>
+        <p class="mt-8" style="font-weight:500;">PoC 종료 시 설문:<br>"이전 방식으로 돌아가야 한다면?"</p>
+      </div>
+      <div class="card green">
+        <h3>📊 비용 효율 검증</h3>
+        <ul>
+          <li>PoC 전후 비교 가능한 <strong>KPI 사전 측정</strong></li>
+          <li>PoC 기간 중 동일 KPI 재측정</li>
+          <li>차이를 <strong>재무적 언어</strong>로 번역</li>
+        </ul>
+        <p class="mt-8" style="font-weight:500;">핵심 질문:<br>"얼마나 빨라졌는가? 얼마를 아꼈는가?"</p>
+      </div>
+    </div>
+  </div>
+  <div class="page-num">9</div>
+</div>
+
+<!-- 3-5 KPI -->
+<div class="page">
+  <div class="page-logo"><img src="logo-vertical.png" alt="Kwangdong"></div>
+  <div class="page-inner">
+    <h2>성과 KPI 측정 계획</h2>
+    <p style="margin-bottom:8px;">사전 설문으로 현재 수치를 확보하고, PoC 후 동일 항목 재측정으로 개선 효과를 입증합니다</p>
+    <table>
+      <thead>
+        <tr><th>구분</th><th>측정 항목</th><th>AS-IS (사전 설문)</th><th>PoC 목표</th><th>측정 방법</th></tr>
+      </thead>
+      <tbody>
+        <tr><td rowspan="2"><strong>속도</strong></td><td>보고서 취합~완성 리드타임</td><td>3일+</td><td><strong>1일 이내</strong></td><td>Slides 편집 로그</td></tr>
+        <tr><td>문서 작성 자동화 (AI·스크립트)</td><td>수작업 100%</td><td><strong>초안 자동생성</strong></td><td>Gemini·Apps Script 활용 건수</td></tr>
+        <tr><td rowspan="2"><strong>품질</strong></td><td>파일 버전 혼선 재작업</td><td>월 3건+</td><td><strong>0건</strong></td><td>이슈 로그 + 설문</td></tr>
+        <tr><td>정보 누락 업무 지연</td><td>사전 설문</td><td><strong>70% 감소</strong></td><td>부서 간 이슈 기록</td></tr>
+        <tr><td rowspan="2"><strong>접근성</strong></td><td>과거 문서 검색 소요시간</td><td>30분/건</td><td><strong>5분 이내</strong></td><td>Drive 검색 로그</td></tr>
+        <tr><td>외근 중 자료 접근</td><td>제한적 (PC 의존)</td><td><strong>모바일 즉시</strong></td><td>모바일 사용률</td></tr>
+        <tr><td><strong>수용도</strong></td><td>"이전으로 돌아가고 싶다" 응답률</td><td>-</td><td><strong>30% 이하</strong></td><td>PoC 종료 설문</td></tr>
+        <tr><td><strong>보안</strong></td><td>보안 정책 위반 건수</td><td>-</td><td><strong>0건</strong></td><td>DLP + 감사 로그</td></tr>
+      </tbody>
+    </table>
+    <p class="text-xs mt-8">※ AS-IS 기준값은 PoC 시작 전 사전 설문으로 확보합니다 (별첨 A 참조)</p>
+  </div>
+  <div class="page-num">10</div>
+</div>
+
+<!-- 3-6 Go/No-Go -->
+<div class="page">
+  <div class="page-logo"><img src="logo-vertical.png" alt="Kwangdong"></div>
+  <div class="page-inner">
+    <h2>PoC 성공/실패 판정 기준</h2>
+    <p style="margin-bottom:8px;">5개 기준 모두 충족 시 Go, 일부 미달 시 보완 후 재판정, 핵심 미달 시 대안을 검토합니다</p>
+    <table>
+      <thead>
+        <tr><th>판단 기준</th><th style="color:var(--kd-green);">✅ Go</th><th style="color:var(--kd-orange);">⚠️ 조건부 Go</th><th style="color:var(--kd-red);">❌ No-Go</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>사용자 만족도</strong></td><td>4.0점 이상</td><td>3.0~3.9점</td><td>3.0점 미만</td></tr>
+        <tr><td><strong>기능 충족률</strong></td><td>90% 이상</td><td>70~89%</td><td>70% 미만</td></tr>
+        <tr><td><strong>효율 KPI</strong></td><td>3개+ 달성</td><td>2개 달성</td><td>1개 이하</td></tr>
+        <tr><td><strong>보안 이슈</strong></td><td>실제 유출 0건</td><td>차단된 시도만 존재</td><td>실제 데이터 유출 발생</td></tr>
+        <tr><td><strong>사용자 수용도</strong></td><td>70% 이상</td><td>50~69%</td><td>50% 미만</td></tr>
+      </tbody>
+    </table>
+    <div class="card-grid mt-12">
+      <div class="card green">
+        <h3>✅ Go → 전사 확대 로드맵 수립</h3>
+        <p>PoC 부서 유지 + 확산 범위·일정·예산 기획 (별도 보고)</p>
+      </div>
+      <div class="card orange">
+        <h3>⚠️ 조건부 Go → 보완 후 재판정</h3>
+        <p>미충족 항목 원인 분석 → 개선안 수립 → 2~4주 보완 기간 후 재평가</p>
+      </div>
+      <div class="card red">
+        <h3>❌ No-Go → 대안 검토</h3>
+        <p>원인 분석 보고서 작성 → M365 등 대안 솔루션 검토 또는 재설계</p>
+      </div>
+    </div>
+    <p class="text-xs mt-8">※ 보안 이슈: DLP가 차단한 시도는 "정상 작동"으로 분류하며, 실제 외부 유출만 No-Go 사유입니다</p>
+  </div>
+  <div class="page-num">11</div>
+</div>
+
+<!-- ══════════════════════════════════════════ -->
+<!-- SECTION 4 -->
+<!-- ══════════════════════════════════════════ -->
+
+
+<!-- 4-1 -->
+<div class="page">
+  <div class="page-logo"><img src="logo-vertical.png" alt="Kwangdong"></div>
+  <div class="page-inner">
+    <h2><span class="tag tag-blue" style="font-size:12px; vertical-align:middle; margin-right:8px;">04 운영 계획</span> 추진 일정</h2>
+    <p style="margin-bottom:8px;">3.31 환경 세팅 완료 → 4.14 사용자 PoC 시작 (Day 1) → Slack 5.23 / GWS 5.27 종료, 교육·검증·평가를 단계별로 실행합니다</p>
+    <table>
+      <thead>
+        <tr><th style="width:120px;">일정</th><th>주요 내용</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>3/31(화)</strong></td><td>환경 세팅 완료</td></tr>
+        <tr><td><strong>4/1(수)~4/4(금)</strong></td><td>PoC 준비 기간</td></tr>
+        <tr><td><strong>4월 2주차 (4/7~4/11)</strong></td><td>GWS + Slack 교육, 매뉴얼 배포, 보안 설정 완료</td></tr>
+        <tr><td><strong>4/14(월) Day 1</strong></td><td>사용자 PoC 시작 — GWS 계정 활성화, Drive 앱 설치, 공유 드라이브 확인</td></tr>
+        <tr><td><strong>4/14~4/16 (Day 1~3)</strong></td><td>사용자 온보딩 집중 기간 (GWS 기본 실습, Slack 가입, 공동 편집 테스트)</td></tr>
+        <tr><td><strong>4월 3주차~ (4/14~)</strong></td><td>실사용 및 크로스협업 시나리오 테스트</td></tr>
+        <tr><td><strong>5/23(금)</strong></td><td>Slack PoC 종료 (분기정산일 전 계정 원복)</td></tr>
+        <tr><td><strong>5/27(화)</strong></td><td>GWS PoC 종료 및 결과 보고</td></tr>
+      </tbody>
+    </table>
+    <p class="text-xs mt-8">※ PoC 기간: GWS 4/1~5/27, Slack 4/1~5/23</p>
+    <div class="card-grid mt-16" style="grid-template-columns: 1fr 1fr 1fr 1fr;">
+      <div class="card" style="border-left-color:var(--kd-navy);">
+        <h3>준비 (3월~4/11)</h3>
+        <ul><li>테넌트 구성</li><li>DLP 기본 정책 설정</li><li>교육·매뉴얼 배포</li></ul>
+      </div>
+      <div class="card orange">
+        <h3>Day 1~3 (4/14~16)</h3>
+        <ul><li>계정 활성화</li><li>앱 설치·채널 입장</li><li>기본 실습</li></ul>
+      </div>
+      <div class="card green">
+        <h3>4/14~5월: 검증</h3>
+        <ul><li>크로스협업 시나리오</li><li>주차별 체크</li><li>개선 반복</li></ul>
+      </div>
+      <div class="card" style="border-left-color:#6554c0;">
+        <h3>종료: GWS 5/27</h3>
+        <ul><li>만족도 설문</li><li>KPI 분석</li><li>결과 보고 (Slack 5/23)</li></ul>
+      </div>
+    </div>
+  </div>
+  <div class="page-num">12</div>
+</div>
+
+<!-- 4-2: 온보딩 계획 -->
+<div class="page">
+  <div class="page-logo"><img src="logo-vertical.png" alt="Kwangdong"></div>
+  <div class="page-inner">
+    <h2>온보딩 계획</h2>
+    <p style="margin-bottom:12px;">기존 AI Crew + AI센터 층별 상주로, 초기 2주간 즉석 지원하여 적응 장벽을 제거합니다</p>
+    <div class="card-grid">
+      <div class="card">
+        <h3>🤖 AI Crew — 온보딩 도우미</h3>
+        <ul>
+          <li>기존 <strong>AI Crew</strong>를 PoC 온보딩 도우미로 활용</li>
+          <li>AI센터가 사전 교육 → AI Crew가 부서 내 <strong>1차 문의 대응</strong></li>
+          <li>Slack <strong>#ai-crew</strong> 전용 채널에서 실시간 Q&A 공유</li>
+          <li>부서원 질문 → AI Crew 해결 → 미해결 시 AI센터 에스컬레이션</li>
+        </ul>
+      </div>
+      <div class="card green">
+        <h3>🏢 층별 상주 지원 (첫 2주)</h3>
+        <ul>
+          <li>PoC 시작 첫 2주간 <strong>AI센터 인원이 각 층에 상주</strong></li>
+          <li>계정 설정, 앱 세팅, 초기 질문 <strong>즉석 해결</strong></li>
+          <li>오전/오후 교대 배치 — 업무 시간 중 상시 접근 가능</li>
+          <li>2주 후 상주 종료 → Slack 채널 + AI Crew 체제로 전환</li>
+        </ul>
+      </div>
+    </div>
+    <div class="card-grid mt-12">
+      <div class="card orange">
+        <h3>📋 사용자 온보딩 체크리스트 — GWS (공통)</h3>
+        <ul>
+          <li><strong>Day 1 (4/14):</strong> GWS 계정 활성화 (초기 비밀번호 변경) — Judy (계정 생성), 사용자 (직접 설정)</li>
+          <li><strong>Day 1 (4/14):</strong> Google Drive 앱 설치 (PC + 모바일) — 사용자</li>
+          <li><strong>Day 1 (4/14):</strong> 부서 공유 드라이브 접근 확인 — Judy</li>
+          <li><strong>Day 1 (4/14):</strong> PoC 기간 중 기존 사내메일 ↔ GWS 병행 운영 가이드 확인 — Judy</li>
+          <li><strong>Day 2 (4/15):</strong> Google Docs / Sheets / Slides 기본 실습 — 사용자</li>
+          <li><strong>Day 2 (4/15):</strong> Google Calendar 일정 생성 및 공유 실습 — 사용자</li>
+          <li><strong>Day 2 (4/15):</strong> Meet 화상회의 테스트 — 사용자</li>
+          <li><strong>Day 3 (4/16):</strong> 공동 문서 편집 테스트 — 사용자</li>
+          <li><strong>Day 3 (4/16):</strong> 드라이브 파일 공유 권한 테스트 — 사용자</li>
+          <li><strong>(수시):</strong> 협업·AI 활용에 필요한 업무문서/파일 Drive 업로드 — 사용자</li>
+        </ul>
+      </div>
+      <div class="card green">
+        <h3>📋 사용자 온보딩 체크리스트 — Slack (CMO본부 전용)</h3>
+        <ul>
+          <li><strong>Day 2 (4/15):</strong> Slack 가입 및 프로필 설정 — 사용자</li>
+          <li><strong>Day 2 (4/15):</strong> Slack 모바일 앱 설치 — 사용자</li>
+          <li><strong>Day 2 (4/15):</strong> 소속 부서 채널 입장 — 사용자</li>
+          <li><strong>Day 2 (4/15):</strong> #00_poc-질문문의 채널 입장 — 사용자</li>
+          <li><strong>Day 3 (4/16):</strong> 기본 Slack 사용자 교육 — 세일즈포스 교육</li>
+        </ul>
+      </div>
+      <div class="card" style="border-left-color:#6554c0;">
+        <h3>📞 지원 채널 체계</h3>
+        <ul>
+          <li><strong>1차:</strong> AI센터 (#00_poc-질문문의 채널)</li>
+          <li><strong>2차:</strong> AI센터 에스컬레이션</li>
+          <li><strong>3차:</strong> 메가존 기술지원 (제품 이슈)</li>
+          <li><strong>Q&A 오피스아워:</strong> 4/14~5/27 매주 운영</li>
+          <li><strong>보안 모니터링:</strong> 4/14~5/27</li>
+          <li><strong>GWS Admin Console 모니터링:</strong> 4/14~5/27</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="page-num">13</div>
+</div>
+
+<!-- 4-3: 교육 계획 -->
+<div class="page">
+  <div class="page-logo"><img src="logo-vertical.png" alt="Kwangdong"></div>
+  <div class="page-inner">
+    <h2>교육 계획</h2>
+    <p style="margin-bottom:8px;">전체 VOD 2시간 + 챔피언 심화 4시간, 역할별 차등 교육으로 실무 적용력을 확보합니다</p>
+    <table>
+      <thead>
+        <tr><th>대상</th><th>인원</th><th>방식</th><th>시간</th><th>내용</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>전체 사용자</td><td>155명</td><td>VOD + 실습</td><td>2시간</td><td>Gmail, Drive, Docs, Meet 기본</td></tr>
+        <tr><td>부서 챔피언</td><td>10~15명</td><td>오프라인 워크숍</td><td>4시간</td><td>부서별 시나리오 실습, Q&A</td></tr>
+        <tr><td>관리자/AI크루</td><td>5~10명</td><td>심화 워크숍</td><td>8시간</td><td>Admin Console, DLP, Gemini</td></tr>
+      </tbody>
+    </table>
+    <h3 class="mt-16">리스크 및 대응</h3>
+    <table>
+      <thead>
+        <tr><th>리스크</th><th>가능성</th><th>영향</th><th>대응 방안</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>사용자 저항</td><td class="risk-high">높음</td><td class="risk-mid">중</td><td>챔피언 선발, 밀착 가이드, 주간 Q&A</td></tr>
+        <tr><td>MS Office 호환</td><td class="risk-mid">중</td><td class="risk-mid">중</td><td>변환 가이드, 기술지원 채널, 병행 허용</td></tr>
+        <tr><td>보안 우려</td><td class="risk-mid">중</td><td class="risk-high">높음</td><td>DLP 사전 설정, 접근 제어, 보안팀 검증</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="page-num">14</div>
+</div>
+
+<!-- ══════════════════════════════════════════ -->
+<!-- SECTION 5 -->
+<!-- ══════════════════════════════════════════ -->
+
+
+<!-- 5-1 -->
+<div class="page">
+  <div class="page-logo"><img src="logo-vertical.png" alt="Kwangdong"></div>
+  <div class="page-inner">
+    <h2><span class="tag tag-blue" style="font-size:12px; vertical-align:middle; margin-right:8px;">05 보안 컴플라이언스</span> 문서등급별 적용 기준 & 핵심 논리</h2>
+    <table>
+      <thead><tr><th>보안 등급</th><th>정의</th><th>GWS 적용</th></tr></thead>
+      <tbody>
+        <tr><td><strong class="risk-high">1등급 (비밀)</strong></td><td>주요 재무·합병·매각 관련 문서</td><td>❌ GWS 저장/공유 <strong>금지</strong> (PoC 범위 제외)</td></tr>
+        <tr><td><strong class="risk-mid">2등급 (부서비)</strong></td><td>인사정보, 영업정책, 고객정보, 계약서</td><td>⚠️ 조건부 허용: 특정인만 공유, 외부 차단</td></tr>
+        <tr><td><strong class="risk-low">3등급 (사내비)</strong></td><td>사내 유통 허용 일반 문서</td><td>✅ GWS 자유 활용 (외부 공유는 건별 승인)</td></tr>
+      </tbody>
+    </table>
+    <div class="card-grid-3 mt-16">
+      <div class="card green">
+        <h3>🔑 데이터 소유권</h3>
+        <p>구글은 인프라만 제공. 데이터 권리는 <strong>광동제약</strong>에 귀속</p>
+      </div>
+      <div class="card green">
+        <h3>🛡️ 글로벌 표준 보안</h3>
+        <p>ISO 27001/27017, SOC 2/3, HIPAA — <strong>세계적 수준의 보안팀이 24시간 방어</strong></p>
+      </div>
+      <div class="card green">
+        <h3>👁️ 투명한 감시</h3>
+        <p>모든 행동 로그 기록 — 실시간 <strong>모니터링·차단</strong> 가능</p>
+      </div>
+    </div>
+    <div class="card-grid mt-12">
+      <div class="card">
+        <h3>🔐 GWS Admin 필수 보안</h3>
+        <ul>
+          <li>외부 공유 기본값 OFF (도메인 내부만)</li>
+          <li>DLP — 주민번호·카드번호 자동 감지/차단</li>
+          <li>Context-Aware Access — 기기·IP 기반 접근 제어</li>
+          <li>2단계 인증 전 사용자 필수</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>💬 Slack 보안 통제</h3>
+        <ul>
+          <li>1·2등급 논의 → 비공개 채널</li>
+          <li>1등급 문서 업로드 금지</li>
+          <li>개인정보 직접 게시 금지 → Drive 링크로 대체</li>
+          <li>Slack Connect · 앱 설치 시 정보보호팀 사전 승인</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="page-num">15</div>
+</div>
+
+<!-- ══════════════════════════════════════════ -->
+<!-- SECTION 6 -->
+<!-- ══════════════════════════════════════════ -->
+
+
+<!-- 6-1 -->
+<div class="page">
+  <div class="page-logo"><img src="logo-vertical.png" alt="Kwangdong"></div>
+  <div class="page-inner">
+    <h2><span class="tag tag-blue" style="font-size:12px; vertical-align:middle; margin-right:8px;">06 비용</span> PoC 소요 비용</h2>
+    <p style="margin-bottom:8px;">GWS 무상 트라이얼 + Slack 약 560만원, 총 560만원 수준으로 전사 도입 판단 근거를 확보합니다</p>
+    <table>
+      <thead><tr><th>항목</th><th>산출 근거</th><th>비용</th></tr></thead>
+      <tbody>
+        <tr><td><strong>GWS 라이선스</strong></td><td>Enterprise Standard × 155명 × 약 10주 (준비 1주 + 검증 8주)</td><td><strong>무상 (트라이얼)</strong></td></tr>
+        <tr><td><strong>Slack 라이선스</strong></td><td>Business+ $12.50/월 × 155명 × 2개월</td><td><strong>$3,875 (약 560만원)</strong></td></tr>
+        <tr><td><strong>교육/변경관리</strong></td><td>메가존 서비스 제공</td><td><strong>무상</strong></td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- APPENDIX A -->
+
+
+<div class="page">
+  <div class="page-logo"><img src="logo-vertical.png" alt="Kwangdong"></div>
+  <div class="page-inner">
+    <h2>사전 설문</h2>
+    <p style="margin-bottom:8px;">14개 문항으로 현재 업무 효율을 측정하고, PoC 후 동일 문항 재조사로 개선 효과를 산출합니다</p>
+    <div class="card-grid">
+      <div class="card">
+        <h3>1. 보고서 리드타임</h3>
+        <p>Q1. 월간/분기 보고서 자료 요청~최종 승인까지 평균 며칠?</p>
+        <p>Q2. 보고서 1건당 오가는 버전 수?</p>
+        <p>Q3. 타 부서 자료 취합·합본에만 소요되는 순수 시간?</p>
+      </div>
+      <div class="card">
+        <h3>2. 파일 버전 혼선</h3>
+        <p>Q4. 잘못된 버전으로 작업/재작업한 경험 월 평균?</p>
+        <p>Q5. 버전 혼선으로 낭비되는 월간 재작업 시간?</p>
+      </div>
+      <div class="card">
+        <h3>3. 현장→본사 전달 속도</h3>
+        <p>Q6. 긴급 이슈 인지~본사 보고 완료까지?</p>
+        <p>Q7. 전달 수단? (유선 / 카톡 / 이메일 / 대면)</p>
+      </div>
+      <div class="card">
+        <h3>4. 회의 · 정보 검색</h3>
+        <p>Q8. 회의 1건 세팅 소요?</p>
+        <p>Q9. 회의록 정리~전파~피드백까지 소요 시간?</p>
+        <p>Q10. 과거 히스토리 1건 찾는 데 평균?</p>
+        <p>Q11. 검색의 가장 큰 장애물?</p>
+      </div>
+      <div class="card">
+        <h3>5. AI 활용 현황</h3>
+        <p>Q12. 현재 업무에 AI 도구를 사용하고 있나요? (종류·빈도)</p>
+        <p>Q13. AI가 도움이 될 것 같은 업무 영역은?</p>
+        <p>Q14. AI 도구 도입 시 가장 기대하는 효과는?</p>
+      </div>
+    </div>
+    <div class="exec-quote mt-12">
+      본 설문 결과는 PoC 전후 비교의 기준선(Baseline)으로 활용됩니다.<br>
+      PoC 종료 후 동일 항목 재측정 → 개선 효과 정량 산출
+    </div>
+  </div>
+  <div class="page-num">16</div>
+</div>
+
+<!-- APPENDIX C -->
+
+
+<div class="page">
+  <div class="page-logo"><img src="logo-vertical.png" alt="Kwangdong"></div>
+  <div class="page-inner">
+    <h2>기획관리 본부 시나리오</h2>
+    <p style="margin-bottom:8px;">견적·계약 검토, 시설 관리, 경영보고 — 각 팀 핵심 업무가 GWS+Slack에서 어떻게 바뀌는지 보여줍니다</p>
+    <div class="card-grid-3">
+      <div class="scenario-box">
+        <h4>📋 영업지원: 견적서·계약서 검토</h4>
+        <p><strong>AS-IS:</strong> 메일 첨부 핑퐁, "견적서_수정_최종_v3_진짜.xlsx"</p>
+        <p><strong>TO-BE:</strong> Google Docs 제안 모드 → 코멘트 협의 → Drive 보관</p>
+        <p><strong>KPI:</strong> 검토 리드타임, 최종본 혼선 건수</p>
+      </div>
+      <div class="scenario-box">
+        <h4>📢 총무: 전사 공지·시설 요청</h4>
+        <p><strong>AS-IS:</strong> 메일 공지(확인 불가), 전화 요청(누락)</p>
+        <p><strong>TO-BE:</strong> #company-notice 리액션 확인, 워크플로우 양식 접수</p>
+        <p><strong>KPI:</strong> 24h 내 공지 확인률, 요청 처리 누락률</p>
+      </div>
+      <div class="scenario-box">
+        <h4>📊 전략기획: 경영보고서</h4>
+        <p><strong>AS-IS:</strong> 부서별 PPT 메일 → 수작업 합본</p>
+        <p><strong>TO-BE:</strong> Slides 부서별 영역 → 동시 편집 → 합본 불필요</p>
+        <p><strong>KPI:</strong> 보고서 취합 소요시간</p>
+      </div>
+    </div>
+    <div class="card mt-12">
+      <h3>📝 영업지원: 주간 매출 실적 리포팅</h3>
+      <div style="display:flex; gap:20px;">
+        <p style="flex:1;"><strong>AS-IS:</strong> 엑셀 수작업 합산 → 메일 공유</p>
+        <p style="flex:1;"><strong>TO-BE:</strong> Sheets 통합 시트 직접 입력 → 자동 합산·차트</p>
+      </div>
+    </div>
+  </div>
+  <div class="page-num">17</div>
+</div>
+
+<div class="page">
+  <div class="page-logo"><img src="logo-vertical.png" alt="Kwangdong"></div>
+  <div class="page-inner">
+    <h2>CMO 본부 시나리오 (1/2)</h2>
+    <p style="margin-bottom:8px;">삼다수 일일 현황, 디자인 시안 피드백, F&B 거래처 관리 — 각 팀 핵심 업무 전환 시나리오입니다</p>
+    <div class="card-grid">
+      <div class="scenario-box">
+        <h4>🥤 삼다수사업: 일일 현황 + 긴급 이슈</h4>
+        <p><strong>AS-IS:</strong> 판매량·재고 메일/단톡 산재, 이슈 기록 없음</p>
+        <p><strong>TO-BE:</strong> Sheets 대시보드 + #samdasu-daily 리마인더</p>
+        <p>🚨 긴급: #samdasu-issue → @멘션 → 스레드 → 원인분석</p>
+        <p><strong>KPI:</strong> 이슈 전원 인지 시간, 대응 기록률</p>
+      </div>
+      <div class="scenario-box">
+        <h4>🎨 디자인: 요청~시안~납품</h4>
+        <p><strong>AS-IS:</strong> 구두/메일 요청 → 시안 반복 → 파일 산재</p>
+        <p><strong>TO-BE:</strong> 워크플로우 양식 → 담당 배정 → 스레드 피드백 → Drive 보관</p>
+        <p><strong>KPI:</strong> 요청~납품 일수, 재확인 횟수</p>
+      </div>
+      <div class="scenario-box">
+        <h4>📱 F&B영업: 미팅 + 프로모션</h4>
+        <p><strong>AS-IS:</strong> 개인 노트 → 히스토리 단절</p>
+        <p><strong>TO-BE:</strong> 모바일 Docs 미팅 노트 + Sheets 프로모션 캘린더</p>
+        <p>⭐ 핵심: 모바일 사용성 검증 (외근 영업팀)</p>
+      </div>
+      <div class="scenario-box">
+        <h4>🏷️ 브랜드전략: 캠페인 기획~실행</h4>
+        <p><strong>AS-IS:</strong> 순차 메일 → 정보 단절</p>
+        <p><strong>TO-BE:</strong> #brand-campaign 채널 전 부서 동시 참여</p>
+        <p>브리프 → 시안 → 영업 → 실행 → 분석 → 아카이빙</p>
+      </div>
+    </div>
+  </div>
+  <div class="page-num">18</div>
+</div>
+
+<div class="page">
+  <div class="page-logo"><img src="logo-vertical.png" alt="Kwangdong"></div>
+  <div class="page-inner">
+    <h2>CMO 본부 시나리오 (2/2) + 운영부서</h2>
+    <p style="margin-bottom:8px;">브랜드 캠페인, CMO 예산 관리 + IT 장애 대응, 보안 감사 — 각 팀 핵심 업무 전환 시나리오입니다</p>
+    <div class="card-grid">
+      <div class="card">
+        <h3>📋 CMO전략: 주간 보고</h3>
+        <ul>
+          <li><strong>AS-IS:</strong> 각 팀 PPT 메일 → 수작업 취합</li>
+          <li><strong>TO-BE:</strong> Slides 템플릿 팀별 배정 → 동시 편집</li>
+          <li>화 리마인더 → 목 정리 → 금 보고</li>
+        </ul>
+      </div>
+      <div class="card green">
+        <h3>💰 CMO전략: 예산 관리</h3>
+        <ul>
+          <li><strong>AS-IS:</strong> 월말 취합 → 초과 사후 인지</li>
+          <li><strong>TO-BE:</strong> Sheets 대시보드 실시간 입력</li>
+          <li>집행률 자동 계산 + 조건부 서식</li>
+          <li>#cmo-budget 채널 예산 초과 즉시 논의</li>
+        </ul>
+      </div>
+    </div>
+    <h3 class="mt-16">운영부서 시나리오</h3>
+    <div class="card-grid mt-8">
+      <div class="card">
+        <h3>🖥️ IT운영팀</h3>
+        <table>
+          <tr><td><strong>IT 요청</strong></td><td>워크플로우 양식 → Sheets 자동 기록 → 스레드 처리</td></tr>
+          <tr><td><strong>장애 대응</strong></td><td>#it-system-status 공지 → 스레드 실시간 업데이트</td></tr>
+          <tr><td><strong>PoC 관리</strong></td><td>프로비저닝, OU 설정, 보안 정책, 사용량 대시보드</td></tr>
+        </table>
+      </div>
+      <div class="card green">
+        <h3>🛡️ 정보보호팀</h3>
+        <table>
+          <tr><td><strong>주간 보안</strong></td><td>감사 로그 리뷰 (외부 공유, 비정상 로그인)</td></tr>
+          <tr><td><strong>DLP</strong></td><td>주민번호·카드번호 탐지 → 자동 차단 + 알림</td></tr>
+          <tr><td><strong>PoC 평가</strong></td><td>보안 이슈 종합 → 다음 단계 판단 의견</td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div class="page-num">19</div>
+</div>
+
+<!-- APPENDIX D -->
+
+
+<div class="page">
+  <div class="page-logo"><img src="logo-vertical.png" alt="Kwangdong"></div>
+  <div class="page-inner">
+    <h2>크로스 시나리오 A: 신제품 캠페인 론칭</h2>
+    <p style="margin-bottom:6px;">삼다수사업 + 브랜드전략 + 디자인 + F&B영업 + CMO전략</p>
+    <table>
+      <thead><tr><th>단계</th><th>활동</th><th>Slack</th><th>GWS</th></tr></thead>
+      <tbody>
+        <tr><td>1. 기획</td><td>방향·목표 수립</td><td>#launch-[제품명] 개설</td><td>Docs: 브리프</td></tr>
+        <tr><td>2. 확정</td><td>의견 취합</td><td>스레드 논의</td><td>Docs: 코멘트</td></tr>
+        <tr><td>3. 시안</td><td>디자인 제작</td><td>채널 시안 공유</td><td>Drive: 에셋</td></tr>
+        <tr><td>4. 영업</td><td>프로모션 조건</td><td>실시간 인지</td><td>Sheets: 조건표</td></tr>
+        <tr><td>5. 론칭</td><td>캠페인 시작</td><td>체크리스트</td><td>Calendar+Meet</td></tr>
+        <tr><td>6. 모니터링</td><td>일일 현황</td><td>이슈 대응</td><td>Sheets: 트래킹</td></tr>
+        <tr><td>7. 분석</td><td>성과 회고</td><td>아카이빙</td><td>Slides: 보고서</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="page-num">20</div>
+</div>
+
+<div class="page">
+  <div class="page-logo"><img src="logo-vertical.png" alt="Kwangdong"></div>
+  <div class="page-inner">
+    <h2>크로스 시나리오 B·C: 경영보고 & 계약</h2>
+    <p style="margin-bottom:6px;">월간 경영보고 합본 제거 + 거래처 계약 버전 혼선 제로 — 두 가지 핵심 프로세스를 개선합니다</p>
+    <div class="card-grid">
+      <div class="card">
+        <h3>📊 B. 월간 경영보고</h3>
+        <p>전략기획 + CMO전략 + 각 본부</p>
+        <table class="mt-4">
+          <tr><td><strong>D-7</strong></td><td>Slides 템플릿 + 안내</td></tr>
+          <tr><td><strong>D-5</strong></td><td>리마인더: 데이터 업데이트</td></tr>
+          <tr><td><strong>D-3</strong></td><td>1차 작성 마감</td></tr>
+          <tr><td><strong>D-2</strong></td><td>전략기획 리뷰</td></tr>
+          <tr><td><strong>D-1</strong></td><td>최종 확정</td></tr>
+          <tr><td><strong>D-Day</strong></td><td>보고</td></tr>
+        </table>
+        <p class="mt-4"><strong>핵심:</strong> 합본 제거, 마감 준수율 향상</p>
+      </div>
+      <div class="card green">
+        <h3>📝 C. 거래처 계약 프로세스</h3>
+        <p>F&B영업 + 영업지원 + 전략기획</p>
+        <table class="mt-4">
+          <tr><td><strong>1. 초안</strong></td><td>Docs 템플릿 작성</td></tr>
+          <tr><td><strong>2. 검토</strong></td><td>제안 모드 수정</td></tr>
+          <tr><td><strong>3. 협의</strong></td><td>스레드 Q&A</td></tr>
+          <tr><td><strong>4. 확정</strong></td><td>승인 → 확정</td></tr>
+          <tr><td><strong>5. 보관</strong></td><td>Drive 10년 보존</td></tr>
+        </table>
+        <p class="mt-4"><strong>핵심:</strong> 버전 혼선 제로</p>
+      </div>
+    </div>
+  </div>
+  <div class="page-num">21</div>
+</div>
+
+<div class="page">
+  <div class="page-logo"><img src="logo-vertical.png" alt="Kwangdong"></div>
+  <div class="page-inner">
+    <h2>크로스 시나리오 D: 캠페인 기획~실행 통합</h2>
+    <p style="margin-bottom:6px;">브랜드전략 + 디자인 + F&B영업 + CMO전략</p>
+    <table>
+      <thead><tr><th>단계</th><th>활동</th><th>Slack</th><th>GWS</th></tr></thead>
+      <tbody>
+        <tr><td>1. 기획 킥오프</td><td>시장 분석·방향 수립</td><td>#brand-campaign-[명] 개설, Meet 링크 공유</td><td>Docs: 기획 브리프 공동 작성</td></tr>
+        <tr><td>2. 컨셉 확정</td><td>컨셉 후보 토의·확정</td><td>스레드 투표·코멘트</td><td>Slides: 컨셉 시안</td></tr>
+        <tr><td>3. 에셋 제작</td><td>디자인 시안·카피 작업</td><td>시안 공유 → 실시간 피드백</td><td>Drive: 에셋 폴더 (단일 버전)</td></tr>
+        <tr><td>4. 매체 집행</td><td>예산 배분·매체 확정</td><td>대행사 Slack Connect 연동</td><td>Sheets: 매체 플랜·예산표</td></tr>
+        <tr><td>5. 실행·모니터링</td><td>론칭 후 일일 성과</td><td>일일 알림 봇 연동</td><td>Sheets: 실시간 성과 대시보드</td></tr>
+        <tr><td>6. 회고·보고</td><td>캠페인 종합 분석</td><td>채널 아카이빙</td><td>Slides: 성과 보고서</td></tr>
+      </tbody>
+    </table>
+    <div class="card-grid mt-12">
+      <div class="card green">
+        <h3>핵심 검증 포인트</h3>
+        <ul>
+          <li>기획~론칭 <strong>리드타임 단축</strong> (기존 대비)</li>
+          <li>부서 간 <strong>정보 누락 건수</strong> 제로 목표</li>
+          <li>외부 대행사와 <strong>Slack Connect</strong> 협업 효과</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>AS-IS vs TO-BE</h3>
+        <ul>
+          <li><strong>AS-IS:</strong> 메일 기반 순차 진행, 파일 버전 산재, 대행사 별도 소통</li>
+          <li><strong>TO-BE:</strong> 단일 채널에서 전 부서·대행사 동시 진행, 에셋 단일 버전</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- APPENDIX E -->
+
+
+<div class="page">
+  <div class="page-logo"><img src="logo-vertical.png" alt="Kwangdong"></div>
+  <div class="page-inner">
+    <h2>Slack 채널 맵 & 공유 드라이브</h2>
+    <p style="margin-bottom:8px;">32개 채널을 필수·선택으로 구분하고, 알림 기본값을 설정하여 채널 피로를 방지합니다</p>
+    <div class="card-grid-3">
+      <div class="card">
+        <h3>🌐 전사 공통 (5개)</h3>
+        <ul>
+          <li>#company-notice — 전사 공지</li>
+          <li>#company-general — 자유 소통</li>
+          <li>#it-helpdesk — IT 요청</li>
+          <li>#it-system-status — 시스템 상태</li>
+          <li>#facility-request — 시설 요청</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>📋 기획관리 (8개)</h3>
+        <ul>
+          <li>🔒 team-sales-support / admin / strategy</li>
+          <li>#sales-support (공개)</li>
+          <li>🔒 contract-review / sales-data</li>
+          <li>🔒 exec-report / strategy-weekly</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>🎯 CMO 본부 (15개)</h3>
+        <ul>
+          <li>🔒 팀 채널 ×4</li>
+          <li>🔒 삼다수 daily·issue</li>
+          <li>🔒 영업 4개 + 디자인 2개</li>
+          <li>🔒 CMO 3개 (리더십·주간·예산)</li>
+        </ul>
+      </div>
+    </div>
+    <div class="card-grid mt-12">
+      <div class="card" style="border-left-color:var(--kd-navy);">
+        <h3>🛡️ 운영 (4개) + 📁 프로젝트</h3>
+        <p>🔒 team-it, team-security, poc-admin, security-alert</p>
+        <p>📁 brand-campaign-[명], launch-[제품] — 종료 후 아카이빙</p>
+      </div>
+      <div class="card orange">
+        <h3>📌 채널 운영 가이드</h3>
+        <ul>
+          <li><strong>필수 채널:</strong> 소속 부서 팀 채널 + #company-notice (자동 참여)</li>
+          <li><strong>선택 채널:</strong> 나머지 공개 채널은 관심에 따라 자율 참여</li>
+          <li><strong>알림 기본값:</strong> 필수 채널만 알림 ON, 나머지 @멘션 시에만</li>
+          <li><strong>프로젝트 채널:</strong> 참여자만 초대, 종료 시 아카이빙</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="page-num">22</div>
+</div>
+
+<!-- GWS 공유 드라이브 구조 -->
+<div class="page">
+  <div class="page-logo"><img src="logo-vertical.png" alt="Kwangdong"></div>
+  <div class="page-inner">
+    <h2>GWS 공유 드라이브 구조 <span class="tag tag-gray">시뮬레이션</span></h2>
+    <p style="margin-bottom:12px;">AI센터 시나리오 시뮬레이션 기반 설계안입니다. 실제 구조는 PoC 실행 시 각 부서 협의를 통해 변경될 수 있습니다.</p>
+    <div class="card-grid-3">
+      <div class="card">
+        <h3>📋 기획관리 본부</h3>
+        <ul>
+          <li><strong>영업지원/</strong> — 거래처별 계약서·견적서, 매출실적</li>
+          <li><strong>총무/</strong> — 사내규정, 시설관리</li>
+          <li><strong>전략기획/</strong> — 경영보고서, 전략과제별, KPI·대시보드</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>🎯 CMO 본부</h3>
+        <ul>
+          <li><strong>삼다수사업/</strong> — 실적데이터, 이슈보고서</li>
+          <li><strong>디자인/</strong> — 브랜드가이드라인, 프로젝트별</li>
+          <li><strong>F&B영업/</strong> — 거래처별, 프로모션</li>
+          <li><strong>브랜드전략/</strong> — 캠페인별</li>
+          <li><strong>CMO전략/</strong> — 예산관리, 주간·월간보고</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>🛡️ 운영부서</h3>
+        <ul>
+          <li><strong>IT운영/</strong> — SOP·매뉴얼, IT자산관리, 장애보고서, PoC 관리</li>
+          <li><strong>정보보호/</strong> — 보안 가이드, 점검 보고서, PoC 보안 평가</li>
+        </ul>
+      </div>
+    </div>
+    <div class="card-grid mt-16">
+      <div class="card green">
+        <h3>📌 접근 권한 원칙</h3>
+        <ul>
+          <li>각 본부 드라이브 → <strong>해당 본부만</strong> 접근</li>
+          <li>크로스 협업 → 프로젝트별 별도 공유 드라이브 생성</li>
+          <li>1등급 문서 → <strong>GWS 저장 금지</strong> (PoC 범위 제외)</li>
+          <li>외부 공유 → 건별 정보보호팀 승인 필요</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>🔄 운영 규칙</h3>
+        <ul>
+          <li>폴더 구조 변경 → 부서 챔피언과 협의 후 적용</li>
+          <li>프로젝트 종료 → 아카이브 폴더로 이동 (검색 가능)</li>
+          <li>파일 명명 규칙 → PoC 준비 단계에서 부서별 합의</li>
+          <li>퇴사자 데이터 → Google Vault로 보존·관리</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="page-num">23</div>
+</div>
+
+</body>
+</html>
