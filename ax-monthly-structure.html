@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AX 진행 사례 구조도 (정보보호팀 공유용)</title>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif; margin: 24px; color: #1f2937; }
+    h1 { margin-bottom: 8px; }
+    .desc { color: #4b5563; margin-bottom: 24px; }
+    .card { border: 1px solid #e5e7eb; border-radius: 12px; padding: 16px; margin-bottom: 24px; background: #fff; }
+    .legend { font-size: 14px; color: #374151; background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 10px; padding: 12px 14px; margin-bottom: 24px; }
+    .legend ul { margin: 8px 0 0 20px; }
+    .footer { margin-top: 24px; color: #6b7280; font-size: 13px; }
+  </style>
+  <script type="module">
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+    mermaid.initialize({ startOnLoad: true, theme: 'default', securityLevel: 'loose' });
+  </script>
+</head>
+<body>
+  <h1>AX 진행 사례 구조도</h1>
+  <p class="desc">대상: 정보보호팀 / 목적: 시스템 구조 및 데이터 흐름, 통제 지점 공유</p>
+
+  <div class="legend">
+    <strong>표기 기준</strong>
+    <ul>
+      <li><b>Data</b>: 다루는 정보 유형</li>
+      <li><b>Control</b>: 권한·암호화·로그·승인 등 통제 항목</li>
+      <li><b>Risk</b>: 오답변/오발송/권한 오남용 등 주요 리스크</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h2>1) 임상시험/PMS SOP 문서 챗봇 구조</h2>
+    <pre class="mermaid">
+flowchart LR
+  subgraph Z1[사내 사용자 구간]
+    U[임상팀 사용자]
+  end
+
+  subgraph Z2[AX 서비스 구간]
+    A[챗봇 서비스\n질의 처리/응답]
+    L[로그·모니터링\n질의/응답/접근 기록]
+  end
+
+  subgraph Z3[지식 구간]
+    D[SOP 문서 저장소\n약 120개 문서]
+    I[검색/인덱싱 엔진\nNotebookLM 등]
+  end
+
+  subgraph Z4[운영자 구간]
+    O[운영담당자\n문서 변경 등록]
+  end
+
+  U -->|질의| A
+  A -->|검색 요청| I
+  I -->|문서 참조| D
+  I -->|검색결과 + 출처| A
+  A -->|답변 + 출처 표기| U
+
+  O -->|신규/개정 SOP 등록| D
+  A -->|접근/질의/응답 로그| L
+  I -->|검색 로그| L
+  D -->|변경 이력| L
+
+  C1[[Control: RBAC 권한관리]]
+  C2[[Control: TLS 전송 암호화]]
+  C3[[Control: 로그 보관/감사]]
+  R1[[Risk: 대량 문서 관리 복잡성]]
+  R2[[Risk: 출처 표기 정확성]]
+
+  A -.-> C1
+  A -.-> C2
+  L -.-> C3
+  I -.-> R1
+  A -.-> R2
+    </pre>
+  </div>
+
+  <div class="card">
+    <h2>2) 임상 뉴스레터 발송 자동화 구조</h2>
+    <pre class="mermaid">
+flowchart LR
+  subgraph N1[업무 입력 구간]
+    F[담당자 입력폼\nStreamlit]
+    R[수신자 목록 관리]
+  end
+
+  subgraph N2[처리/검증 구간]
+    V[데이터 검증\n필수값/형식]
+    T[템플릿 엔진\n텍스트+이미지]
+    P[승인 단계\n팀장/운영자]
+  end
+
+  subgraph N3[발송 구간]
+    M[메일 발송 시스템]
+    H[수신자\n병원 의사/담당자]
+  end
+
+  subgraph N4[감사 구간]
+    G[발송 이력/에러 로그]
+  end
+
+  F -->|월간 현황 입력| V
+  V -->|검증 통과 데이터| T
+  R -->|수신자 정보| T
+  T -->|초안 생성| P
+  P -->|승인 완료| M
+  M -->|뉴스레터 발송| H
+
+  V -->|검증 로그| G
+  P -->|승인 이력| G
+  M -->|발송/실패 이력| G
+
+  C4[[Control: 입력 권한관리]]
+  C5[[Control: 승인 후 발송]]
+  C6[[Control: 테스트/실발송 분리]]
+  C7[[Control: 로그 보관/추적]]
+  R3[[Risk: 오발송]]
+  R4[[Risk: 수신자 정보 관리 미흡]]
+
+  F -.-> C4
+  P -.-> C5
+  M -.-> C6
+  G -.-> C7
+  M -.-> R3
+  R -.-> R4
+    </pre>
+  </div>
+
+  <div class="footer">
+    작성: JudyBot · AX 진행상황 공유용 초안
+  </div>
+</body>
+</html>
