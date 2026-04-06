@@ -124,8 +124,53 @@ flowchart LR
     </pre>
   </div>
 
+  <div class="card">
+    <h2>3) 보안팀 검토 포인트 요약 (NotebookLM 기준)</h2>
+    <table style="width:100%; border-collapse:collapse; font-size:14px;">
+      <thead>
+        <tr style="background:#f3f4f6;">
+          <th style="border:1px solid #e5e7eb; padding:10px; text-align:left;">구분</th>
+          <th style="border:1px solid #e5e7eb; padding:10px; text-align:left;">현재 확인 가능</th>
+          <th style="border:1px solid #e5e7eb; padding:10px; text-align:left;">현재 한계/불가</th>
+          <th style="border:1px solid #e5e7eb; padding:10px; text-align:left;">권장 통제/대안</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td style="border:1px solid #e5e7eb; padding:10px;"><b>사용자 활동 가시성</b></td>
+          <td style="border:1px solid #e5e7eb; padding:10px;">계정/접속/운영 메타 정보 중심 가시성</td>
+          <td style="border:1px solid #e5e7eb; padding:10px;">질의·응답 전문의 중앙 실시간 모니터링은 제한적</td>
+          <td style="border:1px solid #e5e7eb; padding:10px;">사내 프록시형 챗 UI 도입 시 감사로그(질의/응답/사용자/시간) 설계</td>
+        </tr>
+        <tr>
+          <td style="border:1px solid #e5e7eb; padding:10px;"><b>데이터 통제</b></td>
+          <td style="border:1px solid #e5e7eb; padding:10px;">업로드 문서(SOP)와 변경 이력의 운영 관리 가능</td>
+          <td style="border:1px solid #e5e7eb; padding:10px;">문서 단위 세밀한 반출 감시/자동 차단은 별도 설계 필요</td>
+          <td style="border:1px solid #e5e7eb; padding:10px;">문서 분류등급, 업로드 승인 절차, 민감정보 비식별 기준 수립</td>
+        </tr>
+        <tr>
+          <td style="border:1px solid #e5e7eb; padding:10px;"><b>접근권한</b></td>
+          <td style="border:1px solid #e5e7eb; padding:10px;">조직 계정 기반 접근통제(RBAC/SSO 정책 연동 가능 범위)</td>
+          <td style="border:1px solid #e5e7eb; padding:10px;">기능별 초세분 권한/결재 워크플로우는 운영정책 보완 필요</td>
+          <td style="border:1px solid #e5e7eb; padding:10px;">권한 매트릭스(사용자/운영자/관리자) + 정기 권한점검 시행</td>
+        </tr>
+        <tr>
+          <td style="border:1px solid #e5e7eb; padding:10px;"><b>감사/사고대응</b></td>
+          <td style="border:1px solid #e5e7eb; padding:10px;">운영 로그 및 문서 변경 이력 기반 사후 점검 가능</td>
+          <td style="border:1px solid #e5e7eb; padding:10px;">질의 맥락 단위 정밀 포렌식은 데이터 수집 체계가 있어야 가능</td>
+          <td style="border:1px solid #e5e7eb; padding:10px;">로그 보관기간·점검주기·사고 보고체계(탐지→통보→조치) 문서화</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p style="margin-top:12px; color:#4b5563; font-size:13px;">
+      권고: NotebookLM 단독 운영 시에는 “업무 보조 도구”로 범위를 명확히 하고,
+      중앙 감사 요구가 있는 경우 사내 중계 계층(프록시/게이트웨이) 또는 별도 챗 서비스로 확장 검토.
+    </p>
+  </div>
+
   <div class="footer">
-    작성: JudyBot · AX 진행상황 공유용 초안
+    작성: JudyBot · AX 진행상황 공유용 초안 (보안팀 검토용 업데이트)
   </div>
 </body>
 </html>
