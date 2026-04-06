@@ -79,53 +79,53 @@ flowchart LR
   </div>
 
   <div class="card">
-    <h2>2) 임상 뉴스레터 발송 자동화 구조</h2>
+    <h2>2) 임상 뉴스레터 발송 자동화 구조 (localhost:8501 구현 반영)</h2>
     <pre class="mermaid">
 flowchart LR
-  subgraph N1[업무 입력 구간]
-    F[담당자 입력폼\nStreamlit]
-    R[수신자 목록 관리]
+  subgraph N1[사용자/입력 구간]
+    F[담당자 입력폼\nStreamlit UI]
+    X[CSV/Excel 업로드\n병원 DB 일괄 등록]
   end
 
-  subgraph N2[처리/검증 구간]
-    V[데이터 검증\n필수값/형식]
-    T[템플릿 엔진\n텍스트+이미지]
-    P[승인 단계\n팀장/운영자]
+  subgraph N2[애플리케이션 구간]
+    V[입력 체크\n필수값/계산]
+    T[템플릿 렌더링\nJinja2 + MJML]
+    P[미리보기/HTML 다운로드]
   end
 
-  subgraph N3[발송 구간]
-    M[메일 발송 시스템]
+  subgraph N3[데이터 저장 구간]
+    D[(SQLite newsletter.db\n병원DB + 발송로그)]
+    G[발송 이력 조회 화면]
+  end
+
+  subgraph N4[발송 구간]
+    M[SMTP 릴레이\nspam.ekdp.com:25]
     H[수신자\n병원 의사/담당자]
   end
 
-  subgraph N4[감사 구간]
-    G[발송 이력/에러 로그]
-  end
+  X -->|병원 정보 저장/수정| D
+  F -->|월간 현황/수신자 입력| V
+  D -->|병원/교수/이메일 불러오기| F
+  V -->|렌더링 데이터| T
+  T -->|뉴스레터 HTML| P
+  P -->|발송 요청| M
+  M -->|메일 발송| H
+  M -->|성공/실패 상태| D
+  D -->|최근 발송 50건| G
 
-  F -->|월간 현황 입력| V
-  V -->|검증 통과 데이터| T
-  R -->|수신자 정보| T
-  T -->|초안 생성| P
-  P -->|승인 완료| M
-  M -->|뉴스레터 발송| H
-
-  V -->|검증 로그| G
-  P -->|승인 이력| G
-  M -->|발송/실패 이력| G
-
-  C4[[Control: 입력 권한관리]]
-  C5[[Control: 승인 후 발송]]
-  C6[[Control: 테스트/실발송 분리]]
-  C7[[Control: 로그 보관/추적]]
+  C4[[Control: UI 접근 권한관리]]
+  C5[[Control: SMTP 계정/비밀번호 입력]]
+  C6[[Control: 발송 로그 저장/추적]]
+  C7[[Control: 테스트 수신자로 사전 검증]]
   R3[[Risk: 오발송]]
-  R4[[Risk: 수신자 정보 관리 미흡]]
+  R4[[Risk: 잘못된 수신자/데이터 입력]]
 
   F -.-> C4
-  P -.-> C5
-  M -.-> C6
-  G -.-> C7
+  M -.-> C5
+  D -.-> C6
+  P -.-> C7
   M -.-> R3
-  R -.-> R4
+  V -.-> R4
     </pre>
   </div>
 
