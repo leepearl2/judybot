@@ -32,48 +32,43 @@
   </div>
 
   <div class="card">
-    <h2>1) 임상시험/PMS SOP 문서 챗봇 구조</h2>
+    <h2>1) 임상시험/PMS SOP 문서 챗봇 구조 (NotebookLM 모니터링 범위 명시)</h2>
+    <p style="margin: 6px 0 14px; color:#4b5563; font-size:14px;">
+      ※ 현재 구조 기준으로는 <b>NotebookLM 내부 질의·응답 전문의 중앙 모니터링은 제한적</b>이며,
+      관리자 가시성은 계정/접근/운영 메타정보 중심입니다.
+    </p>
     <pre class="mermaid">
 flowchart LR
   subgraph Z1[사내 사용자 구간]
     U[임상팀 사용자]
   end
 
-  subgraph Z2[AX 서비스 구간]
-    A[챗봇 서비스\n질의 처리/응답]
-    L[로그·모니터링\n질의/응답/접근 기록]
+  subgraph Z2[서비스/운영 구간]
+    A[NotebookLM 사용 환경\n사용자 직접 질의]
+    M[관리자 가시영역\n계정/접근/운영 메타]
   end
 
   subgraph Z3[지식 구간]
-    D[SOP 문서 저장소\n약 120개 문서]
-    I[검색/인덱싱 엔진\nNotebookLM 등]
-  end
-
-  subgraph Z4[운영자 구간]
+    D[SOP 문서 소스\n약 120개 문서]
     O[운영담당자\n문서 변경 등록]
   end
 
-  U -->|질의| A
-  A -->|검색 요청| I
-  I -->|문서 참조| D
-  I -->|검색결과 + 출처| A
-  A -->|답변 + 출처 표기| U
-
+  U -->|질의/검색| A
+  A -->|응답 + 출처| U
   O -->|신규/개정 SOP 등록| D
-  A -->|접근/질의/응답 로그| L
-  I -->|검색 로그| L
-  D -->|변경 이력| L
+  D -->|문서 업데이트 반영| A
+  A -->|접근/운영 메타| M
 
-  C1[[Control: RBAC 권한관리]]
-  C2[[Control: TLS 전송 암호화]]
-  C3[[Control: 로그 보관/감사]]
-  R1[[Risk: 대량 문서 관리 복잡성]]
+  C1[[Control: RBAC/SSO 권한관리]]
+  C2[[Control: 데이터 분류/업로드 기준]]
+  C3[[Control: 운영 정책/감사 절차]]
+  R1[[Risk: 질의·응답 전문 감사 한계]]
   R2[[Risk: 출처 표기 정확성]]
 
   A -.-> C1
-  A -.-> C2
-  L -.-> C3
-  I -.-> R1
+  O -.-> C2
+  M -.-> C3
+  A -.-> R1
   A -.-> R2
     </pre>
   </div>
