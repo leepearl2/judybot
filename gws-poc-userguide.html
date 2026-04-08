@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>광동제약 GWS 사용자 가이드</title>
+  <style>
+    :root {
+      --primary: #005bac;
+      --primary-dark: #003f7d;
+      --accent: #e8f0fe;
+      --warning-bg: #fff8e1;
+      --warning-border: #f9a825;
+      --danger-bg: #fdecea;
+      --danger-border: #e53935;
+      --success-bg: #e8f5e9;
+      --success-border: #43a047;
+      --text: #212121;
+      --text-muted: #555;
+      --border: #dde3ec;
+      --bg: #f4f6fb;
+      --white: #ffffff;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+    }
+
+    /* Header */
+    header {
+      background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+      color: white;
+      padding: 40px 0 30px;
+      text-align: center;
+      box-shadow: 0 3px 12px rgba(0,0,0,0.15);
+    }
+    header .logo-area { margin-bottom: 10px; font-size: 13px; opacity: 0.8; letter-spacing: 2px; text-transform: uppercase; }
+    header h1 { font-size: 26px; font-weight: 700; letter-spacing: -0.5px; }
+    header p { margin-top: 8px; font-size: 14px; opacity: 0.85; }
+    .badge {
+      display: inline-block;
+      background: rgba(255,255,255,0.2);
+      border: 1px solid rgba(255,255,255,0.4);
+      border-radius: 20px;
+      padding: 3px 14px;
+      font-size: 12px;
+      margin-top: 12px;
+    }
+
+    /* Layout */
+    .container { max-width: 860px; margin: 0 auto; padding: 0 20px; }
+
+    /* TOC */
+    .toc {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 24px 28px;
+      margin: 30px 0 10px;
+    }
+    .toc h2 { font-size: 14px; font-weight: 700; color: var(--primary); margin-bottom: 12px; display: flex; align-items: center; gap: 6px; }
+    .toc ol { padding-left: 18px; }
+    .toc li { margin: 5px 0; }
+    .toc a { color: var(--primary); text-decoration: none; font-size: 14px; }
+    .toc a:hover { text-decoration: underline; }
+
+    /* Section */
+    .section {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 28px 32px;
+      margin: 16px 0;
+    }
+    .section-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--primary-dark);
+      margin-bottom: 18px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid var(--accent);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .section-title .icon { font-size: 20px; }
+
+    /* Step box (최초 PC 허용) */
+    .step-box {
+      background: var(--accent);
+      border-left: 4px solid var(--primary);
+      border-radius: 8px;
+      padding: 18px 22px;
+      margin: 14px 0;
+    }
+    .step-box h3 { font-size: 15px; font-weight: 700; color: var(--primary-dark); margin-bottom: 10px; }
+    .step-list { padding-left: 0; list-style: none; counter-reset: step-counter; }
+    .step-list li {
+      counter-increment: step-counter;
+      padding: 6px 0 6px 36px;
+      position: relative;
+      font-size: 14px;
+    }
+    .step-list li::before {
+      content: counter(step-counter);
+      position: absolute;
+      left: 0;
+      top: 7px;
+      background: var(--primary);
+      color: white;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      font-size: 12px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Policy card */
+    .policy-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 4px; }
+    @media(max-width: 600px) { .policy-grid { grid-template-columns: 1fr; } }
+    .policy-card {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 16px 18px;
+      background: var(--bg);
+    }
+    .policy-card h4 { font-size: 13px; font-weight: 700; color: var(--primary); margin-bottom: 8px; }
+    .policy-card ul { padding-left: 16px; font-size: 13px; color: var(--text-muted); }
+    .policy-card ul li { margin: 4px 0; }
+
+    /* Alert boxes */
+    .alert {
+      border-radius: 8px;
+      padding: 14px 18px;
+      margin: 14px 0;
+      font-size: 14px;
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+    }
+    .alert-icon { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
+    .alert-warning { background: var(--warning-bg); border-left: 4px solid var(--warning-border); }
+    .alert-danger  { background: var(--danger-bg);  border-left: 4px solid var(--danger-border);  }
+    .alert-success { background: var(--success-bg); border-left: 4px solid var(--success-border); }
+    .alert strong { display: block; margin-bottom: 3px; }
+
+    /* Security grade table */
+    table { width: 100%; border-collapse: collapse; margin-top: 14px; font-size: 13px; }
+    th { background: var(--primary); color: white; padding: 10px 14px; text-align: left; }
+    td { padding: 10px 14px; border-bottom: 1px solid var(--border); vertical-align: top; }
+    tr:nth-child(even) td { background: var(--accent); }
+    .grade-1 { color: #c62828; font-weight: 700; }
+    .grade-2 { color: #e65100; font-weight: 700; }
+    .grade-3 { color: #2e7d32; font-weight: 700; }
+
+    /* Tag chip */
+    .chip {
+      display: inline-block;
+      padding: 2px 10px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 700;
+      margin-right: 4px;
+    }
+    .chip-red    { background: #fdecea; color: #c62828; border: 1px solid #e57373; }
+    .chip-orange { background: #fff3e0; color: #e65100; border: 1px solid #ffb74d; }
+    .chip-green  { background: #e8f5e9; color: #2e7d32; border: 1px solid #81c784; }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      padding: 30px 20px;
+      font-size: 13px;
+      color: #888;
+      margin-top: 10px;
+    }
+    footer a { color: var(--primary); text-decoration: none; }
+
+    /* Scroll to top */
+    .back-top {
+      display: block;
+      text-align: right;
+      font-size: 12px;
+      color: var(--primary);
+      text-decoration: none;
+      margin-top: 12px;
+    }
+    .back-top:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="logo-area">Kwangdong Pharmaceutical</div>
+  <h1>🛡️ GWS 사용자 가이드</h1>
+  <p>Google Workspace 정책 및 보안 수칙 안내</p>
+  <span class="badge">PoC 배포용 · 내부용</span>
+</header>
+
+<div class="container">
+
+  <!-- 목차 -->
+  <nav class="toc" id="top">
+    <h2>📋 목차</h2>
+    <ol>
+      <li><a href="#start">최초 PC 허용 작업 (로그인 시 1회)</a></li>
+      <li><a href="#sharing">정보 공유 유의사항</a></li>
+      <li><a href="#policy">GWS 활용 정책 및 보안 수칙</a></li>
+      <li><a href="#security-grade">문서 보안 등급 분류 기준</a></li>
+      <li><a href="#monitoring">정보보호 및 모니터링</a></li>
+      <li><a href="#contact">문의 및 지원</a></li>
+    </ol>
+  </nav>
+
+  <!-- 1. 최초 PC 허용 -->
+  <section class="section" id="start">
+    <div class="section-title"><span class="icon">🖥️</span> 1. 최초 PC 허용 작업 (로그인 시 최초 1회)</div>
+
+    <div class="alert alert-warning">
+      <span class="alert-icon">⚠️</span>
+      <div>
+        <strong>로그인 후 "액세스가 차단되었습니다" 화면이 뜨는 경우</strong>
+        아래 순서대로 따라하시면 됩니다. 이 작업은 처음 한 번만 하면 돼요.
+      </div>
+    </div>
+
+    <div class="step-box">
+      <h3>🔧 처리 절차</h3>
+      <ol class="step-list">
+        <li>Chrome 웹 스토어에 접속합니다.</li>
+        <li><strong>Endpoint Verification</strong> 확장 프로그램을 검색 후 설치합니다.</li>
+        <li>설치 완료 후 확장 프로그램에서 <strong>Sync now</strong> 버튼을 클릭합니다.</li>
+        <li>Gmail, 드라이브 등 GWS 서비스 접속이 허용되는지 확인합니다.</li>
+      </ol>
+    </div>
+
+    <div class="alert alert-danger">
+      <span class="alert-icon">🚫</span>
+      <div>
+        <strong>그래도 차단이 계속되는 경우</strong>
+        위 절차 수행 후에도 접속이 차단된다면 <strong>AI센터</strong>로 문의해 주십시오.
+      </div>
+    </div>
+    <a href="#top" class="back-top">↑ 목차로</a>
+  </section>
+
+  <!-- 2. 정보 공유 유의사항 -->
+  <section class="section" id="sharing">
+    <div class="section-title"><span class="icon">📢</span> 2. 정보 공유 유의사항</div>
+    <div class="alert alert-danger">
+      <span class="alert-icon">🔒</span>
+      <div>
+        <strong>회사 중요 정보는 GWS 밖으로 내보내지 마세요</strong>
+        개인 정보, 영업 비밀처럼 회사 내부 정보에 해당하는 파일이나 내용은 GWS 외부로 공유하거나 유출되지 않도록 각별히 주의해 주세요.
+      </div>
+    </div>
+    <a href="#top" class="back-top">↑ 목차로</a>
+  </section>
+
+  <!-- 3. GWS 보안 수칙 -->
+  <section class="section" id="policy">
+    <div class="section-title"><span class="icon">📁</span> 3. GWS 활용 정책 및 보안 수칙</div>
+    <div class="policy-grid">
+
+      <div class="policy-card">
+        <h4>📂 2.1 파일 저장 원칙</h4>
+        <ul>
+          <li>업무 파일은 반드시 구글 드라이브(내 드라이브 또는 공유 드라이브)에 저장하세요</li>
+          <li>개인 클라우드(네이버 클라우드, 드롭박스 등)나 USB에 저장·복사하는 것은 금지입니다</li>
+          <li>팀이 함께 쓰는 파일은 <strong>공유 드라이브</strong>에 저장하는 것을 권장합니다</li>
+        </ul>
+      </div>
+
+      <div class="policy-card">
+        <h4>🌐 2.2 외부 공유 통제 원칙</h4>
+        <ul>
+          <li>GWS 파일을 회사 외부(타 회사 이메일 등)로 공유하는 것은 기본적으로 막혀 있습니다</li>
+        </ul>
+      </div>
+
+      <div class="policy-card">
+        <h4>🔑 2.3 로그인 보안 원칙</h4>
+        <ul>
+          <li>로그인 시 <strong>OTP(2단계 인증)</strong> 사용이 필수입니다 — 비밀번호 외에 인증 앱의 숫자 코드를 추가로 입력하는 방식이에요</li>
+          <li>OTP 설정을 하지 않으면 로그인이 차단됩니다</li>
+          <li>내 업무에 필요한 파일·폴더에만 접근하고, 다른 부서 파일을 무단으로 열람하지 마세요</li>
+        </ul>
+      </div>
+
+      <div class="policy-card">
+        <h4>🤖 2.4 AI 서비스 사용 원칙</h4>
+        <ul>
+          <li>구글 AI(Gemini, NotebookLM)에 <strong>1등급(비밀)·2등급(부서비)</strong> 문서 내용을 입력하는 것은 금지입니다</li>
+          <li>어떤 등급인지 모르겠다면 아래 보안 등급 표를 참고하세요</li>
+        </ul>
+      </div>
+
+      <div class="policy-card">
+        <h4>📋 2.6 활동 기록 보관 원칙</h4>
+        <ul>
+          <li>드라이브·Gmail·Meet·Gemini 등 GWS 사용 기록은 최소 1년간 보관됩니다</li>
+          <li>보안 정책을 위반한 이력도 별도로 기록됩니다</li>
+        </ul>
+      </div>
+
+      <div class="policy-card">
+        <h4>💻 2.7 사용 기기 원칙</h4>
+        <ul>
+          <li>미리 등록·승인된 기기에서만 GWS에 접속할 수 있습니다</li>
+          <li>회사에서 지급한 PC는 자동으로 등록됩니다</li>
+          <li>개인 PC나 휴대폰으로 접속하려면 AI센터에 별도로 승인 요청이 필요합니다</li>
+        </ul>
+      </div>
+
+    </div>
+    <a href="#top" class="back-top">↑ 목차로</a>
+  </section>
+
+  <!-- 4. 보안 등급 -->
+  <section class="section" id="security-grade">
+    <div class="section-title"><span class="icon">🏷️</span> 4. 문서 보안 등급 분류 기준</div>
+
+    <div class="alert alert-danger">
+      <span class="alert-icon">🚫</span>
+      <div>
+        <strong>AI 서비스(Gemini, NotebookLM) 입력 주의</strong>
+        <span class="chip chip-red">1등급(비밀)</span><span class="chip chip-orange">2등급(부서비)</span> 에 해당하는 내용은 AI 서비스에 입력하지 마십시오.
+      </div>
+    </div>
+
+    <table>
+      <thead>
+        <tr>
+          <th style="width:110px">등급</th>
+          <th>해당 문서 유형</th>
+          <th style="width:100px">AI 서비스 입력</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="grade-1">1등급 (비밀)</span></td>
+          <td>
+            주요 재무·회계 정보 / 합병·매각 관련 / 중요 계약·프로젝트 /
+            의약품·연구개발 정보 / 기타 비밀 처리 필요 문서
+          </td>
+          <td style="text-align:center"><span class="chip chip-red">금지</span></td>
+        </tr>
+        <tr>
+          <td><span class="grade-2">2등급 (부서비)</span></td>
+          <td>
+            임직원 인사정보 / 영업 정책 / 고객 정보 / 시스템 운영·설계 /
+            계약서·협약서·각서 / 대외 공표 금지 업무 계획 / 기타 부서 중요 문서
+          </td>
+          <td style="text-align:center"><span class="chip chip-red">금지</span></td>
+        </tr>
+        <tr>
+          <td><span class="grade-3">3등급 (사내비)</span></td>
+          <td>사내 유통·공유가 허용되는 일반 업무 문서</td>
+          <td style="text-align:center"><span class="chip chip-green">허용</span></td>
+        </tr>
+      </tbody>
+    </table>
+    <a href="#top" class="back-top">↑ 목차로</a>
+  </section>
+
+  <!-- 5. 모니터링 -->
+  <section class="section" id="monitoring">
+    <div class="section-title"><span class="icon">🔍</span> 5. 정보보호 및 모니터링</div>
+    <div class="alert alert-success">
+      <span class="alert-icon">ℹ️</span>
+      <div>
+        광동제약은 임직원의 안전한 업무 환경을 위해 GWS 사용 내역(접속, 파일 열람·공유 등)을 기록하고 있습니다.
+        또한, 회사 정보가 외부로 새어나가는 것을 자동으로 감지·차단하는 시스템이 운영 중이며, 정책 위반 이력은 별도로 보관됩니다.
+        GWS는 사전에 등록된 기기에서만 접속할 수 있습니다.
+      </div>
+    </div>
+    <a href="#top" class="back-top">↑ 목차로</a>
+  </section>
+
+  <!-- 6. 문의 -->
+  <section class="section" id="contact">
+    <div class="section-title"><span class="icon">📞</span> 6. 문의 및 지원</div>
+    <div class="alert alert-success">
+      <span class="alert-icon">💬</span>
+      <div>
+        GWS 사용 중 정책 관련 문의나 기술적인 문제가 발생하면 <strong>AI센터</strong>로 문의해 주십시오.
+      </div>
+    </div>
+    <a href="#top" class="back-top">↑ 목차로</a>
+  </section>
+
+</div>
+
+<footer>
+  <p>© 광동제약 AI센터 · GWS PoC 사용자 가이드 · 내부 배포용</p>
+  <p style="margin-top:6px">문의: <a href="#">AI센터</a></p>
+</footer>
+
+</body>
+</html>
