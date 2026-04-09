@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>광동제약 Slack PoC 사용자 가이드</title>
+<style>
+  :root {
+    --primary: #4A154B;
+    --primary-light: #F4EFF4;
+    --accent: #36C5F0;
+    --accent-light: #E8F8FD;
+    --success: #2EB67D;
+    --success-light: #E8F7F0;
+    --warn: #ECB22E;
+    --warn-light: #FDF6E3;
+    --danger: #E01E5A;
+    --danger-light: #FDEEF4;
+    --gray50: #F8F8F8;
+    --gray100: #F0F0F0;
+    --gray200: #E0E0E0;
+    --gray400: #999;
+    --gray700: #444;
+    --gray900: #1a1a1a;
+    --radius: 10px;
+    --radius-sm: 6px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
+    color: var(--gray900);
+    background: #fff;
+    line-height: 1.7;
+    font-size: 15px;
+  }
+  .doc-header {
+    background: var(--primary);
+    color: #fff;
+    padding: 48px 40px 36px;
+  }
+  .doc-header .badge {
+    display: inline-block;
+    background: rgba(255,255,255,0.18);
+    color: #fff;
+    font-size: 12px;
+    padding: 3px 10px;
+    border-radius: 20px;
+    margin-bottom: 14px;
+    letter-spacing: 0.5px;
+  }
+  .doc-header h1 { font-size: 26px; font-weight: 700; margin-bottom: 8px; }
+  .doc-header p { font-size: 14px; opacity: 0.8; margin-top: 6px; }
+  .header-meta { display: flex; gap: 24px; margin-top: 20px; font-size: 13px; opacity: 0.75; }
+  .toc {
+    background: var(--gray50);
+    border: 1px solid var(--gray200);
+    border-radius: var(--radius);
+    padding: 24px 28px;
+    margin: 32px 40px;
+  }
+  .toc h2 { font-size: 14px; font-weight: 600; color: var(--gray400); letter-spacing: 0.5px; margin-bottom: 12px; text-transform: uppercase; }
+  .toc ol { padding-left: 20px; }
+  .toc li { margin: 6px 0; }
+  .toc a { color: var(--primary); text-decoration: none; font-size: 14px; }
+  .toc a:hover { text-decoration: underline; }
+  .content { padding: 0 40px 60px; }
+  .section { margin-bottom: 52px; scroll-margin-top: 20px; }
+  .section-header {
+    display: flex; align-items: center; gap: 14px;
+    border-bottom: 2px solid var(--primary);
+    padding-bottom: 12px; margin-bottom: 24px;
+  }
+  .section-num {
+    background: var(--primary); color: #fff;
+    width: 32px; height: 32px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px; font-weight: 700; flex-shrink: 0;
+  }
+  .section-header h2 { font-size: 20px; font-weight: 700; color: var(--primary); }
+  .steps { display: flex; flex-direction: column; gap: 0; }
+  .step { display: flex; gap: 20px; position: relative; }
+  .step:not(:last-child)::after {
+    content: ''; position: absolute;
+    left: 19px; top: 40px; bottom: 0;
+    width: 2px; background: var(--gray200);
+  }
+  .step-circle {
+    width: 40px; height: 40px; border-radius: 50%;
+    background: var(--primary-light); border: 2px solid var(--primary);
+    color: var(--primary); display: flex; align-items: center; justify-content: center;
+    font-size: 14px; font-weight: 700; flex-shrink: 0; position: relative; z-index: 1;
+  }
+  .step-body { padding-bottom: 28px; flex: 1; padding-top: 8px; }
+  .step-body h3 { font-size: 15px; font-weight: 700; margin-bottom: 6px; color: var(--gray900); }
+  .step-body p, .step-body li { font-size: 14px; color: var(--gray700); line-height: 1.7; }
+  .step-body ul { padding-left: 18px; margin-top: 4px; }
+  .step-body li { margin: 2px 0; }
+  .callout {
+    border-radius: var(--radius-sm); padding: 14px 18px; margin: 12px 0;
+    font-size: 14px; display: flex; gap: 10px; align-items: flex-start;
+  }
+  .callout-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+  .callout.info { background: var(--accent-light); border-left: 3px solid var(--accent); color: #0e6680; }
+  .callout.warn { background: var(--warn-light); border-left: 3px solid var(--warn); color: #7a5a00; }
+  .callout.success { background: var(--success-light); border-left: 3px solid var(--success); color: #1a6645; }
+  .callout.danger { background: var(--danger-light); border-left: 3px solid var(--danger); color: #8a0030; }
+  code {
+    background: var(--gray100); border: 1px solid var(--gray200);
+    border-radius: 4px; padding: 1px 7px;
+    font-family: 'Courier New', monospace; font-size: 13px; color: var(--primary);
+  }
+  .channel-badge {
+    display: inline-flex; align-items: center; gap: 4px;
+    background: var(--primary-light); border: 1px solid #c9a8ca;
+    border-radius: 4px; padding: 2px 8px;
+    font-family: 'Courier New', monospace; font-size: 13px;
+    color: var(--primary); font-weight: 600; margin: 2px;
+  }
+  .guide-table { width: 100%; border-collapse: collapse; font-size: 14px; margin: 16px 0; }
+  .guide-table th {
+    background: var(--primary); color: #fff;
+    padding: 10px 14px; text-align: left; font-weight: 600; font-size: 13px;
+  }
+  .guide-table td { padding: 10px 14px; border-bottom: 1px solid var(--gray200); vertical-align: top; }
+  .guide-table tr:nth-child(even) td { background: var(--gray50); }
+  .guide-table th:first-child { border-radius: 6px 0 0 0; }
+  .guide-table th:last-child { border-radius: 0 6px 0 0; }
+  .policy-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; margin: 16px 0; }
+  .policy-card { border: 1px solid var(--gray200); border-radius: var(--radius); padding: 18px 20px; background: #fff; }
+  .policy-card .card-icon { font-size: 22px; margin-bottom: 10px; }
+  .policy-card h3 { font-size: 15px; font-weight: 700; margin-bottom: 8px; color: var(--gray900); }
+  .policy-card ul { padding-left: 16px; font-size: 13px; color: var(--gray700); }
+  .policy-card li { margin: 4px 0; }
+  .policy-card.highlight { border-color: var(--primary); border-width: 2px; }
+  .policy-card.highlight h3 { color: var(--primary); }
+  .ch-section { margin: 16px 0; }
+  .ch-section h3 {
+    font-size: 14px; font-weight: 700; color: var(--gray700);
+    margin-bottom: 8px; padding-bottom: 4px; border-bottom: 1px solid var(--gray200);
+  }
+  .tag {
+    display: inline-block; font-size: 11px; padding: 2px 8px;
+    border-radius: 20px; font-weight: 600; margin-left: 4px;
+  }
+  .tag.internal { background: var(--success-light); color: #1a6645; }
+  .tag.external { background: var(--warn-light); color: #7a5a00; }
+  .tag.private { background: var(--danger-light); color: #8a0030; }
+  .tag.readonly { background: var(--accent-light); color: #0e6680; }
+  .doc-footer {
+    background: var(--gray50); border-top: 1px solid var(--gray200);
+    padding: 24px 40px; text-align: center; font-size: 13px; color: var(--gray400);
+  }
+  .doc-footer strong { color: var(--primary); }
+  @media (max-width: 640px) {
+    .doc-header { padding: 32px 20px 24px; }
+    .toc { margin: 20px; }
+    .content { padding: 0 20px 40px; }
+    .policy-cards { grid-template-columns: 1fr; }
+    .doc-footer { padding: 20px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="doc-header">
+  <div class="badge">PoC 사용자 가이드 v1.0</div>
+  <h1>광동제약 Slack 사용 가이드</h1>
+  <p>Slack PoC(개념 검증) 참여자를 위한 초기 설정 및 보안 정책 안내입니다.</p>
+  <div class="header-meta">
+    <span>📅 2025년 작성</span>
+    <span>👥 대상: PoC 참여 임직원 전체</span>
+    <span>📌 문의: <strong style="color:#fff;">#poc-문의사항</strong></span>
+  </div>
+</header>
+
+<nav class="toc">
+  <h2>목차</h2>
+  <ol>
+    <li><a href="#sec1">초기 로그인 방법</a></li>
+    <li><a href="#sec2">Google Authenticator OTP 등록 방법</a></li>
+    <li><a href="#sec3">보안 정책 안내</a></li>
+    <li><a href="#sec4">채널 사용 가이드</a></li>
+  </ol>
+</nav>
+
+<main class="content">
+
+  <!-- 1. 로그인 -->
+  <section class="section" id="sec1">
+    <div class="section-header">
+      <div class="section-num">1</div>
+      <h2>초기 로그인 방법</h2>
+    </div>
+    <div class="callout info">
+      <span class="callout-icon">ℹ</span>
+      <div>Slack 초대 메일이 사전에 발송됩니다. 메일이 오지 않았다면 <strong>#poc-문의사항</strong> 채널 또는 IT 담당자에게 편하게 문의해 주세요.</div>
+    </div>
+    <div class="steps" style="margin-top: 20px;">
+      <div class="step">
+        <div class="step-circle">1</div>
+        <div class="step-body">
+          <h3>초대 메일 확인</h3>
+          <p>회사 이메일로 받으신 <strong>Slack 초대 메일</strong>을 열고 <strong>[지금 시작하기]</strong> 버튼을 클릭해 주세요.</p>
+          <div class="callout warn" style="margin-top: 8px;">
+            <span class="callout-icon">⚠</span>
+            <div>초대 링크는 발송 후 <strong>72시간</strong>이 지나면 만료돼요. 받으셨다면 빨리 진행해 주세요!</div>
+          </div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-circle">2</div>
+        <div class="step-body">
+          <h3>비밀번호 설정</h3>
+          <p>처음 사용할 비밀번호를 설정합니다. 아래 조건을 모두 충족해야 해요.</p>
+          <ul>
+            <li>영문 대·소문자, 숫자, 특수문자를 조합해서 만들어 주세요</li>
+            <li>최소 <strong>10자리 이상</strong>으로 설정해야 합니다</li>
+            <li>생년월일·이름·사번 등 개인정보는 포함하지 마세요</li>
+          </ul>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-circle">3</div>
+        <div class="step-body">
+          <h3>워크스페이스 접속</h3>
+          <p>로그인하면 <strong>광동제약 Slack 워크스페이스</strong>가 자동으로 열립니다.</p>
+          <ul>
+            <li>웹 브라우저에서 바로 사용할 수 있어요</li>
+            <li>Slack 데스크톱/모바일 앱을 설치하면 더욱 편리하게 사용할 수 있어요</li>
+          </ul>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-circle">4</div>
+        <div class="step-body">
+          <h3>프로필 설정</h3>
+          <p>오른쪽 상단 프로필 사진 → <strong>[프로필 편집]</strong>에서 아래 항목을 꼭 입력해 주세요.</p>
+          <ul>
+            <li><strong>표시 이름:</strong> 실명 (예: 홍길동)</li>
+            <li><strong>소속:</strong> 부문 / 본부 / 부서 순으로 입력 (예: CMO부문 마케팅본부 브랜드팀)</li>
+            <li><strong>사번:</strong> 본인 사번 입력</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2. OTP -->
+  <section class="section" id="sec2">
+    <div class="section-header">
+      <div class="section-num">2</div>
+      <h2>Google Authenticator OTP 등록 방법</h2>
+    </div>
+    <div class="callout danger">
+      <span class="callout-icon">🔐</span>
+      <div><strong>2단계 인증(2FA)은 필수예요!</strong> PoC에 참여하는 모든 분들은 처음 로그인 후 반드시 OTP를 등록해 주세요. 등록하지 않으면 계정 접근이 제한될 수 있습니다.</div>
+    </div>
+    <div class="steps" style="margin-top: 20px;">
+      <div class="step">
+        <div class="step-circle">1</div>
+        <div class="step-body">
+          <h3>Google Authenticator 앱 설치</h3>
+          <p>스마트폰에 앱이 없다면 먼저 설치해 주세요.</p>
+          <ul>
+            <li>iPhone: App Store에서 <strong>"Google Authenticator"</strong> 검색 후 설치</li>
+            <li>Android: Google Play에서 <strong>"Google Authenticator"</strong> 검색 후 설치</li>
+          </ul>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-circle">2</div>
+        <div class="step-body">
+          <h3>Slack 2단계 인증 설정 페이지 이동</h3>
+          <p>PC에서 아래 순서대로 따라해 주세요.</p>
+          <ul>
+            <li>오른쪽 상단 프로필 사진 클릭</li>
+            <li><strong>[기본 설정]</strong> 선택</li>
+            <li>왼쪽 메뉴에서 <strong>[보안]</strong> 탭 클릭</li>
+            <li><strong>[2단계 인증 설정]</strong> 버튼 클릭</li>
+          </ul>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-circle">3</div>
+        <div class="step-body">
+          <h3>인증 앱 선택</h3>
+          <p>인증 방법을 고르는 화면에서 <strong>"인증 앱 사용"</strong>을 선택하고 <strong>[계속]</strong>을 눌러 주세요.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-circle">4</div>
+        <div class="step-body">
+          <h3>QR 코드 스캔</h3>
+          <p>Slack 화면에 QR 코드가 나타나면 아래 순서대로 진행하세요.</p>
+          <ul>
+            <li>Google Authenticator 앱 실행</li>
+            <li>오른쪽 하단 <strong>[+]</strong> 버튼 탭</li>
+            <li><strong>"QR 코드 스캔"</strong> 선택</li>
+            <li>Slack 화면의 QR 코드를 카메라로 스캔</li>
+          </ul>
+          <div class="callout warn" style="margin-top: 8px;">
+            <span class="callout-icon">⚠</span>
+            <div>QR 코드는 <strong>절대 다른 사람에게 보여주지 마세요.</strong> 이 코드로 내 계정에 접근할 수 있습니다.</div>
+          </div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-circle">5</div>
+        <div class="step-body">
+          <h3>6자리 인증 코드 입력 및 완료</h3>
+          <p>앱에 표시된 <strong>6자리 숫자 코드</strong>를 Slack 화면에 입력하고 <strong>[확인]</strong>을 눌러 주세요.</p>
+          <ul>
+            <li>코드는 <strong>30초마다 새로 바뀌어요.</strong> 시간 안에 입력해 주세요.</li>
+            <li>등록이 완료되면 <strong>"2단계 인증이 활성화되었습니다"</strong> 메시지가 나타납니다.</li>
+          </ul>
+          <div class="callout success" style="margin-top: 8px;">
+            <span class="callout-icon">✔</span>
+            <div>이후 Slack에 로그인할 때마다 앱에서 OTP 코드를 확인하여 입력하면 돼요.</div>
+          </div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-circle">6</div>
+        <div class="step-body">
+          <h3>백업 코드 저장</h3>
+          <p>Slack에서 <strong>백업 코드</strong>를 제공해요. 스마트폰을 분실했을 때 계정을 복구할 수 있어요.</p>
+          <ul>
+            <li>코드를 인쇄하거나 안전한 곳에 메모해 두세요.</li>
+            <li>절대 다른 사람에게 공유하지 마세요.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. 보안 정책 -->
+  <section class="section" id="sec3">
+    <div class="section-header">
+      <div class="section-num">3</div>
+      <h2>보안 정책 안내</h2>
+    </div>
+    <p style="color: var(--gray700); margin-bottom: 20px; font-size: 14px;">광동제약 Slack PoC에서 적용되는 3가지 보안 정책을 안내드려요. 사용 중 보안에 대해 우려되는 부분이 있다면 참고해 주세요.</p>
+    <div class="policy-cards">
+      <div class="policy-card highlight">
+        <div class="card-icon">🔒</div>
+        <h3>앱 설치 — 담당자 승인 방식</h3>
+        <ul>
+          <li>Slack과 연동되는 앱(Bot, 외부 서비스 등)은 담당자 확인 후 설치할 수 있어요</li>
+          <li>사용하고 싶은 앱이 있다면 <span class="channel-badge">#poc-문의사항</span> 채널로 편하게 문의해 주세요</li>
+          <li>아직 승인되지 않은 앱은 자동으로 차단될 수 있습니다</li>
+        </ul>
+      </div>
+      <div class="policy-card highlight">
+        <div class="card-icon">📢</div>
+        <h3>채널 유형 — 내부/외부 채널 구분</h3>
+        <ul>
+          <li><strong>내부 채널</strong>은 임직원만 참여할 수 있는 기본 채널이에요</li>
+          <li><strong>외부 채널</strong>은 외부 협력사와 소통이 필요할 때 개설할 수 있어요. 별도 승인 없이 직접 생성 가능합니다</li>
+          <li>소속 본부·부문·팀 채널과 공통 채널(<span class="channel-badge">#전체공지</span>, <span class="channel-badge">#poc-문의사항</span>)은 처음부터 자동으로 보여요</li>
+        </ul>
+      </div>
+      <div class="policy-card highlight">
+        <div class="card-icon">🔗</div>
+        <h3>Google Drive 링크 — 외부 공유 차단</h3>
+        <ul>
+          <li>PoC 기간 중에는 Google Drive 파일을 <strong>외부에 공유할 수 없어요</strong></li>
+          <li>사내 구성원끼리만 파일을 공유할 수 있습니다</li>
+          <li>개인 Google 계정의 Drive 파일은 공유하지 않도록 해 주세요</li>
+          <li>꼭 외부 공유가 필요한 경우에는 <span class="channel-badge">#poc-문의사항</span>으로 문의해 주세요</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. 채널 가이드 -->
+  <section class="section" id="sec4">
+    <div class="section-header">
+      <div class="section-num">4</div>
+      <h2>채널 사용 가이드</h2>
+    </div>
+    <div class="callout info">
+      <span class="callout-icon">ℹ</span>
+      <div>업무에 필요한 <strong>비공개 채널을 직접 생성</strong>하여 필요한 인원을 초대한 후 사용할 수 있습니다.</div>
+    </div>
+
+    <div class="ch-section" style="margin-top: 24px;">
+      <h3>📌 공통 채널 (전체 참여자)</h3>
+      <table class="guide-table">
+        <thead>
+          <tr><th>채널명</th><th>유형</th><th>용도</th><th>대상</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="channel-badge">#전체공지</span></td>
+            <td><span class="tag readonly">읽기전용</span></td>
+            <td>전사 공지사항 (관리자만 작성)</td>
+            <td>전체</td>
+          </tr>
+          <tr>
+            <td><span class="channel-badge">#poc-문의사항</span></td>
+            <td><span class="tag internal">내부</span></td>
+            <td>PoC 관련 질문, 불편사항, 요청사항</td>
+            <td>전체</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="ch-section">
+      <h3>👥 내 팀 채널 (CMO 부문 예시)</h3>
+      <table class="guide-table">
+        <thead>
+          <tr><th>채널명 패턴</th><th>유형</th><th>용도</th><th>예시</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="channel-badge">#00_cmo_*</span></td>
+            <td><span class="tag internal">내부</span></td>
+            <td>부문/본부 전체 공유 채널</td>
+            <td><code>#00_cmo_전체</code></td>
+          </tr>
+          <tr>
+            <td><span class="channel-badge">#01_cmo_*</span></td>
+            <td><span class="tag internal">내부</span></td>
+            <td>팀 전용 업무 채널</td>
+            <td><code>#01_cmo_마케팅</code></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="ch-section">
+      <h3>⚙️ 운영부서 채널 (AI센터·IT·정보보호)</h3>
+      <table class="guide-table">
+        <thead>
+          <tr><th>채널명 패턴</th><th>유형</th><th>용도</th><th>예시</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="channel-badge">#00_operate_전체</span></td>
+            <td><span class="tag internal">내부</span></td>
+            <td>운영부서 공통 공유 채널</td>
+            <td><code>#00_operate_전체</code></td>
+          </tr>
+          <tr>
+            <td><span class="channel-badge">#01_operate_*</span></td>
+            <td><span class="tag internal">내부</span></td>
+            <td>팀별 운영 전용 채널</td>
+            <td><code>#01_operate_it</code></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="ch-section">
+      <h3>🔍 채널 유형 구분 기준</h3>
+      <table class="guide-table">
+        <thead>
+          <tr><th>유형</th><th>대상</th><th>외부 초대</th><th>개설 조건</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="tag internal">내부 채널</span></td>
+            <td>광동제약 임직원</td>
+            <td>불가</td>
+            <td>운영부서 승인 후 개설</td>
+          </tr>
+          <tr>
+            <td><span class="tag external">외부 채널</span></td>
+            <td>외부 협력사 포함</td>
+            <td>가능</td>
+            <td>채널 관리자가 채널 생성 후 필요한 인원만 초대</td>
+          </tr>
+          <tr>
+            <td><span class="tag private">비공개 채널</span></td>
+            <td>초대된 멤버만</td>
+            <td>불가</td>
+            <td>채널 관리자가 채널 생성 후 필요한 인원만 초대</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout success">
+      <span class="callout-icon">✔</span>
+      <div>
+        <strong>올바른 채널 사용 체크리스트</strong>
+        <ul style="margin-top: 6px; padding-left: 18px; font-size: 13px;">
+          <li>부문·본부 채널(<code>#00_*</code>)은 소속된 모든 구성원에게 내용이 공유돼요. 메시지 작성 전에 한 번 더 확인해 주세요</li>
+          <li>외부 협력사와 소통이 필요하다면 외부 채널을 직접 만들고, 꼭 필요한 인원만 초대해 주세요</li>
+          <li>외부 채널은 가끔씩 멤버를 확인하여 더 이상 필요 없는 인원은 내보내 주세요</li>
+          <li>개인적인 업무 대화는 DM(다이렉트 메시지)을 활용해 주세요</li>
+          <li>Google Drive 파일을 공유할 때는 사내 구성원에게만 공유해 주세요. PoC 기간 중 외부 공유는 차단됩니다</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="doc-footer">
+  <p>📌 문의사항은 Slack <strong>#poc-문의사항</strong> 채널 또는 <strong>AI센터 / IT팀 / 정보보호팀</strong>으로 연락해 주세요.</p>
+  <p style="margin-top: 6px;">© 2025 광동제약 — 본 문서는 내부 PoC 참여자 전용입니다.</p>
+</footer>
+
+</body>
+</html>
