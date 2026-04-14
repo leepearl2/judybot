@@ -14,15 +14,15 @@
       .progress-bar-outer { background:#f8d7da; border-radius:20px; height:12px; width:100%; overflow:hidden; }
       .progress-bar-inner { background:linear-gradient(90deg,#c62828,#ef5350); height:12px; border-radius:20px; }
       a { color:#c62828 !important; }
-      p, div, span, li { color:#333333 !important; }
       .header-white, .header-white * { color:#ffffff !important; }
+      .red-bg, .red-bg * { color:#ffffff !important; }
     </mj-style>
   </mj-head>
 
   <mj-body background-color="#fff5f5">
 
     <!-- ══ HEADER ══ -->
-    <mj-section background-color="#b71c1c" padding="36px 30px 32px">
+    <mj-section css-class="red-bg" background-color="#b71c1c" padding="36px 30px 32px">
       <mj-column>
         {% if logo_cid %}
         <mj-table align="right" width="190px" padding="0 0 10px">
@@ -155,9 +155,9 @@
       <mj-column>
         <mj-table font-size="14px" cell-padding="10px 14px">
           <tr style="background:#c62828; color:#ffffff !important; text-align:center;">
-            <th style="padding:10px 14px; text-align:center;">계약례</th>
-            <th style="padding:10px 14px; text-align:center;">등록례 (동의서 취득)</th>
-            <th style="padding:10px 14px; text-align:center;">E-CRF 작성례</th>
+            <th style="padding:10px 14px; text-align:center; color:#ffffff !important;">계약례</th>
+            <th style="padding:10px 14px; text-align:center; color:#ffffff !important;">등록례 (동의서 취득)</th>
+            <th style="padding:10px 14px; text-align:center; color:#ffffff !important;">E-CRF 작성례</th>
           </tr>
           <tr style="text-align:center; background:#fffafa;">
             <td style="padding:12px 14px; border-bottom:1px solid #eee;">{{ site_contracted }}례</td>
@@ -282,10 +282,10 @@
       <mj-column>
         <mj-table font-size="13px" cell-padding="9px 12px">
           <tr style="background:#c62828; color:#ffffff !important; text-align:center;">
-            <th style="padding:9px 12px; text-align:center;">구분</th>
-            <th style="padding:9px 12px; text-align:center;">담당자</th>
-            <th style="padding:9px 12px; text-align:center;">Tel</th>
-            <th style="padding:9px 12px; text-align:center;">E-mail</th>
+            <th style="padding:9px 12px; text-align:center; color:#ffffff !important;">구분</th>
+            <th style="padding:9px 12px; text-align:center; color:#ffffff !important;">담당자</th>
+            <th style="padding:9px 12px; text-align:center; color:#ffffff !important;">Tel</th>
+            <th style="padding:9px 12px; text-align:center; color:#ffffff !important;">E-mail</th>
           </tr>
           {% for contact in contacts %}
           <tr style="text-align:center; background:{{ '#fffafa' if loop.index is odd else '#ffffff' }};">
@@ -304,7 +304,7 @@
     </mj-section>
 
     <!-- ══ FOOTER ══ -->
-    <mj-section background-color="#8e0000" padding="28px 32px">
+    <mj-section css-class="red-bg" background-color="#8e0000" padding="28px 32px">
       <mj-column>
         <mj-text font-size="13px" color="rgba(255,255,255,0.8)" line-height="1.8" padding-bottom="10px">
           본 과제가 식약처 재심사 신청까지 원활하게 진행될 수 있도록 조사자분의 도움을 부탁드리며,
