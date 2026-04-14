@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>GWS + Slack PoC 검증기간 실행 체크리스트</title>
+  <title>GWS + Slack PoC 기능별 상세 체크리스트</title>
   <style>
     :root {
       --bg: #f6f8fb;
@@ -13,55 +13,55 @@
       --line: #e5e7eb;
       --accent: #2563eb;
       --ok: #059669;
+      --tag: #eef2ff;
     }
     * { box-sizing: border-box; }
     body {
       margin: 0;
-      padding: 32px 18px;
+      padding: 28px 16px;
       font-family: "Pretendard", "Noto Sans KR", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       color: var(--text);
       background: var(--bg);
       line-height: 1.55;
     }
     .wrap {
-      max-width: 920px;
+      max-width: 980px;
       margin: 0 auto;
       background: var(--card);
       border: 1px solid var(--line);
       border-radius: 14px;
-      padding: 28px;
+      padding: 24px;
       box-shadow: 0 6px 20px rgba(0,0,0,0.04);
     }
-    h1 {
-      margin: 0 0 8px;
-      font-size: 1.7rem;
-    }
-    .sub {
-      margin: 0 0 22px;
-      color: var(--muted);
-      font-size: 0.95rem;
-    }
-    .goal {
-      margin: 0 0 24px;
-      padding: 14px 16px;
+    h1 { margin: 0 0 8px; font-size: 1.65rem; }
+    .sub { margin: 0 0 16px; color: var(--muted); font-size: 0.95rem; }
+    .note {
+      margin: 0 0 20px;
+      padding: 12px 14px;
       border-left: 4px solid var(--accent);
       background: #eff6ff;
       border-radius: 10px;
-      font-size: 0.95rem;
+      font-size: 0.93rem;
     }
     h2 {
-      margin: 28px 0 10px;
-      font-size: 1.18rem;
+      margin: 26px 0 8px;
+      font-size: 1.12rem;
       border-bottom: 1px solid var(--line);
       padding-bottom: 6px;
     }
-    ul {
-      margin: 0;
-      padding-left: 0;
-      list-style: none;
+    .tag {
+      display: inline-block;
+      margin-left: 8px;
+      padding: 1px 8px;
+      border-radius: 999px;
+      background: var(--tag);
+      color: #3730a3;
+      font-size: 0.78rem;
+      vertical-align: middle;
     }
+    ul { margin: 0; padding: 0; list-style: none; }
     li {
-      margin: 9px 0;
+      margin: 8px 0;
       padding: 10px 12px;
       border: 1px solid var(--line);
       border-radius: 10px;
@@ -77,17 +77,13 @@
       accent-color: var(--ok);
       flex-shrink: 0;
     }
-    .order {
-      color: var(--accent);
-      font-weight: 700;
-      margin-right: 4px;
-    }
+    .order { color: var(--accent); font-weight: 700; margin-right: 5px; }
     .footer {
-      margin-top: 28px;
+      margin-top: 26px;
       padding-top: 12px;
       border-top: 1px dashed var(--line);
       color: var(--muted);
-      font-size: 0.9rem;
+      font-size: 0.88rem;
     }
     @media print {
       body { background: #fff; padding: 0; }
@@ -98,55 +94,75 @@
 </head>
 <body>
   <main class="wrap">
-    <h1>GWS + Slack PoC 검증기간 실행 체크리스트</h1>
-    <p class="sub">검증기간(4/1~5/27) 동안 실행 우선순위를 기준으로 정리한 운영 체크리스트</p>
+    <h1>GWS + Slack PoC 검증기간 기능별 상세 체크리스트</h1>
+    <p class="sub">기간: 4/1 ~ 5/27 · 목적: 실사용 운영 가능성 + 보안/통제 + 확산 가능성 검증</p>
 
-    <p class="goal">
-      <strong>목표:</strong> PoC를 "설치 완료"가 아니라 <strong>실사용 가능한 운영 상태</strong>로 만들고,
-      보안/운영/사용자 경험 관점에서 재현 가능한 결과를 남긴다.
-    </p>
+    <p class="note"><strong>사용 방법:</strong> 기능 단위로 주 단위 점검하고, 체크 완료 항목은 담당자·완료일·증빙 링크(문서/로그)까지 함께 남긴다.</p>
 
-    <h2>1) 운영 안정화 (가장 먼저)</h2>
+    <h2>1) 계정·접근관리 <span class="tag">기초 안정화</span></h2>
     <ul>
-      <li><input type="checkbox" /><div><span class="order">1-1.</span>GWS↔Slack 계정/그룹 매핑표 최신화 (중복 사용자, 누락 멤버, 권한 오류 정리)</div></li>
-      <li><input type="checkbox" /><div><span class="order">1-2.</span>공유드라이브/채널 구조 최종 잠금 (업무 단위로 드라이브 분리, 소유/관리 책임자 지정)</div></li>
-      <li><input type="checkbox" /><div><span class="order">1-3.</span>기본 권한 정책 적용 점검 (Viewer/Commenter 기본, Editor 승인제 기준 확정)</div></li>
-      <li><input type="checkbox" /><div><span class="order">1-4.</span>장애 대응 루틴 정의 (권한오류·접속이슈·봇오류 접수 채널/담당자/처리 SLA 설정)</div></li>
+      <li><input type="checkbox" /><div><span class="order">1-1.</span>사용자 계정 목록 최신화 (입/퇴사·조직이동·겸직 계정 반영)</div></li>
+      <li><input type="checkbox" /><div><span class="order">1-2.</span>GWS 그룹 ↔ Slack 유저그룹 매핑 검증 (누락/중복/오배정 확인)</div></li>
+      <li><input type="checkbox" /><div><span class="order">1-3.</span>신규 사용자 온보딩 절차 테스트 (초대 → 권한부여 → 첫 로그인까지 리드타임 측정)</div></li>
+      <li><input type="checkbox" /><div><span class="order">1-4.</span>권한 회수 절차 테스트 (퇴사/이동 사용자 접근 차단 + 공유자산 소유권 이관)</div></li>
+      <li><input type="checkbox" /><div><span class="order">1-5.</span>예외 권한 요청 프로세스 정리 (승인자, 기준, 만료일, 정기 재검토 주기)</div></li>
     </ul>
 
-    <h2>2) 보안·통제 검증 (온보딩 전 필수)</h2>
+    <h2>2) 채널·워크스페이스 운영 <span class="tag">협업 구조</span></h2>
     <ul>
-      <li><input type="checkbox" /><div><span class="order">2-1.</span>외부공유 차단·Restricted 기본 설정 상태 재확인 (OU/그룹 기준)</div></li>
-      <li><input type="checkbox" /><div><span class="order">2-2.</span>다운로드/인쇄/복사 제한 정책 테스트 (파일 유형별 예외 포함)</div></li>
-      <li><input type="checkbox" /><div><span class="order">2-3.</span>DLP/감사로그 시나리오 점검 (대량 다운로드, 권한상승, 외부 공유 이벤트)</div></li>
-      <li><input type="checkbox" /><div><span class="order">2-4.</span>정보보호팀 공유용 "모니터링 가능/불가" 범위 문서 최종본 확정</div></li>
+      <li><input type="checkbox" /><div><span class="order">2-1.</span>PoC 공식 채널 구조 확정 (공지/운영문의/파일럿 피드백 채널 분리)</div></li>
+      <li><input type="checkbox" /><div><span class="order">2-2.</span>채널 네이밍/설명/고정메시지(가이드, 문의 방식) 표준화</div></li>
+      <li><input type="checkbox" /><div><span class="order">2-3.</span>필수 알림 정책 설정 (멘션 기준, 공지 권한, 노이즈 최소화 룰)</div></li>
+      <li><input type="checkbox" /><div><span class="order">2-4.</span>운영 이슈 접수 템플릿 배포 (발생시간/재현경로/스크린샷/영향도)</div></li>
+      <li><input type="checkbox" /><div><span class="order">2-5.</span>주간 공지 리듬 운영 (월: 변경사항, 수: 활용팁, 금: FAQ/개선사항)</div></li>
     </ul>
 
-    <h2>3) 사용자 온보딩 준비</h2>
+    <h2>3) 파일·문서 협업 (GWS Drive/Docs) <span class="tag">실무 사용성</span></h2>
     <ul>
-      <li><input type="checkbox" /><div><span class="order">3-1.</span>사용자 매뉴얼 배포본 제작 (가입/권한요청/파일공유/협업 시나리오)</div></li>
-      <li><input type="checkbox" /><div><span class="order">3-2.</span>팀장/실무자용 2트랙 안내 (의사결정자용 요약 + 실무자용 상세 가이드)</div></li>
-      <li><input type="checkbox" /><div><span class="order">3-3.</span>초기 1주 운영 Q&A 체계 구성 (FAQ, 문의 접수 템플릿, 우선순위 기준)</div></li>
-      <li><input type="checkbox" /><div><span class="order">3-4.</span>파일명/채널명/권한요청 포맷 등 운영 룰 공지</div></li>
+      <li><input type="checkbox" /><div><span class="order">3-1.</span>공유드라이브 구조 점검 (업무영역별 분리, 관리자/소유 책임 명시)</div></li>
+      <li><input type="checkbox" /><div><span class="order">3-2.</span>권한 기본값 적용 확인 (Viewer/Commenter 기본, Editor 승인제)</div></li>
+      <li><input type="checkbox" /><div><span class="order">3-3.</span>문서 공동편집 시나리오 테스트 (동시편집, 버전복구, 코멘트/승인 흐름)</div></li>
+      <li><input type="checkbox" /><div><span class="order">3-4.</span>파일 공유 실수 방지 장치 확인 (외부공유 경고, 링크 접근 범위 검증)</div></li>
+      <li><input type="checkbox" /><div><span class="order">3-5.</span>파일명/폴더명/버전명 컨벤션 공지 및 준수율 확인</div></li>
     </ul>
 
-    <h2>4) 실사용 검증 (PoC 핵심)</h2>
+    <h2>4) JudyBot/자동화 기능 <span class="tag">PoC 차별 포인트</span></h2>
     <ul>
-      <li><input type="checkbox" /><div><span class="order">4-1.</span>핵심 업무 시나리오 3~5개 선정 (예: 문서 협업, 승인, 공지, 검색)</div></li>
-      <li><input type="checkbox" /><div><span class="order">4-2.</span>시나리오별 성공 기준 정의 (처리시간, 오류율, 사용자 만족, 재작업 횟수)</div></li>
-      <li><input type="checkbox" /><div><span class="order">4-3.</span>파일럿 사용자 그룹 운영 및 피드백 수집 (주 1회 정리)</div></li>
-      <li><input type="checkbox" /><div><span class="order">4-4.</span>발견 이슈를 정책/가이드/자동화 개선 항목으로 즉시 반영</div></li>
+      <li><input type="checkbox" /><div><span class="order">4-1.</span>핵심 명령어/기능 목록 확정 (사용자에게 공개할 기능과 제한 기능 분리)</div></li>
+      <li><input type="checkbox" /><div><span class="order">4-2.</span>대표 사용 시나리오 5개 테스트 (요약, 공지 초안, 체크리스트, Q&A, 보고 초안)</div></li>
+      <li><input type="checkbox" /><div><span class="order">4-3.</span>오답·할루시네이션 대응 가이드 배포 (검증 필요 문구/책임소재/재질문 방식)</div></li>
+      <li><input type="checkbox" /><div><span class="order">4-4.</span>장애 대응 기준 수립 (응답 지연, 실패, 권한오류 시 수동 대체 프로세스)</div></li>
+      <li><input type="checkbox" /><div><span class="order">4-5.</span>기능 개선 요청 백로그 운영 (요청내용, 우선순위, 반영일, 반영결과 공개)</div></li>
     </ul>
 
-    <h2>5) 보고·의사결정 패키지 정리</h2>
+    <h2>5) 보안·통제 <span class="tag">온보딩 전 필수</span></h2>
     <ul>
-      <li><input type="checkbox" /><div><span class="order">5-1.</span>1분기: 계획 대비 변경사항 + 현재 진행률 중심으로 보고서 정리</div></li>
-      <li><input type="checkbox" /><div><span class="order">5-2.</span>2분기: 월별 실행계획(운영/보안/확산) 로드맵 작성</div></li>
-      <li><input type="checkbox" /><div><span class="order">5-3.</span>확대/유지/중단 의사결정 기준표 작성 (효과, 리스크, 운영비용)</div></li>
-      <li><input type="checkbox" /><div><span class="order">5-4.</span>최종 보고용 KPI 대시보드 항목 확정 (활성 사용자, 협업량, 정책위반, 처리속도)</div></li>
+      <li><input type="checkbox" /><div><span class="order">5-1.</span>외부공유 차단/제한 정책 재검증 (OU·그룹·드라이브별 예외 확인)</div></li>
+      <li><input type="checkbox" /><div><span class="order">5-2.</span>다운로드·인쇄·복사 제한 테스트 (파일유형/권한레벨별 결과 기록)</div></li>
+      <li><input type="checkbox" /><div><span class="order">5-3.</span>DLP 시나리오 테스트 (민감 키워드 업로드/외부 공유 시 탐지·차단 확인)</div></li>
+      <li><input type="checkbox" /><div><span class="order">5-4.</span>감사로그 리뷰 루틴 수립 (일/주 단위 점검자, 임계치, 경보 처리 절차)</div></li>
+      <li><input type="checkbox" /><div><span class="order">5-5.</span>정보보호팀 공유 문서 업데이트 (모니터링 가능/불가 범위와 보완책 분리 명시)</div></li>
     </ul>
 
-    <p class="footer">작성 목적: GWS + Slack PoC 검증기간 운영 우선순위 정렬 및 실행 추적</p>
+    <h2>6) 사용자 온보딩·지원 <span class="tag">체감 품질</span></h2>
+    <ul>
+      <li><input type="checkbox" /><div><span class="order">6-1.</span>사용자 가이드 2종 배포 (요약본 1p + 상세 매뉴얼)</div></li>
+      <li><input type="checkbox" /><div><span class="order">6-2.</span>첫 주 필수 교육/안내 세션 운영 (라이브 데모 + Q&A)</div></li>
+      <li><input type="checkbox" /><div><span class="order">6-3.</span>문의 SLA 공지 (예: 긴급 4h, 일반 24h) 및 실제 준수율 측정</div></li>
+      <li><input type="checkbox" /><div><span class="order">6-4.</span>반복 문의 TOP10 FAQ로 전환하여 고정메시지/문서에 즉시 반영</div></li>
+      <li><input type="checkbox" /><div><span class="order">6-5.</span>파일럿 사용자 만족도 체크 (주간 펄스 설문 + 개선 액션 연결)</div></li>
+    </ul>
+
+    <h2>7) 성과 측정·보고 <span class="tag">의사결정</span></h2>
+    <ul>
+      <li><input type="checkbox" /><div><span class="order">7-1.</span>PoC KPI 확정 (활성 사용자, 협업량, 처리시간, 문의건수, 정책위반 건수)</div></li>
+      <li><input type="checkbox" /><div><span class="order">7-2.</span>주간 리포트 템플릿 통일 (성과·이슈·리스크·다음주 액션)</div></li>
+      <li><input type="checkbox" /><div><span class="order">7-3.</span>1분기 결과 정리 (계획 대비 변경점/실행률/학습 포인트)</div></li>
+      <li><input type="checkbox" /><div><span class="order">7-4.</span>2분기 확장 계획 수립 (월별 목표, 필요 리소스, 리스크 대응)</div></li>
+      <li><input type="checkbox" /><div><span class="order">7-5.</span>확대/유지/중단 판단표 작성 (효과, 리스크, 운영비용, 조직 수용성)</div></li>
+    </ul>
+
+    <p class="footer">작성 목적: PoC 기간 중 기능별 실행 상태를 일관되게 추적하고, 최종 의사결정에 필요한 근거를 축적하기 위함</p>
   </main>
 </body>
 </html>
