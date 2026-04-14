@@ -48,9 +48,9 @@
 
     <!-- ══ GREETING IMAGE ══ -->
     {% if greeting_image %}
-    <mj-section background-color="#ffffff" padding="10px 24px 8px">
+    <mj-section background-color="#ffffff" padding="12px 24px 8px">
       <mj-column>
-        <mj-image src="{{ greeting_image }}" alt="계절 이미지" border-radius="10px" padding="0" fluid-on-mobile="true" />
+        <mj-image src="{{ greeting_image }}" alt="계절 이미지" width="560px" border-radius="10px" padding="0" fluid-on-mobile="true" />
       </mj-column>
     </mj-section>
     {% endif %}
