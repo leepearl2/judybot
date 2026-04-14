@@ -153,6 +153,7 @@ if menu == "📨 뉴스레터 생성/발송":
         with st.expander("📌 과제 기본 정보", expanded=False):
             study_id = st.text_input("과제 ID", value="KD-RXN-401")
             base_date = st.text_input("기준일", value="2026년 2월 27일")
+            greeting_month = st.selectbox("인사말/계절 기준 월", options=list(range(1,13)), index=4)
 
         # ── 전체 현황 ──
         with st.expander("📊 전체 현황", expanded=True):
@@ -198,7 +199,7 @@ if menu == "📨 뉴스레터 생성/발송":
                 schedule_image = f"data:{mime};base64,{img_b64}"
                 st.markdown(f'<img src="{schedule_image}" style="max-width:100%;border-radius:6px;"/>', unsafe_allow_html=True)
             else:
-                schedule_image = get_season_image_url(datetime.now().month)
+                schedule_image = get_season_image_url(greeting_month)
 
         # ── 발신자 ──
         with st.expander("👤 발신 담당자", expanded=False):
@@ -226,7 +227,7 @@ if menu == "📨 뉴스레터 생성/발송":
         st.subheader("👁️ 미리보기")
 
         if generate_btn or send_btn:
-            month = datetime.now().month
+            month = greeting_month
             enrollment_pct = round((total_enrolled / target_total) * 100, 1)
             enrollment_pct_int = min(int(enrollment_pct), 100)
 
@@ -243,6 +244,7 @@ if menu == "📨 뉴스레터 생성/발송":
                 "sender_name": sender_name, "sender_pm": sender_name,
                 "contacts": contacts,
                 "greeting_body": make_greeting(professor, hospital, month, sender_name),
+                "greeting_image": get_season_image_url(month),
                 "schedule_image": schedule_image,
                 "has_enrollment": site_enrolled > 0,
                 "logo_url": st.session_state.get("logo_url", ""),

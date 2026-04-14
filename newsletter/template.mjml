@@ -39,8 +39,17 @@
       </mj-column>
     </mj-section>
 
+    <!-- ══ GREETING IMAGE ══ -->
+    {% if greeting_image %}
+    <mj-section background-color="#ffffff" padding="24px 24px 8px">
+      <mj-column>
+        <mj-image src="{{ greeting_image }}" alt="계절 이미지" border-radius="10px" padding="0" />
+      </mj-column>
+    </mj-section>
+    {% endif %}
+
     <!-- ══ GREETING ══ -->
-    <mj-section background-color="#ffffff" padding="32px 24px 8px">
+    <mj-section background-color="#ffffff" padding="20px 24px 8px">
       <mj-column>
         <mj-text font-size="15px" font-weight="700" color="#c62828" padding-bottom="4px">
           {{ hospital }} {{ professor }}님께,
