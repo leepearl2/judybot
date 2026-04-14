@@ -14,7 +14,7 @@
       .progress-bar-outer { background:#f8d7da; border-radius:20px; height:12px; width:100%; overflow:hidden; }
       .progress-bar-inner { background:linear-gradient(90deg,#c62828,#ef5350); height:12px; border-radius:20px; }
       a { color:#c62828 !important; }
-      p, div, span, td, th, li { color:#333333 !important; }
+      p, div, span, li { color:#333333 !important; }
       .header-white, .header-white * { color:#ffffff !important; }
     </mj-style>
   </mj-head>
@@ -24,11 +24,19 @@
     <!-- ══ HEADER ══ -->
     <mj-section background-color="#b71c1c" padding="36px 30px 32px">
       <mj-column>
-        {% if logo_cid or logo_url %}
-        <mj-table align="right" width="180px" padding="0 0 10px">
+        {% if logo_cid %}
+        <mj-table align="right" width="190px" padding="0 0 10px">
           <tr>
-            <td style="background:#ffffff;border-radius:8px;padding:6px;text-align:center;">
-              <img src="{{ 'cid:' + logo_cid if logo_cid else logo_url }}" alt="광동제약 로고" style="width:155px;height:auto;display:block;margin:0 auto;" />
+            <td style="background:#ffffff;border-radius:8px;padding:8px;text-align:center;">
+              <img src="cid:{{ logo_cid }}" alt="광동제약 로고" style="width:165px;height:auto;display:block;margin:0 auto;" />
+            </td>
+          </tr>
+        </mj-table>
+        {% elif logo_url %}
+        <mj-table align="right" width="190px" padding="0 0 10px">
+          <tr>
+            <td style="background:#ffffff;border-radius:8px;padding:8px;text-align:center;">
+              <img src="{{ logo_url }}" alt="광동제약 로고" style="width:165px;height:auto;display:block;margin:0 auto;" />
             </td>
           </tr>
         </mj-table>
@@ -146,7 +154,7 @@
     <mj-section background-color="#ffffff" padding="0 24px 8px">
       <mj-column>
         <mj-table font-size="14px" cell-padding="10px 14px">
-          <tr style="background:#c62828; color:white; text-align:center;">
+          <tr style="background:#c62828; color:#ffffff !important; text-align:center;">
             <th style="padding:10px 14px; text-align:center;">계약례</th>
             <th style="padding:10px 14px; text-align:center;">등록례 (동의서 취득)</th>
             <th style="padding:10px 14px; text-align:center;">E-CRF 작성례</th>
@@ -273,7 +281,7 @@
     <mj-section background-color="#ffffff" padding="0 24px 28px">
       <mj-column>
         <mj-table font-size="13px" cell-padding="9px 12px">
-          <tr style="background:#c62828; color:white; text-align:center;">
+          <tr style="background:#c62828; color:#ffffff !important; text-align:center;">
             <th style="padding:9px 12px; text-align:center;">구분</th>
             <th style="padding:9px 12px; text-align:center;">담당자</th>
             <th style="padding:9px 12px; text-align:center;">Tel</th>
