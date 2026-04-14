@@ -25,10 +25,10 @@
     <mj-section background-color="#b71c1c" padding="36px 30px 32px">
       <mj-column>
         {% if logo_cid or logo_url %}
-        <mj-table align="right" width="120px" padding="0 0 10px">
+        <mj-table align="right" width="180px" padding="0 0 10px">
           <tr>
             <td style="background:#ffffff;border-radius:8px;padding:6px;text-align:center;">
-              <img src="{{ 'cid:' + logo_cid if logo_cid else logo_url }}" alt="광동제약 로고" style="width:100px;height:auto;display:block;margin:0 auto;" />
+              <img src="{{ 'cid:' + logo_cid if logo_cid else logo_url }}" alt="광동제약 로고" style="width:155px;height:auto;display:block;margin:0 auto;" />
             </td>
           </tr>
         </mj-table>
