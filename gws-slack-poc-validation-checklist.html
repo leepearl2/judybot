@@ -78,6 +78,22 @@
       flex-shrink: 0;
     }
     .order { color: var(--accent); font-weight: 700; margin-right: 5px; }
+    .actions {
+      display: flex;
+      gap: 8px;
+      margin: 12px 0 18px;
+      flex-wrap: wrap;
+    }
+    .btn {
+      border: 1px solid var(--line);
+      background: #fff;
+      color: var(--text);
+      border-radius: 8px;
+      padding: 7px 10px;
+      font-size: 0.85rem;
+      cursor: pointer;
+    }
+    .btn:hover { border-color: #cbd5e1; }
     .footer {
       margin-top: 26px;
       padding-top: 12px;
@@ -97,7 +113,12 @@
     <h1>GWS + Slack PoC 검증기간 기능별 상세 체크리스트</h1>
     <p class="sub">기간: 4/1 ~ 5/27 · 목적: 실사용 운영 가능성 + 보안/통제 + 확산 가능성 검증</p>
 
-    <p class="note"><strong>사용 방법:</strong> 기능 단위로 주 단위 점검하고, 체크 완료 항목은 담당자·완료일·증빙 링크(문서/로그)까지 함께 남긴다.</p>
+    <p class="note"><strong>사용 방법:</strong> 기능 단위로 주 단위 점검하고, 체크 완료 항목은 담당자·완료일·증빙 링크(문서/로그)까지 함께 남긴다. 체크 상태는 같은 브라우저에서 자동 저장된다.</p>
+    <div class="actions">
+      <button id="check-all" class="btn" type="button">전체 체크</button>
+      <button id="uncheck-all" class="btn" type="button">전체 해제</button>
+      <button id="reset-storage" class="btn" type="button">저장 초기화</button>
+    </div>
 
     <h2>1) 계정·접근관리 <span class="tag">기초 안정화</span></h2>
     <ul>
@@ -164,5 +185,55 @@
 
     <p class="footer">작성 목적: PoC 기간 중 기능별 실행 상태를 일관되게 추적하고, 최종 의사결정에 필요한 근거를 축적하기 위함</p>
   </main>
+
+  <script>
+    (function () {
+      const STORAGE_KEY = 'gws_slack_poc_checklist_v1';
+      const checkboxes = Array.from(document.querySelectorAll('input[type="checkbox"]'));
+
+      function itemKey(cb, index) {
+        const text = cb.closest('li')?.innerText?.replace(/\s+/g, ' ').trim() || `item-${index}`;
+        return `${index}:${text}`;
+      }
+
+      function loadState() {
+        try {
+          const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
+          checkboxes.forEach((cb, idx) => {
+            cb.checked = Boolean(saved[itemKey(cb, idx)]);
+          });
+        } catch (e) {
+          console.warn('체크 상태 로드 실패', e);
+        }
+      }
+
+      function saveState() {
+        const data = {};
+        checkboxes.forEach((cb, idx) => {
+          data[itemKey(cb, idx)] = cb.checked;
+        });
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+      }
+
+      checkboxes.forEach(cb => cb.addEventListener('change', saveState));
+
+      document.getElementById('check-all')?.addEventListener('click', function () {
+        checkboxes.forEach(cb => cb.checked = true);
+        saveState();
+      });
+
+      document.getElementById('uncheck-all')?.addEventListener('click', function () {
+        checkboxes.forEach(cb => cb.checked = false);
+        saveState();
+      });
+
+      document.getElementById('reset-storage')?.addEventListener('click', function () {
+        localStorage.removeItem(STORAGE_KEY);
+        checkboxes.forEach(cb => cb.checked = false);
+      });
+
+      loadState();
+    })();
+  </script>
 </body>
 </html>
