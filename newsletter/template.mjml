@@ -22,37 +22,27 @@
   <mj-body background-color="#fff5f5">
 
     <!-- ══ HEADER ══ -->
-    <mj-section css-class="red-bg" background-color="#b71c1c" padding="36px 30px 32px">
-      <mj-column>
-        {% if logo_cid %}
-        <mj-table align="right" width="190px" padding="0 0 10px">
-          <tr>
-            <td style="background:#ffffff;border-radius:8px;padding:8px;text-align:center;">
-              <img src="cid:{{ logo_cid }}" alt="광동제약 로고" style="width:165px;height:auto;display:block;margin:0 auto;" />
-            </td>
-          </tr>
-        </mj-table>
-        {% elif logo_url %}
-        <mj-table align="right" width="190px" padding="0 0 10px">
-          <tr>
-            <td style="background:#ffffff;border-radius:8px;padding:8px;text-align:center;">
-              <img src="{{ logo_url }}" alt="광동제약 로고" style="width:165px;height:auto;display:block;margin:0 auto;" />
-            </td>
-          </tr>
-        </mj-table>
-        {% endif %}
-        <mj-text css-class="header-white" align="center" font-size="16px" letter-spacing="2px" color="#ffffff" padding-bottom="6px">
+    <mj-section css-class="red-bg" background-color="#b71c1c" padding="32px 24px 28px">
+      <mj-column width="68%">
+        <mj-text css-class="header-white" align="left" font-size="16px" letter-spacing="2px" color="#ffffff" padding="0 0 6px">
           광동제약㈜
         </mj-text>
-        <mj-text css-class="header-white" align="center" font-size="26px" font-weight="700" color="#ffffff" line-height="1.3" padding-bottom="4px">
+        <mj-text css-class="header-white" align="left" font-size="26px" font-weight="700" color="#ffffff" line-height="1.3" padding="0 0 4px">
           락손필름코팅정
         </mj-text>
-        <mj-text css-class="header-white" align="center" font-size="20px" color="#ffffff" font-weight="700" padding-bottom="14px">
+        <mj-text css-class="header-white" align="left" font-size="20px" color="#ffffff" font-weight="700" padding="0 0 12px">
           시판 후 사용성적조사 NEWS LETTER
         </mj-text>
-        <mj-text css-class="header-white" align="center" font-size="24px" font-weight="700" color="#ffffff" letter-spacing="2px" padding-top="10px">
+        <mj-text css-class="header-white" align="left" font-size="24px" font-weight="700" color="#ffffff" letter-spacing="2px" padding="6px 0 0">
           {{ study_id }}
         </mj-text>
+      </mj-column>
+      <mj-column width="32%">
+        {% if logo_cid %}
+        <mj-image src="cid:{{ logo_cid }}" alt="광동제약 로고" align="right" width="150px" padding="0" background-color="#ffffff" border-radius="8px" />
+        {% elif logo_url %}
+        <mj-image src="{{ logo_url }}" alt="광동제약 로고" align="right" width="150px" padding="0" background-color="#ffffff" border-radius="8px" />
+        {% endif %}
       </mj-column>
     </mj-section>
 
