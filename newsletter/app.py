@@ -23,11 +23,12 @@ smtp_port = 25
 smtp_user = st.sidebar.text_input("발신 이메일 (SMTP_USER)", value="", key="smtp_user")
 smtp_pass = st.sidebar.text_input("앱 비밀번호 (SMTP_PASS)", value="", type="password", key="smtp_pass")
 st.sidebar.caption(f"📡 메일 서버: `{smtp_host}:{smtp_port}` (자동)")
-st.sidebar.markdown("**브랜드 로고 (선택)**")
-logo_file = st.sidebar.file_uploader("로고 PNG 업로드", type=["png"], key="logo_png")
-if logo_file:
-    logo_bytes = logo_file.getvalue()
-    st.session_state["logo_url"] = "data:image/png;base64," + base64.b64encode(logo_bytes).decode()
+DEFAULT_LOGO_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "assets", "logo1.png")
+if os.path.exists(DEFAULT_LOGO_PATH):
+    with open(DEFAULT_LOGO_PATH, "rb") as _f:
+        logo_url = "data:image/png;base64," + base64.b64encode(_f.read()).decode()
+else:
+    logo_url = ""
 
 if smtp_host:
     st.sidebar.success("✅ 메일 설정 완료")
@@ -116,7 +117,10 @@ if menu == "📨 뉴스레터 생성/발송":
     st.title("📨 뉴스레터 생성 및 발송")
 
     hospitals = get_all_hospitals()
-    hosp_labels = ["-- 직접 입력 --"] + [f"{h['hospital_name']} / {h['professor']}" for h in hospitals]
+    if not hospitals:
+        st.error("병원 DB가 비어 있습니다. 먼저 '🏥 병원 DB 관리'에서 업로드해주세요.")
+        st.stop()
+    hosp_labels = [f"{h['hospital_name']} / {h['professor']}" for h in hospitals]
 
     col_left, col_right = st.columns([1, 1.6])
 
@@ -126,24 +130,15 @@ if menu == "📨 뉴스레터 생성/발송":
         # ── 병원 선택 ──
         with st.expander("🏥 수신 기관 선택", expanded=True):
             selected = st.selectbox("DB에서 불러오기", hosp_labels)
-            if selected != "-- 직접 입력 --":
-                idx = hosp_labels.index(selected) - 1
-                h = hospitals[idx]
-                default_hospital = h["hospital_name"]
-                default_professor = h["professor"]
-                default_email = h["email"]
-                default_contracted = h["site_contracted"]
-                default_enrolled = h["site_enrolled"]
-                default_ecrf = h["site_ecrf"]
-                default_delta = h["site_delta"]
-            else:
-                default_hospital = ""
-                default_professor = ""
-                default_email = ""
-                default_contracted = 0
-                default_enrolled = 0
-                default_ecrf = 0
-                default_delta = 0
+            idx = hosp_labels.index(selected)
+            h = hospitals[idx]
+            default_hospital = h["hospital_name"]
+            default_professor = h["professor"]
+            default_email = h["email"]
+            default_contracted = h["site_contracted"]
+            default_enrolled = h["site_enrolled"]
+            default_ecrf = h["site_ecrf"]
+            default_delta = h["site_delta"]
 
             hospital = st.text_input("병원명", value=default_hospital)
             professor = st.text_input("교수명 (직함 포함)", value=default_professor)
@@ -164,14 +159,13 @@ if menu == "📨 뉴스레터 생성/발송":
             total_enrolled = c3.number_input("총 등록 대상자", value=38, min_value=0)
             target_total   = c4.number_input("목표 례수",       value=600, min_value=1)
 
-        # ── 본원 현황 ──
-        with st.expander("🏢 본원 현황 (기관 DB 기준)", expanded=True):
-            c5, c6, c7 = st.columns(3)
-            site_contracted = c5.number_input("계약례",        value=default_contracted, min_value=0)
-            site_enrolled   = c6.number_input("등록례",        value=default_enrolled,   min_value=0)
-            site_ecrf       = c7.number_input("E-CRF 작성례", value=default_ecrf,        min_value=0)
-            site_delta_num  = st.number_input("전월 대비 변동 (음수 가능)", value=default_delta)
-            site_delta = f"{abs(site_delta_num)}례{'↑' if site_delta_num > 0 else '↓' if site_delta_num < 0 else ' 동일'}"
+        # ── 본원 현황: 기관 DB 값 자동 반영 ──
+        site_contracted = int(default_contracted or 0)
+        site_enrolled = int(default_enrolled or 0)
+        site_ecrf = int(default_ecrf or 0)
+        site_delta_num = int(default_delta or 0)
+        site_delta = f"{abs(site_delta_num)}례{'↑' if site_delta_num > 0 else '↓' if site_delta_num < 0 else ' 동일'}"
+        st.caption("🏢 본원 현황(계약례/등록례/E-CRF/전월대비)은 기관 DB 값이 자동 반영됩니다.")
 
         # ── 일정/링크 ──
         with st.expander("📅 일정 및 링크", expanded=False):
@@ -247,7 +241,7 @@ if menu == "📨 뉴스레터 생성/발송":
                 "greeting_image": get_season_image_url(month),
                 "schedule_image": schedule_image,
                 "has_enrollment": site_enrolled > 0,
-                "logo_url": st.session_state.get("logo_url", ""),
+                "logo_url": logo_url,
             }
 
             html_output = render_html(data)
