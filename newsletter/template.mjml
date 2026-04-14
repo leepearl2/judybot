@@ -144,10 +144,10 @@
     <mj-section background-color="#ffffff" padding="0 24px 8px">
       <mj-column>
         <mj-table font-size="14px" cell-padding="10px 14px">
-          <tr style="background:#c62828 !important; color:#ffffff !important; text-align:center;">
-            <th style="padding:10px 14px; text-align:center; background:#c62828 !important; color:#ffffff !important;"><span style="color:#ffffff !important;">계약례</span></th>
-            <th style="padding:10px 14px; text-align:center; background:#c62828 !important; color:#ffffff !important;"><span style="color:#ffffff !important;">등록례 (동의서 취득)</span></th>
-            <th style="padding:10px 14px; text-align:center; background:#c62828 !important; color:#ffffff !important;"><span style="color:#ffffff !important;">E-CRF 작성례</span></th>
+          <tr>
+            <td bgcolor="#c62828" style="padding:10px 14px; text-align:center; background:#c62828; color:#ffffff; font-weight:700;">계약례</td>
+            <td bgcolor="#c62828" style="padding:10px 14px; text-align:center; background:#c62828; color:#ffffff; font-weight:700;">등록례 (동의서 취득)</td>
+            <td bgcolor="#c62828" style="padding:10px 14px; text-align:center; background:#c62828; color:#ffffff; font-weight:700;">E-CRF 작성례</td>
           </tr>
           <tr style="text-align:center; background:#fffafa;">
             <td style="padding:12px 14px; border-bottom:1px solid #eee;">{{ site_contracted }}례</td>
@@ -271,11 +271,11 @@
     <mj-section background-color="#ffffff" padding="0 24px 28px">
       <mj-column>
         <mj-table font-size="13px" cell-padding="9px 12px">
-          <tr style="background:#c62828 !important; color:#ffffff !important; text-align:center;">
-            <th style="padding:9px 12px; text-align:center; background:#c62828 !important; color:#ffffff !important;"><span style="color:#ffffff !important;">구분</span></th>
-            <th style="padding:9px 12px; text-align:center; background:#c62828 !important; color:#ffffff !important;"><span style="color:#ffffff !important;">담당자</span></th>
-            <th style="padding:9px 12px; text-align:center; background:#c62828 !important; color:#ffffff !important;"><span style="color:#ffffff !important;">Tel</span></th>
-            <th style="padding:9px 12px; text-align:center; background:#c62828 !important; color:#ffffff !important;"><span style="color:#ffffff !important;">E-mail</span></th>
+          <tr>
+            <td bgcolor="#c62828" style="padding:9px 12px; text-align:center; background:#c62828; color:#ffffff; font-weight:700;">구분</td>
+            <td bgcolor="#c62828" style="padding:9px 12px; text-align:center; background:#c62828; color:#ffffff; font-weight:700;">담당자</td>
+            <td bgcolor="#c62828" style="padding:9px 12px; text-align:center; background:#c62828; color:#ffffff; font-weight:700;">Tel</td>
+            <td bgcolor="#c62828" style="padding:9px 12px; text-align:center; background:#c62828; color:#ffffff; font-weight:700;">E-mail</td>
           </tr>
           {% for contact in contacts %}
           <tr style="text-align:center; background:{{ '#fffafa' if loop.index is odd else '#ffffff' }};">
