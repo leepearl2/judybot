@@ -16,13 +16,15 @@
     </mj-style>
   </mj-head>
 
-  <mj-body background-color="#f0f4f8">
+  <mj-body background-color="#fff5f5">
 
     <!-- ══ HEADER ══ -->
     <mj-section background-color="#b71c1c" padding="36px 30px 32px">
       <mj-column>
-        {% if logo_url %}
-        <mj-image src="{{ logo_url }}" width="120px" align="right" padding="0 0 8px" />
+        {% if logo_cid %}
+        <mj-image src="cid:{{ logo_cid }}" width="90px" align="right" padding="0 0 8px" background-color="#ffffff" border-radius="6px" />
+        {% elif logo_url %}
+        <mj-image src="{{ logo_url }}" width="90px" align="right" padding="0 0 8px" background-color="#ffffff" border-radius="6px" />
         {% endif %}
         <mj-text align="center" font-size="16px" letter-spacing="2px" color="rgba(255,255,255,0.75)" padding-bottom="6px">
           광동제약㈜

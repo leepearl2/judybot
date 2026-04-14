@@ -262,6 +262,7 @@ if menu == "📨 뉴스레터 생성/발송":
                         smtp_user=smtp_user, smtp_pass=smtp_pass,
                         template_data=data,
                         image_path=img_path,
+                        logo_path=DEFAULT_LOGO_PATH,
                     )
                     if result["ok"]:
                         log_send(hospital, professor, to_email, "sent")
