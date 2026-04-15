@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 from jinja2 import Environment, FileSystemLoader
 from datetime import datetime
-import os, base64, io
+import os, base64
 
 from db import init_db, upsert_hospital, get_all_hospitals, update_hospital, delete_hospital, log_send, get_send_log
 from mailer import send_newsletter
@@ -36,25 +36,6 @@ else:
     st.sidebar.warning("발신 이메일을 입력해주세요")
 
 # ── 공통 유틸 ─────────────────────────────────────────────────────────────────
-def read_uploaded_csv_safely(uploaded_file):
-    """CSV 업로드 시 인코딩/구분자 이슈를 최대한 자동 처리."""
-    raw = uploaded_file.getvalue()
-    encodings = ["utf-8-sig", "utf-8", "cp949", "euc-kr"]
-    last_error = None
-
-    for enc in encodings:
-        try:
-            text = raw.decode(enc)
-            # sep=None + python engine으로 , ; \t 자동 감지
-            return pd.read_csv(io.StringIO(text), sep=None, engine="python")
-        except Exception as e:
-            last_error = e
-
-    raise ValueError(
-        "CSV 인코딩을 읽지 못했습니다. UTF-8(권장) 또는 CP949(EUC-KR)로 저장 후 다시 업로드해주세요. "
-        f"(원인: {last_error})"
-    )
-
 SEASON_GREETINGS = {
     1:  "새해 첫 달, 매서운 한파 속에서도 희망찬 기운이 넘치는 1월입니다. 추운 날씨에 건강 각별히 유의하시고, 새해에도 교수님과 가정에 건강과 행복이 가득하시기를 진심으로 기원드립니다.",
     2:  "아직 겨울의 끝자락이 남아 있는 2월입니다. 입춘은 지났지만 여전히 차가운 날씨가 이어지고 있는 만큼 건강에 유의하시길 바라며, 이른 봄빛처럼 교수님의 나날이 따뜻하고 평온하시기를 기원드립니다.",
@@ -324,7 +305,7 @@ elif menu == "🏥 병원 DB 관리":
         if uploaded:
             try:
                 if uploaded.name.endswith(".csv"):
-                    df = read_uploaded_csv_safely(uploaded)
+                    df = pd.read_csv(uploaded)
                 else:
                     df = pd.read_excel(uploaded)
 
