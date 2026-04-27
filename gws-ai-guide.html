@@ -1,0 +1,1001 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Google AI 기능 사용 가이드 | 광동제약 GWS PoC</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --blue-deep: #1a3a5c;
+    --blue-mid: #2563a8;
+    --blue-bright: #3b82f6;
+    --blue-light: #dbeafe;
+    --blue-pale: #eff6ff;
+    --green: #16a34a;
+    --green-light: #dcfce7;
+    --yellow: #d97706;
+    --yellow-light: #fef3c7;
+    --red: #dc2626;
+    --red-light: #fee2e2;
+    --gray-900: #111827;
+    --gray-700: #374151;
+    --gray-500: #6b7280;
+    --gray-300: #d1d5db;
+    --gray-100: #f3f4f6;
+    --gray-50: #f9fafb;
+    --white: #ffffff;
+    --radius: 12px;
+    --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
+    --shadow-md: 0 4px 16px rgba(0,0,0,0.10);
+    --shadow-lg: 0 8px 32px rgba(26,58,92,0.12);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Noto Sans KR', sans-serif;
+    background: var(--gray-50);
+    color: var(--gray-900);
+    line-height: 1.7;
+    font-size: 15px;
+  }
+
+  /* ── Header ── */
+  .site-header {
+    background: linear-gradient(135deg, var(--blue-deep) 0%, var(--blue-mid) 100%);
+    color: var(--white);
+    padding: 0 24px;
+  }
+  .header-inner {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 36px 0 32px;
+  }
+  .header-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.25);
+    border-radius: 20px;
+    padding: 4px 14px;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.03em;
+    margin-bottom: 18px;
+  }
+  .header-badge span { opacity: 0.85; }
+  .site-header h1 {
+    font-size: 28px;
+    font-weight: 700;
+    line-height: 1.3;
+    margin-bottom: 10px;
+  }
+  .site-header h1 em {
+    font-style: normal;
+    color: #93c5fd;
+  }
+  .site-header p {
+    font-size: 14px;
+    opacity: 0.8;
+    max-width: 560px;
+  }
+
+  /* ── Table of Contents ── */
+  .toc-bar {
+    background: var(--white);
+    border-bottom: 1px solid var(--gray-300);
+    padding: 0 24px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: var(--shadow-sm);
+  }
+  .toc-inner {
+    max-width: 860px;
+    margin: 0 auto;
+    display: flex;
+    gap: 0;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .toc-inner::-webkit-scrollbar { display: none; }
+  .toc-link {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 13px 18px;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--gray-500);
+    text-decoration: none;
+    white-space: nowrap;
+    border-bottom: 2px solid transparent;
+    transition: all 0.2s;
+  }
+  .toc-link:hover { color: var(--blue-mid); border-bottom-color: var(--blue-bright); }
+  .toc-num {
+    width: 20px; height: 20px;
+    background: var(--gray-100);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-weight: 600;
+    color: var(--gray-500);
+    flex-shrink: 0;
+  }
+
+  /* ── Main Layout ── */
+  .main {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 40px 24px 80px;
+  }
+
+  /* ── Alert Box ── */
+  .alert {
+    display: flex;
+    gap: 14px;
+    padding: 16px 20px;
+    border-radius: var(--radius);
+    margin-bottom: 32px;
+    border-left: 4px solid;
+  }
+  .alert-icon { font-size: 20px; flex-shrink: 0; line-height: 1.5; }
+  .alert-body { flex: 1; }
+  .alert-body strong { font-size: 14px; display: block; margin-bottom: 4px; }
+  .alert-body p { font-size: 13.5px; }
+  .alert.info { background: var(--blue-pale); border-color: var(--blue-bright); }
+  .alert.warn { background: var(--yellow-light); border-color: var(--yellow); }
+  .alert.success { background: var(--green-light); border-color: var(--green); }
+  .alert.danger { background: var(--red-light); border-color: var(--red); }
+
+  /* ── Section ── */
+  .section {
+    margin-bottom: 52px;
+    scroll-margin-top: 60px;
+  }
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+    border-bottom: 2px solid var(--blue-light);
+  }
+  .section-num {
+    width: 40px; height: 40px;
+    background: linear-gradient(135deg, var(--blue-mid), var(--blue-bright));
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    color: white;
+    font-family: 'IBM Plex Mono', monospace;
+    font-weight: 700;
+    font-size: 16px;
+    flex-shrink: 0;
+    box-shadow: 0 2px 8px rgba(37,99,168,0.3);
+  }
+  .section-title-group h2 {
+    font-size: 19px;
+    font-weight: 700;
+    color: var(--blue-deep);
+    line-height: 1.3;
+  }
+  .section-title-group p {
+    font-size: 13px;
+    color: var(--gray-500);
+    margin-top: 2px;
+  }
+
+  /* ── Step Cards ── */
+  .steps { display: flex; flex-direction: column; gap: 14px; }
+
+  .step-card {
+    background: var(--white);
+    border: 1px solid var(--gray-300);
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+    transition: box-shadow 0.2s;
+  }
+  .step-card:hover { box-shadow: var(--shadow-md); }
+
+  .step-head {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 18px;
+    background: var(--gray-50);
+    border-bottom: 1px solid var(--gray-300);
+  }
+  .step-badge {
+    background: var(--blue-mid);
+    color: white;
+    font-size: 11px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 20px;
+    flex-shrink: 0;
+  }
+  .step-head h3 { font-size: 14px; font-weight: 600; color: var(--gray-900); }
+
+  .step-body { padding: 16px 18px; }
+  .step-body p { font-size: 14px; color: var(--gray-700); margin-bottom: 10px; }
+  .step-body p:last-child { margin-bottom: 0; }
+
+  .step-body ul, .step-body ol {
+    padding-left: 20px;
+    font-size: 14px;
+    color: var(--gray-700);
+  }
+  .step-body li { margin-bottom: 6px; }
+
+  /* ── Code / Path Pill ── */
+  .path {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background: var(--gray-100);
+    border: 1px solid var(--gray-300);
+    border-radius: 6px;
+    padding: 2px 10px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12.5px;
+    color: var(--blue-deep);
+    font-weight: 500;
+  }
+  .url-box {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--blue-pale);
+    border: 1px solid var(--blue-light);
+    border-radius: 8px;
+    padding: 10px 14px;
+    margin: 10px 0;
+  }
+  .url-box .url-icon { font-size: 16px; }
+  .url-box a {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+    color: var(--blue-mid);
+    font-weight: 600;
+    text-decoration: none;
+    word-break: break-all;
+  }
+  .url-box a:hover { text-decoration: underline; }
+
+  /* ── Feature Cards Grid ── */
+  .feature-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 14px;
+    margin-top: 4px;
+  }
+  .feature-card {
+    background: var(--white);
+    border: 1px solid var(--gray-300);
+    border-radius: var(--radius);
+    padding: 18px;
+    box-shadow: var(--shadow-sm);
+    transition: transform 0.15s, box-shadow 0.15s;
+  }
+  .feature-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
+  .feature-card .fc-icon { font-size: 28px; margin-bottom: 10px; }
+  .feature-card h4 { font-size: 14px; font-weight: 700; color: var(--blue-deep); margin-bottom: 6px; }
+  .feature-card p { font-size: 13px; color: var(--gray-500); line-height: 1.6; }
+  .feature-card .fc-tag {
+    display: inline-block;
+    margin-top: 10px;
+    background: var(--blue-light);
+    color: var(--blue-mid);
+    font-size: 11px;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 4px;
+  }
+
+  /* ── Highlight / Quote ── */
+  .highlight-box {
+    background: linear-gradient(135deg, var(--blue-pale) 0%, #e0f2fe 100%);
+    border: 1px solid var(--blue-light);
+    border-left: 4px solid var(--blue-mid);
+    border-radius: var(--radius);
+    padding: 16px 20px;
+    margin: 14px 0;
+    font-size: 14px;
+    color: var(--blue-deep);
+  }
+  .highlight-box strong { display: block; margin-bottom: 4px; font-size: 13px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--blue-mid); }
+
+  /* ── Tip / Caution ── */
+  .tip {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    background: var(--green-light);
+    border-radius: 8px;
+    padding: 12px 14px;
+    font-size: 13.5px;
+    color: #14532d;
+    margin: 10px 0;
+  }
+  .caution {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    background: var(--yellow-light);
+    border-radius: 8px;
+    padding: 12px 14px;
+    font-size: 13.5px;
+    color: #78350f;
+    margin: 10px 0;
+  }
+
+  /* ── Image Placeholder ── */
+  .img-placeholder {
+    background: var(--gray-100);
+    border: 2px dashed var(--gray-300);
+    border-radius: 8px;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-size: 13px;
+    color: var(--gray-500);
+    margin: 10px 0;
+  }
+
+  /* ── Numbered List (step flow) ── */
+  .flow-list { list-style: none; padding: 0; }
+  .flow-list li {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--gray-100);
+    font-size: 14px;
+    color: var(--gray-700);
+  }
+  .flow-list li:last-child { border-bottom: none; }
+  .flow-num {
+    width: 24px; height: 24px;
+    background: var(--blue-mid);
+    color: white;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px;
+    font-weight: 700;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  /* ── Tag chips ── */
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+  .chip {
+    background: var(--blue-pale);
+    border: 1px solid var(--blue-light);
+    color: var(--blue-mid);
+    font-size: 12px;
+    font-weight: 500;
+    padding: 3px 10px;
+    border-radius: 20px;
+  }
+
+  /* ── Footer ── */
+  .footer {
+    text-align: center;
+    padding: 32px 24px;
+    font-size: 13px;
+    color: var(--gray-500);
+    border-top: 1px solid var(--gray-300);
+    background: var(--white);
+  }
+  .footer strong { color: var(--blue-mid); }
+
+  /* ── Divider ── */
+  hr.section-divider {
+    border: none;
+    border-top: 1px dashed var(--gray-300);
+    margin: 32px 0;
+  }
+
+  @media (max-width: 600px) {
+    .site-header h1 { font-size: 22px; }
+    .feature-grid { grid-template-columns: 1fr; }
+    .toc-link { padding: 12px 12px; font-size: 12px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ══ HEADER ══ -->
+<header class="site-header">
+  <div class="header-inner">
+    <div class="header-badge">
+      <span>🔷</span>
+      <span>광동제약 GWS PoC · 임직원 사용 가이드</span>
+    </div>
+    <h1>Google AI 기능<br><em>쉽게 시작하기</em></h1>
+    <p>Gemini · Gem · NotebookLM · Google OTP 2단계 인증<br>처음 사용하시는 분도 바로 따라 할 수 있도록 단계별로 안내합니다.</p>
+  </div>
+</header>
+
+<!-- ══ TOC ══ -->
+<nav class="toc-bar" aria-label="목차">
+  <div class="toc-inner">
+    <a href="#sec-otp" class="toc-link">
+      <span class="toc-num">0</span>
+      🔐 OTP 2단계 인증
+    </a>
+    <a href="#sec-gemini" class="toc-link">
+      <span class="toc-num">1</span>
+      ✨ Gemini란?
+    </a>
+    <a href="#sec-gemini-use" class="toc-link">
+      <span class="toc-num">2</span>
+      💬 Gemini 사용법
+    </a>
+    <a href="#sec-gem" class="toc-link">
+      <span class="toc-num">3</span>
+      💎 Gem 만들기
+    </a>
+    <a href="#sec-notebooklm" class="toc-link">
+      <span class="toc-num">4</span>
+      📚 NotebookLM
+    </a>
+  </div>
+</nav>
+
+<!-- ══ MAIN ══ -->
+<main class="main">
+
+  <div class="alert warn">
+    <div class="alert-icon">⚠️</div>
+    <div class="alert-body">
+      <strong>먼저 확인해 주세요 — Google OTP 2단계 인증</strong>
+      <p>아직 OTP 인증을 설정하지 않으신 분은 <strong>섹션 0</strong>을 먼저 완료해 주세요. 설정하지 않으면 계정 로그인이 불안정하거나 일부 기능을 사용할 수 없습니다.</p>
+    </div>
+  </div>
+
+
+  <!-- ══ SECTION 0: OTP ══ -->
+  <section class="section" id="sec-otp">
+    <div class="section-header">
+      <div class="section-num">0</div>
+      <div class="section-title-group">
+        <h2>🔐 Google OTP 2단계 인증 설정하기</h2>
+        <p>계정 보안을 위해 필수로 설정해야 합니다 · Google Authenticator 앱 사용</p>
+      </div>
+    </div>
+
+    <div class="alert info">
+      <div class="alert-icon">ℹ️</div>
+      <div class="alert-body">
+        <strong>OTP가 뭔가요?</strong>
+        <p>비밀번호 외에 <strong>스마트폰에서 생성되는 6자리 숫자</strong>를 추가로 입력해 로그인하는 방식입니다. 비밀번호가 유출되더라도 계정을 보호할 수 있습니다. 숫자는 <strong>30초마다 자동 갱신</strong>됩니다.</p>
+      </div>
+    </div>
+
+    <p style="font-size:14px; color:var(--gray-700); margin-bottom:16px;">
+      📱 <strong>스마트폰</strong>과 <strong>PC</strong> 두 가지를 동시에 사용하면서 진행해 주세요.
+    </p>
+
+    <div class="steps">
+
+      <div class="step-card">
+        <div class="step-head">
+          <span class="step-badge">STEP 1</span>
+          <h3>스마트폰에 Google Authenticator 앱 설치</h3>
+        </div>
+        <div class="step-body">
+          <p>아직 앱이 없다면 먼저 설치해 주세요.</p>
+          <ul>
+            <li>📱 <strong>iPhone (iOS)</strong> → App Store에서 <span class="path">Google Authenticator</span> 검색 후 설치</li>
+            <li>📱 <strong>Android</strong> → Play 스토어에서 <span class="path">Google OTP</span> 또는 <span class="path">Google Authenticator</span> 검색 후 설치</li>
+          </ul>
+          <div class="tip">💡 이미 설치되어 있다면 이 단계는 건너뛰세요.</div>
+        </div>
+      </div>
+
+      <div class="step-card">
+        <div class="step-head">
+          <span class="step-badge">STEP 2</span>
+          <h3>PC에서 Google 계정 보안 설정 열기</h3>
+        </div>
+        <div class="step-body">
+          <p>PC 브라우저에서 아래 주소로 접속하거나, Google 계정 아이콘 클릭 후 <span class="path">계정 관리</span>를 선택하세요.</p>
+          <div class="url-box">
+            <span class="url-icon">🔗</span>
+            <a href="https://myaccount.google.com/security" target="_blank">myaccount.google.com/security</a>
+          </div>
+          <p>페이지가 열리면 <strong>「Google에 로그인하는 방법」</strong> 섹션을 찾으세요.</p>
+        </div>
+      </div>
+
+      <div class="step-card">
+        <div class="step-head">
+          <span class="step-badge">STEP 3</span>
+          <h3>2단계 인증 클릭 → 설정 시작</h3>
+        </div>
+        <div class="step-body">
+          <p><strong>「2단계 인증」</strong> 항목을 클릭하면 설정 안내 화면이 나타납니다.</p>
+          <ul>
+            <li>화면 하단의 <strong>「시작하기」</strong> 버튼을 클릭하세요.</li>
+            <li>현재 비밀번호 입력을 요청하면 본인의 GWS 비밀번호를 입력합니다.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="step-card">
+        <div class="step-head">
+          <span class="step-badge">STEP 4</span>
+          <h3>인증 앱(Authenticator) 선택</h3>
+        </div>
+        <div class="step-body">
+          <p>다양한 2단계 인증 방법이 나타납니다. 이 중 <strong>「인증 앱」</strong> 또는 <strong>「Authenticator 앱」</strong>을 선택하세요.</p>
+          <div class="caution">⚠️ 문자(SMS) 인증은 회사 보안 정책상 사용하지 않습니다. 반드시 <strong>앱 인증</strong>을 선택해 주세요.</div>
+        </div>
+      </div>
+
+      <div class="step-card">
+        <div class="step-head">
+          <span class="step-badge">STEP 5</span>
+          <h3>QR 코드 스캔 — 스마트폰으로 등록</h3>
+        </div>
+        <div class="step-body">
+          <p>PC 화면에 <strong>QR 코드</strong>가 표시됩니다.</p>
+          <ol>
+            <li>스마트폰에서 <strong>Google Authenticator 앱</strong>을 엽니다.</li>
+            <li>앱 우측 하단의 <strong>＋ 버튼</strong>을 탭합니다.</li>
+            <li><strong>「QR 코드 스캔」</strong>을 선택한 뒤, PC 화면의 QR 코드를 스캔합니다.</li>
+            <li>앱에 <strong>6자리 숫자 코드</strong>가 나타나면 등록 완료!</li>
+          </ol>
+          <div class="highlight-box">
+            <strong>🔢 코드 예시</strong>
+            앱에 「광동제약 (이메일주소)」라는 이름과 함께 <strong>123 456</strong> 형태의 6자리 숫자가 표시됩니다. 이 숫자는 30초마다 바뀝니다.
+          </div>
+        </div>
+      </div>
+
+      <div class="step-card">
+        <div class="step-head">
+          <span class="step-badge">STEP 6</span>
+          <h3>코드 입력 → 설정 완료 확인</h3>
+        </div>
+        <div class="step-body">
+          <p>PC 화면에서 <strong>「다음」</strong>을 클릭하면 코드 입력창이 나타납니다.</p>
+          <ul>
+            <li>스마트폰 Authenticator 앱에 보이는 <strong>6자리 숫자</strong>를 입력합니다.</li>
+            <li><strong>「확인」</strong> 또는 <strong>「사용 설정」</strong> 버튼을 누릅니다.</li>
+            <li>✅ <strong>「2단계 인증 사용 설정됨」</strong> 메시지가 나타나면 완료입니다!</li>
+          </ul>
+          <div class="tip">💡 앞으로 로그인할 때마다 비밀번호 입력 후, 앱의 6자리 코드를 추가로 입력하면 됩니다.</div>
+        </div>
+      </div>
+
+    </div><!-- /steps -->
+
+    <div class="alert success" style="margin-top:20px;">
+      <div class="alert-icon">✅</div>
+      <div class="alert-body">
+        <strong>OTP 설정이 완료되었습니다!</strong>
+        <p>이제 아래의 Gemini, NotebookLM 등 Google AI 기능을 안전하게 사용할 수 있습니다.</p>
+      </div>
+    </div>
+
+  </section>
+
+  <hr class="section-divider">
+
+
+  <!-- ══ SECTION 1: GEMINI란? ══ -->
+  <section class="section" id="sec-gemini">
+    <div class="section-header">
+      <div class="section-num">1</div>
+      <div class="section-title-group">
+        <h2>✨ Gemini란 무엇인가요?</h2>
+        <p>Google의 AI 어시스턴트 · 업무 질문, 문서 작성, 번역 등 다양하게 활용 가능</p>
+      </div>
+    </div>
+
+    <div class="highlight-box">
+      <strong>한 줄 설명</strong>
+      Gemini는 <strong>Google이 만든 AI 대화 도우미</strong>입니다. 업무 관련 질문을 하면 답변해 주고, 문서 초안을 써 주거나, 이메일 요약, 번역 등 다양한 작업을 도와줍니다.
+    </div>
+
+    <div class="feature-grid">
+      <div class="feature-card">
+        <div class="fc-icon">💬</div>
+        <h4>자연스러운 대화</h4>
+        <p>질문을 자유롭게 입력하면 AI가 답변해 줍니다. 검색보다 더 구체적인 답을 얻을 수 있어요.</p>
+        <span class="fc-tag">질문 & 답변</span>
+      </div>
+      <div class="feature-card">
+        <div class="fc-icon">✍️</div>
+        <h4>문서 초안 작성</h4>
+        <p>보고서, 이메일, 공지문 등의 초안을 빠르게 작성해 달라고 요청할 수 있습니다.</p>
+        <span class="fc-tag">문서 작성</span>
+      </div>
+      <div class="feature-card">
+        <div class="fc-icon">🌐</div>
+        <h4>번역 & 언어 교정</h4>
+        <p>영어 이메일을 한국어로 번역하거나, 작성한 문장을 자연스럽게 다듬어 달라고 할 수 있어요.</p>
+        <span class="fc-tag">번역 & 교정</span>
+      </div>
+      <div class="feature-card">
+        <div class="fc-icon">📊</div>
+        <h4>데이터 정리 & 요약</h4>
+        <p>긴 텍스트나 회의 내용을 붙여넣으면 핵심만 요약해 줍니다.</p>
+        <span class="fc-tag">요약 & 분석</span>
+      </div>
+      <div class="feature-card">
+        <div class="fc-icon">💡</div>
+        <h4>아이디어 브레인스토밍</h4>
+        <p>새로운 아이디어나 기획 방향에 대해 다양한 관점을 제안받을 수 있어요.</p>
+        <span class="fc-tag">기획 지원</span>
+      </div>
+      <div class="feature-card">
+        <div class="fc-icon">🔍</div>
+        <h4>복잡한 개념 설명</h4>
+        <p>어려운 개념이나 용어를 쉽게 설명해 달라고 요청할 수 있습니다.</p>
+        <span class="fc-tag">학습 지원</span>
+      </div>
+    </div>
+
+  </section>
+
+  <hr class="section-divider">
+
+
+  <!-- ══ SECTION 2: GEMINI 사용법 ══ -->
+  <section class="section" id="sec-gemini-use">
+    <div class="section-header">
+      <div class="section-num">2</div>
+      <div class="section-title-group">
+        <h2>💬 Gemini 사용법 — 처음 시작하기</h2>
+        <p>접속부터 첫 대화까지 순서대로 따라해 보세요</p>
+      </div>
+    </div>
+
+    <div class="steps">
+
+      <div class="step-card">
+        <div class="step-head">
+          <span class="step-badge">STEP 1</span>
+          <h3>Gemini 접속하기</h3>
+        </div>
+        <div class="step-body">
+          <p>아래 주소로 접속하거나, Google 앱 목록(구글 앱 아이콘 ⋮⋮⋮)에서 <strong>Gemini</strong>를 찾아 클릭하세요.</p>
+          <div class="url-box">
+            <span class="url-icon">🔗</span>
+            <a href="https://gemini.google.com" target="_blank">gemini.google.com</a>
+          </div>
+          <div class="caution">⚠️ 반드시 <strong>회사 Google 계정</strong>(<span class="path">사번@kwangdong.mzpoc.xyz</span>)으로 로그인된 상태에서 접속하세요. 개인 계정으로 접속하면 회사 데이터가 보호되지 않습니다.</div>
+        </div>
+      </div>
+
+      <div class="step-card">
+        <div class="step-head">
+          <span class="step-badge">STEP 2</span>
+          <h3>텍스트 입력창에 질문 입력하기</h3>
+        </div>
+        <div class="step-body">
+          <p>화면 하단에 있는 <strong>「Gemini에게 메시지 보내기」</strong> 입력창에 원하는 내용을 자유롭게 입력하세요.</p>
+          <p>마치 카카오톡 대화하듯 자연스럽게 입력하면 됩니다. 질문이 구체적일수록 좋은 답변을 받을 수 있어요.</p>
+          <div class="highlight-box">
+            <strong>✏️ 입력 예시</strong>
+            「영업팀에 전달할 신제품 출시 공지 이메일 초안을 작성해 줘. 제목은 "비타500 신제품 출시 안내"이고, 출시일은 5월 15일이야.」
+          </div>
+        </div>
+      </div>
+
+      <div class="step-card">
+        <div class="step-head">
+          <span class="step-badge">STEP 3</span>
+          <h3>Enter 키 또는 전송 버튼으로 전송</h3>
+        </div>
+        <div class="step-body">
+          <p>내용을 입력한 뒤 <strong>Enter 키</strong>를 누르거나 입력창 오른쪽의 <strong>▶ 전송 버튼</strong>을 클릭하세요.</p>
+          <p>잠시 후 Gemini가 답변을 생성합니다. (보통 3~10초 이내)</p>
+        </div>
+      </div>
+
+      <div class="step-card">
+        <div class="step-head">
+          <span class="step-badge">STEP 4</span>
+          <h3>답변 활용하기 — 복사 & 수정 요청</h3>
+        </div>
+        <div class="step-body">
+          <p>마음에 드는 답변이 나왔다면:</p>
+          <ul>
+            <li>📋 답변 위에 마우스를 올리면 <strong>복사 버튼</strong>이 나타납니다. 클릭해서 붙여넣기 할 수 있어요.</li>
+            <li>✏️ 수정이 필요하다면 계속 대화를 이어가면 됩니다. 예: <em>「좀 더 공손한 톤으로 바꿔줘」</em>, <em>「3줄로 요약해줘」</em></li>
+          </ul>
+          <div class="tip">💡 대화는 이어집니다. 이전 맥락을 기억하고 있으니 추가 요청만 입력하면 돼요!</div>
+        </div>
+      </div>
+
+    </div>
+
+    <div style="margin-top:20px;">
+      <p style="font-size:13.5px; font-weight:600; color:var(--gray-700); margin-bottom:10px;">💡 이런 것도 물어볼 수 있어요</p>
+      <div class="chips">
+        <span class="chip">회의 내용 요약해줘</span>
+        <span class="chip">이 문장 영어로 번역해줘</span>
+        <span class="chip">엑셀 함수 설명해줘</span>
+        <span class="chip">프레젠테이션 구성 아이디어 줘</span>
+        <span class="chip">이 이메일 답장 어떻게 쓸까?</span>
+        <span class="chip">업무 프로세스 정리해줘</span>
+      </div>
+    </div>
+
+  </section>
+
+  <hr class="section-divider">
+
+
+  <!-- ══ SECTION 3: GEM ══ -->
+  <section class="section" id="sec-gem">
+    <div class="section-header">
+      <div class="section-num">3</div>
+      <div class="section-title-group">
+        <h2>💎 Gem — 나만의 AI 전문가 만들기</h2>
+        <p>특정 역할과 지식을 가진 맞춤형 AI 어시스턴트</p>
+      </div>
+    </div>
+
+    <div class="highlight-box">
+      <strong>Gem이란?</strong>
+      Gem은 <strong>특정 역할을 부여한 나만의 전용 AI 어시스턴트</strong>입니다. 예를 들어 「항상 경어를 쓰는 이메일 작성 전문가」나 「제약 규정을 잘 아는 QA 도우미」처럼, 반복적으로 사용하는 역할을 미리 설정해 두면 매번 설명 없이도 원하는 방식으로 답변을 받을 수 있습니다.
+    </div>
+
+    <div class="feature-grid" style="margin-bottom:24px;">
+      <div class="feature-card">
+        <div class="fc-icon">📧</div>
+        <h4>이메일 작성 도우미</h4>
+        <p>항상 공손한 비즈니스 이메일을 작성해 주는 전용 Gem</p>
+        <span class="fc-tag">사용 사례</span>
+      </div>
+      <div class="feature-card">
+        <div class="fc-icon">📝</div>
+        <h4>보고서 요약 전문가</h4>
+        <p>긴 보고서를 핵심 3줄로 요약해 주는 Gem</p>
+        <span class="fc-tag">사용 사례</span>
+      </div>
+      <div class="feature-card">
+        <div class="fc-icon">🌐</div>
+        <h4>번역 & 교정 도우미</h4>
+        <p>한↔영 번역과 문체 교정을 전담하는 Gem</p>
+        <span class="fc-tag">사용 사례</span>
+      </div>
+    </div>
+
+    <div class="steps">
+
+      <div class="step-card">
+        <div class="step-head">
+          <span class="step-badge">STEP 1</span>
+          <h3>Gem 만들기 화면 열기</h3>
+        </div>
+        <div class="step-body">
+          <p>Gemini 화면 왼쪽 사이드바에서 <strong>「Gem 탐색」</strong> 또는 <strong>「Gem 만들기」</strong>를 클릭하세요.</p>
+          <p>또는 아래 주소로 바로 접속할 수 있습니다.</p>
+          <div class="url-box">
+            <span class="url-icon">🔗</span>
+            <a href="https://gemini.google.com/gems/create" target="_blank">gemini.google.com/gems/create</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="step-card">
+        <div class="step-head">
+          <span class="step-badge">STEP 2</span>
+          <h3>Gem 이름과 역할 설명 입력하기</h3>
+        </div>
+        <div class="step-body">
+          <p>만들 Gem에 대해 아래 두 가지를 입력합니다.</p>
+          <ul>
+            <li><strong>이름</strong> : Gem을 구분할 수 있는 이름. 예: <span class="path">이메일 작성 도우미</span></li>
+            <li><strong>지침(Instructions)</strong> : AI에게 맡길 역할과 규칙을 자세히 적어 주세요.</li>
+          </ul>
+          <div class="highlight-box">
+            <strong>📝 지침 예시</strong>
+            「당신은 광동제약의 임직원을 위한 비즈니스 이메일 작성 도우미입니다. 항상 공손하고 간결한 존댓말을 사용하며, 수신인과 발신인 정보를 포함한 이메일 형식으로 작성해 주세요. 영어 이메일 요청 시에는 영어로 작성하세요.」
+          </div>
+        </div>
+      </div>
+
+      <div class="step-card">
+        <div class="step-head">
+          <span class="step-badge">STEP 3</span>
+          <h3>(선택) 파일이나 Google Drive 연결하기</h3>
+        </div>
+        <div class="step-body">
+          <p>Gem이 특정 문서를 참고해야 한다면, 관련 파일을 업로드하거나 Google Drive 파일을 연결할 수 있습니다.</p>
+          <ul>
+            <li>예: 회사 이메일 양식 파일을 업로드해 두면, Gem이 해당 양식에 맞게 작성해 줍니다.</li>
+          </ul>
+          <div class="tip">💡 선택 사항입니다. 파일 없이도 Gem을 사용할 수 있어요.</div>
+        </div>
+      </div>
+
+      <div class="step-card">
+        <div class="step-head">
+          <span class="step-badge">STEP 4</span>
+          <h3>저장 후 사용하기</h3>
+        </div>
+        <div class="step-body">
+          <p><strong>「저장」</strong> 버튼을 누르면 Gem이 생성됩니다.</p>
+          <p>이후 Gemini 왼쪽 사이드바 <strong>「내 Gem」</strong> 목록에서 클릭하면 바로 사용할 수 있습니다.</p>
+          <div class="tip">💡 한 번 만들어 두면 매번 역할 설명 없이 바로 사용할 수 있어 훨씬 편리합니다!</div>
+        </div>
+      </div>
+
+    </div>
+
+  </section>
+
+  <hr class="section-divider">
+
+
+  <!-- ══ SECTION 4: NOTEBOOKLM ══ -->
+  <section class="section" id="sec-notebooklm">
+    <div class="section-header">
+      <div class="section-num">4</div>
+      <div class="section-title-group">
+        <h2>📚 NotebookLM — 내 문서 기반 AI</h2>
+        <p>내가 올린 자료만 참고해서 질문에 답해 주는 AI 리서치 도구</p>
+      </div>
+    </div>
+
+    <div class="highlight-box">
+      <strong>NotebookLM이란?</strong>
+      NotebookLM은 <strong>내가 업로드한 문서를 기반으로만 답변하는 AI</strong>입니다. PDF, 문서, 슬라이드 등 자료를 올려 두면, 해당 자료 안에서 정보를 찾아 요약하거나 질문에 답변해 줍니다. 잘못된 정보를 만들어 내는 위험이 낮고, 출처도 명확히 표시해 줍니다.
+    </div>
+
+    <div class="feature-grid" style="margin-bottom:24px;">
+      <div class="feature-card">
+        <div class="fc-icon">📑</div>
+        <h4>문서 요약</h4>
+        <p>긴 PDF나 보고서를 업로드하면 핵심 내용을 빠르게 요약해 줍니다.</p>
+        <span class="fc-tag">활용 예시</span>
+      </div>
+      <div class="feature-card">
+        <div class="fc-icon">❓</div>
+        <h4>문서 기반 Q&A</h4>
+        <p>「이 규정에서 휴가 신청 절차가 어떻게 되어 있나요?」처럼 자료 내용에 대해 질문할 수 있어요.</p>
+        <span class="fc-tag">활용 예시</span>
+      </div>
+      <div class="feature-card">
+        <div class="fc-icon">🎙️</div>
+        <h4>오디오 개요 생성</h4>
+        <p>문서 내용을 팟캐스트처럼 두 사람이 대화하는 오디오로 변환해 줍니다.</p>
+        <span class="fc-tag">특별 기능</span>
+      </div>
+    </div>
+
+    <div class="steps">
+
+      <div class="step-card">
+        <div class="step-head">
+          <span class="step-badge">STEP 1</span>
+          <h3>NotebookLM 접속하기</h3>
+        </div>
+        <div class="step-body">
+          <p>아래 주소로 접속하세요. 회사 Google 계정으로 자동 로그인됩니다.</p>
+          <div class="url-box">
+            <span class="url-icon">🔗</span>
+            <a href="https://notebooklm.google.com" target="_blank">notebooklm.google.com</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="step-card">
+        <div class="step-head">
+          <span class="step-badge">STEP 2</span>
+          <h3>새 노트북 만들기</h3>
+        </div>
+        <div class="step-body">
+          <p>화면에서 <strong>「새 노트북」</strong> 또는 <strong>「+ 만들기」</strong> 버튼을 클릭합니다.</p>
+          <p>노트북은 하나의 프로젝트라고 생각하면 됩니다. 예: <span class="path">2025 신제품 기획</span>, <span class="path">규정집 참고용</span></p>
+        </div>
+      </div>
+
+      <div class="step-card">
+        <div class="step-head">
+          <span class="step-badge">STEP 3</span>
+          <h3>자료(소스) 추가하기</h3>
+        </div>
+        <div class="step-body">
+          <p>노트북에 AI가 참고할 자료를 추가합니다. <strong>「소스 추가」</strong> 버튼을 클릭하세요.</p>
+          <p>지원하는 자료 형식:</p>
+          <ul>
+            <li>📄 <strong>PDF 파일</strong> — 보고서, 규정집, 매뉴얼 등</li>
+            <li>📃 <strong>Google Docs / Slides</strong> — Drive에 있는 문서</li>
+            <li>🌐 <strong>웹 URL</strong> — 특정 웹페이지 내용</li>
+            <li>📝 <strong>텍스트 직접 입력</strong> — 회의록 등 텍스트 붙여넣기</li>
+          </ul>
+          <div class="tip">💡 여러 개의 소스를 동시에 추가할 수 있습니다. AI가 모든 소스를 종합해서 답변해 줍니다.</div>
+        </div>
+      </div>
+
+      <div class="step-card">
+        <div class="step-head">
+          <span class="step-badge">STEP 4</span>
+          <h3>채팅창에서 질문하기</h3>
+        </div>
+        <div class="step-body">
+          <p>소스 추가가 완료되면, 오른쪽 채팅창에서 자유롭게 질문하세요.</p>
+          <div class="highlight-box">
+            <strong>💬 질문 예시</strong>
+            「이 문서에서 부서별 예산 배분 기준을 요약해 줘」<br>
+            「규정집에서 연차 휴가 신청 방법을 찾아줘」<br>
+            「이 보고서의 핵심 결론 3가지를 알려줘」
+          </div>
+          <p style="margin-top:10px;">AI가 답변할 때 출처 위치(몇 페이지 등)도 함께 표시해 줍니다. 클릭하면 해당 부분으로 바로 이동합니다.</p>
+        </div>
+      </div>
+
+      <div class="step-card">
+        <div class="step-head">
+          <span class="step-badge">STEP 5</span>
+          <h3>(보너스) 오디오 개요 생성해 보기</h3>
+        </div>
+        <div class="step-body">
+          <p>왼쪽 패널 하단의 <strong>「오디오 개요」</strong> 버튼을 클릭해 보세요.</p>
+          <p>AI가 문서 내용을 <strong>두 사람의 대화 형식</strong>으로 된 오디오로 만들어 줍니다. 이동 중에 들을 수 있어 편리합니다!</p>
+          <div class="caution">⚠️ 오디오는 영어로 생성됩니다. 한국어 오디오는 아직 지원되지 않습니다.</div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="alert info" style="margin-top:20px;">
+      <div class="alert-icon">ℹ️</div>
+      <div class="alert-body">
+        <strong>NotebookLM의 특징 — 일반 Gemini와의 차이</strong>
+        <p>일반 Gemini는 학습된 전체 지식으로 답변하지만, NotebookLM은 <strong>내가 올린 자료만</strong> 참고합니다. 사내 문서, 기밀 보고서처럼 외부에 없는 내용을 AI와 함께 분석할 때 특히 유용합니다.</p>
+      </div>
+    </div>
+
+  </section>
+
+  <hr class="section-divider">
+
+  <!-- ══ CLOSING SUMMARY ══ -->
+  <section class="section">
+    <div style="background: linear-gradient(135deg, var(--blue-deep) 0%, var(--blue-mid) 100%); border-radius: 16px; padding: 32px; color: white; text-align:center;">
+      <div style="font-size:36px; margin-bottom:12px;">🚀</div>
+      <h2 style="font-size:18px; font-weight:700; margin-bottom:10px;">지금 바로 시작해 보세요!</h2>
+      <p style="font-size:14px; opacity:0.85; max-width:480px; margin:0 auto 20px;">어렵지 않습니다. Gemini에게 오늘 처리해야 할 이메일 하나만 부탁해 보세요.</p>
+      <div style="display:flex; flex-wrap:wrap; gap:10px; justify-content:center;">
+        <a href="https://gemini.google.com" target="_blank" style="background:white; color:var(--blue-deep); font-size:13px; font-weight:700; padding:10px 20px; border-radius:8px; text-decoration:none;">✨ Gemini 시작하기</a>
+        <a href="https://notebooklm.google.com" target="_blank" style="background:rgba(255,255,255,0.15); border:1px solid rgba(255,255,255,0.4); color:white; font-size:13px; font-weight:700; padding:10px 20px; border-radius:8px; text-decoration:none;">📚 NotebookLM 시작하기</a>
+      </div>
+    </div>
+  </section>
+
+  <div class="alert warn">
+    <div class="alert-icon">🔒</div>
+    <div class="alert-body">
+      <strong>보안 주의사항</strong>
+      <p><strong>개인정보, 환자정보, 미공개 재무 정보</strong> 등 민감한 데이터는 입력하지 마세요. 문의: <strong>정보보호팀 / AI센터</strong></p>
+    </div>
+  </div>
+
+</main>
+
+<!-- ══ FOOTER ══ -->
+<footer class="footer">
+  <p>📘 광동제약 GWS PoC 임직원 가이드 &nbsp;|&nbsp; 문의: <strong>정보보호팀 / AI센터 / #poc-문의사항</strong></p>
+  <p style="margin-top:6px; font-size:12px; color:var(--gray-300);">본 가이드는 PoC 기간(2025.12 – 2026.4) 기준으로 작성되었습니다.</p>
+</footer>
+
+</body>
+</html>
