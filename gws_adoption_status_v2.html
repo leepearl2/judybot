@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GWS PoC 활용도 분석 리포트</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+:root {
+  --bg: #F4F2EE;
+  --surface: #FFFFFF;
+  --surface2: #EDEAE4;
+  --text-primary: #1A1814;
+  --text-secondary: #6B6760;
+  --text-muted: #A8A49E;
+  --green: #1B7A58;
+  --green-light: #E3F2EC;
+  --green-mid: #2EA87A;
+  --amber: #B06A00;
+  --amber-light: #FDF3E3;
+  --red: #C0392B;
+  --red-light: #FDECEA;
+  --blue: #1A5FAB;
+  --blue-light: #E8F0FB;
+  --purple: #5B3FA6;
+  --purple-light: #EEE9FA;
+  --border: rgba(26,24,20,0.10);
+  --shadow: 0 2px 12px rgba(26,24,20,0.07);
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Noto Sans KR', sans-serif;
+  background: var(--bg);
+  color: var(--text-primary);
+  font-size: 15px;
+  line-height: 1.6;
+  min-height: 100vh;
+}
+.container { max-width: 1080px; margin: 0 auto; padding: 0 24px; }
+
+/* HEADER */
+header {
+  background: var(--text-primary);
+  color: #fff;
+  padding: 56px 0 44px;
+  position: relative;
+  overflow: hidden;
+}
+header::before {
+  content: '';
+  position: absolute;
+  top: -60px; right: -60px;
+  width: 280px; height: 280px;
+  border-radius: 50%;
+  border: 1px solid rgba(255,255,255,0.07);
+}
+header::after {
+  content: '';
+  position: absolute;
+  bottom: -80px; left: 40%;
+  width: 200px; height: 200px;
+  border-radius: 50%;
+  border: 1px solid rgba(255,255,255,0.05);
+}
+.header-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  color: rgba(255,255,255,0.45);
+  text-transform: uppercase;
+  margin-bottom: 14px;
+}
+header h1 {
+  font-size: clamp(26px, 4vw, 38px);
+  font-weight: 700;
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+  margin-bottom: 12px;
+}
+header h1 span { color: #7FD8B4; }
+.header-meta {
+  font-size: 13px;
+  color: rgba(255,255,255,0.45);
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+.header-meta b { color: rgba(255,255,255,0.7); font-weight: 500; }
+
+/* SUMMARY CARDS */
+.summary { padding: 36px 0 0; }
+.summary-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-bottom: 40px;
+}
+.scard {
+  background: var(--surface);
+  border-radius: 12px;
+  padding: 20px 20px 18px;
+  border: 1px solid var(--border);
+}
+.scard-label { font-size: 12px; color: var(--text-muted); margin-bottom: 6px; }
+.scard-val { font-size: 30px; font-weight: 700; line-height: 1; margin-bottom: 4px; letter-spacing: -0.02em; }
+.scard-sub { font-size: 11px; color: var(--text-muted); }
+.scard.c-green .scard-val { color: var(--green); }
+.scard.c-amber .scard-val { color: var(--amber); }
+.scard.c-red .scard-val { color: var(--red); }
+
+/* SECTION */
+section { padding: 0 0 48px; }
+.section-header {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  margin-bottom: 20px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border);
+}
+.section-title { font-size: 17px; font-weight: 700; letter-spacing: -0.01em; }
+.section-count {
+  font-family: 'DM Mono', monospace;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+/* CHART */
+.chart-wrap {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 24px;
+  margin-bottom: 32px;
+}
+.chart-title { font-size: 13px; font-weight: 500; color: var(--text-secondary); margin-bottom: 16px; }
+.chart-container { position: relative; width: 100%; height: 480px; }
+
+/* DEPT TABLE */
+.dept-list { display: flex; flex-direction: column; gap: 8px; }
+.dept-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 16px 20px;
+  display: grid;
+  grid-template-columns: 130px 90px 52px 1fr 52px 80px;
+  align-items: center;
+  gap: 12px;
+  transition: box-shadow 0.18s, transform 0.18s;
+  cursor: default;
+}
+.dept-card:hover { box-shadow: var(--shadow); transform: translateY(-1px); }
+.dept-name { font-size: 14px; font-weight: 700; }
+.dept-div {
+  font-size: 10px;
+  padding: 3px 8px;
+  border-radius: 20px;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.dept-div.cmo { background: var(--blue-light); color: var(--blue); }
+.dept-div.plan { background: var(--green-light); color: var(--green); }
+.dept-div.ai { background: var(--purple-light); color: var(--purple); }
+.dept-div.other { background: var(--surface2); color: var(--text-secondary); }
+.dept-count { font-size: 12px; color: var(--text-muted); text-align: center; }
+.dept-count b { display: block; font-size: 16px; font-weight: 700; color: var(--text-primary); }
+.bar-area { display: flex; flex-direction: column; gap: 4px; }
+.bar-row { display: flex; align-items: center; gap: 6px; }
+.bar-label { font-size: 10px; color: var(--text-muted); width: 56px; flex-shrink: 0; text-align: right; }
+.bar-track { flex: 1; height: 6px; background: var(--surface2); border-radius: 3px; overflow: hidden; }
+.bar-fill { height: 100%; border-radius: 3px; transition: width 0.5s ease; }
+.bar-val { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--text-secondary); width: 36px; }
+.dept-score { display: flex; align-items: baseline; gap: 2px; justify-content: center; }
+.dept-score .score-num { font-family: 'DM Mono', monospace; font-size: 20px; font-weight: 500; line-height: 1; }
+.dept-score .score-label { font-size: 12px; color: var(--text-muted); }
+.badge {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 5px 10px;
+  border-radius: 20px;
+  text-align: center;
+  white-space: nowrap;
+}
+.keep-card {
+  background: var(--purple-light);
+  border-color: rgba(91,63,166,0.2);
+}
+.badge.keep { background: var(--purple-light); color: var(--purple); }
+.badge.strong { background: var(--green-light); color: var(--green); }
+.badge.watch { background: var(--amber-light); color: var(--amber); }
+.badge.out { background: var(--surface2); color: var(--text-muted); }
+
+/* TIER HEADERS */
+.tier-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 24px 0 10px;
+}
+.tier-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+.tier-label { font-size: 13px; font-weight: 600; }
+.tier-sub { font-size: 12px; color: var(--text-muted); }
+
+/* LEGEND */
+.legend { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 16px; }
+.legend-item { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--text-secondary); }
+.legend-dot { width: 8px; height: 8px; border-radius: 2px; flex-shrink: 0; }
+
+/* NOTES */
+.notes-box {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 18px 22px;
+  margin-top: 32px;
+}
+.notes-title { font-size: 12px; font-weight: 700; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 10px; }
+.notes-list { list-style: none; display: flex; flex-direction: column; gap: 6px; }
+.notes-list li { font-size: 12px; color: var(--text-secondary); padding-left: 14px; position: relative; line-height: 1.55; }
+.notes-list li::before { content: '—'; position: absolute; left: 0; color: var(--text-muted); }
+
+/* FOOTER */
+footer {
+  background: var(--text-primary);
+  color: rgba(255,255,255,0.35);
+  font-size: 11px;
+  text-align: center;
+  padding: 20px 24px;
+  font-family: 'DM Mono', monospace;
+  letter-spacing: 0.05em;
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .summary-grid { grid-template-columns: repeat(2, 1fr); }
+  .dept-card {
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto auto;
+  }
+  .bar-area { grid-column: 1 / -1; }
+  .dept-score { text-align: left; }
+  .chart-container { height: 600px; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="container">
+    <p class="header-label">Kwangdong Pharmaceutical · GWS PoC</p>
+    <h1>부서별 활용도 분석<br><span>PoC 연장 대상 선정 리포트</span></h1>
+    <div class="header-meta">
+      <span><b>분석 기간</b> 2026.04.13 – 2026.05.07</span>
+      <span><b>대상 부서</b> 25개 팀 (인원 3명 이상)</span>
+      <span><b>분석 로그</b> Drive(전체) · OAuth · Chat · 사용자 로그</span>
+    </div>
+  </div>
+</header>
+
+<div class="container">
+  <div class="summary">
+    <div class="summary-grid">
+      <div class="scard">
+        <div class="scard-label">분석 대상 부서</div>
+        <div class="scard-val">24개</div>
+        <div class="scard-sub">인원 3명 이상 기준</div>
+      </div>
+      <div class="scard c-green">
+        <div class="scard-label">연장 강력 추천</div>
+        <div class="scard-val">4개</div>
+        <div class="scard-sub">종합점수 30점 이상</div>
+      </div>
+      <div class="scard c-amber">
+        <div class="scard-label">추가 관찰 필요</div>
+        <div class="scard-val">6개</div>
+        <div class="scard-sub">15–30점 구간</div>
+      </div>
+    </div>
+  </div>
+
+  <section>
+    <div class="section-header">
+      <span class="section-title">전체 부서 활용도 순위</span>
+      <span class="section-count">25개 부서</span>
+    </div>
+    <div class="chart-wrap">
+      <p class="chart-title">종합 활용도 점수 (Drive 능동활동 30% + 생성/편집 25% + GWS 문서 20% + OAuth 앱연동 15% + Chat 5% + 로그인율 5%)</p>
+      <div class="legend">
+        <div class="legend-item"><span class="legend-dot" style="background:#1B7A58"></span>연장 강력 추천 (30점+)</div>
+        <div class="legend-item"><span class="legend-dot" style="background:#B06A00"></span>추가 관찰 (15–30점)</div>
+        <div class="legend-item"><span class="legend-dot" style="background:#C8C5BE"></span>제외 검토 (15점 미만)</div>
+      </div>
+      <div class="chart-container" style="height:440px;">
+        <canvas id="mainChart" role="img" aria-label="부서별 종합 활용도 점수 가로 막대 차트"></canvas>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-header">
+      <span class="section-title">부서별 상세 현황</span>
+    </div>
+
+    <div class="tier-header">
+      <span class="tier-dot" style="background:#1B7A58"></span>
+      <span class="tier-label" style="color:#1B7A58">연장 강력 추천</span>
+      <span class="tier-sub">종합점수 30점 이상 · 실질 업무 활용 확인</span>
+    </div>
+    <div class="dept-list" id="strong-list"></div>
+
+    <div class="tier-header">
+      <span class="tier-dot" style="background:#B06A00"></span>
+      <span class="tier-label" style="color:#B06A00">추가 관찰 필요</span>
+      <span class="tier-sub">종합점수 15–30점 · 온보딩 지원 시 향상 가능성</span>
+    </div>
+    <div class="dept-list" id="watch-list"></div>
+
+    <div class="tier-header">
+      <span class="tier-dot" style="background:#C8C5BE"></span>
+      <span class="tier-label" style="color:#6B6760">제외 검토</span>
+      <span class="tier-sub">종합점수 15점 미만 · 현 시점 연장 효과 제한적</span>
+    </div>
+    <div class="dept-list" id="out-list"></div>
+  </section>
+
+  <div class="notes-box">
+    <p class="notes-title">분석 기준 안내</p>
+    <ul class="notes-list">
+      <li>Drive 로그는 2026.04.13–05.07 전체 기간 (3개 파일 약 147만건 합산), OAuth·Chat·사용자 로그는 동일 기간 기준입니다.</li>
+      <li>단순 폴더 권한 상속·자동 변경 이벤트는 제외하고 능동적 활동(수정, 생성, 업로드, 앱 연동 등)만 점수에 반영했습니다.</li>
+      <li>R&D사업추진팀은 인원 3명이나 인당 지표가 압도적으로 높아 유의미한 결과로 판단합니다.</li>
+      <li>AI센터·정보보호팀은 PoC 운영 및 정책 관리 주체로서 점수와 무관하게 유지 대상입니다.</li>
+    </ul>
+  </div>
+</div>
+
+<footer>
+  광동제약 AI센터 · GWS PoC 분석 리포트 · 2026.05.07
+</footer>
+
+<script>
+const DATA = [{"dept":"R&D사업추진팀","div":"기획관리본부","count":3,"login_rate":100,"drive":3050.7,"create":574.0,"gws":990.7,"oauth":42.3,"chat":1.0,"score":84.7,"grade":"연장 강력 추천"},{"dept":"CMO지원팀","div":"컨슈머사업총괄_CMO","count":5,"login_rate":100,"drive":1662.6,"create":590.8,"gws":475.6,"oauth":84.4,"chat":0.0,"score":66.6,"grade":"연장 강력 추천"},{"dept":"브랜드커머스팀","div":"컨슈머사업총괄_CMO","count":4,"login_rate":100,"drive":576.2,"create":313.5,"gws":267.2,"oauth":64.2,"chat":0.8,"score":37.4,"grade":"연장 강력 추천"},{"dept":"삼다수마케팅팀","div":"컨슈머사업총괄_CMO","count":6,"login_rate":100,"drive":515.3,"create":262.0,"gws":66.3,"oauth":78.2,"chat":0.0,"score":32.3,"grade":"연장 강력 추천"},{"dept":"F&B영업기획팀","div":"컨슈머사업총괄_CMO","count":5,"login_rate":100,"drive":781.2,"create":220.2,"gws":214.4,"oauth":43.4,"chat":0.2,"score":31.8,"grade":"연장 강력 추천"},{"dept":"AI센터","div":"AI센터","count":5,"login_rate":100,"drive":266.6,"create":82.0,"gws":82.0,"oauth":119.2,"chat":0.0,"score":27.7,"grade":"유지"},{"dept":"BM2팀","div":"컨슈머사업총괄_CMO","count":6,"login_rate":83,"drive":520.2,"create":205.7,"gws":199.5,"oauth":28.3,"chat":0.0,"score":25.6,"grade":"추가 관찰"},{"dept":"BM1팀","div":"컨슈머사업총괄_CMO","count":6,"login_rate":100,"drive":482.3,"create":210.7,"gws":132.5,"oauth":32.7,"chat":0.0,"score":25.4,"grade":"추가 관찰"},{"dept":"E-커머스팀","div":"컨슈머사업총괄_CMO","count":7,"login_rate":71,"drive":330.3,"create":142.1,"gws":143.0,"oauth":69.9,"chat":0.4,"score":24.5,"grade":"추가 관찰"},{"dept":"편의점팀","div":"컨슈머사업총괄_CMO","count":6,"login_rate":100,"drive":266.5,"create":110.5,"gws":46.2,"oauth":39.2,"chat":0.3,"score":18.2,"grade":"추가 관찰"},{"dept":"디자인2팀","div":"컨슈머사업총괄_CMO","count":6,"login_rate":100,"drive":320.3,"create":169.5,"gws":6.0,"oauth":17.7,"chat":0.0,"score":17.7,"grade":"추가 관찰"},{"dept":"음료시판팀","div":"컨슈머사업총괄_CMO","count":8,"login_rate":100,"drive":290.1,"create":144.5,"gws":45.8,"oauth":21.0,"chat":0.0,"score":17.5,"grade":"추가 관찰"},{"dept":"정보보호팀","div":"정보보호팀","count":7,"login_rate":86,"drive":119.1,"create":81.0,"gws":55.3,"oauth":17.9,"chat":125.3,"score":17.3,"grade":"유지"},{"dept":"삼다수대리점팀","div":"컨슈머사업총괄_CMO","count":7,"login_rate":86,"drive":184.6,"create":140.0,"gws":12.4,"oauth":9.1,"chat":0.0,"score":13.4,"grade":"제외 검토"},{"dept":"디자인1팀","div":"컨슈머사업총괄_CMO","count":8,"login_rate":75,"drive":156.8,"create":100.2,"gws":5.2,"oauth":25.9,"chat":0.0,"score":12.9,"grade":"제외 검토"},{"dept":"할인점팀","div":"컨슈머사업총괄_CMO","count":8,"login_rate":100,"drive":149.8,"create":84.9,"gws":17.1,"oauth":11.5,"chat":0.0,"score":11.9,"grade":"제외 검토"},{"dept":"CMC팀","div":"컨슈머사업총괄_CMO","count":5,"login_rate":100,"drive":123.4,"create":90.8,"gws":15.2,"oauth":10.8,"chat":0.0,"score":11.7,"grade":"제외 검토"},{"dept":"전략기획팀","div":"기획관리본부","count":5,"login_rate":100,"drive":47.0,"create":13.6,"gws":5.6,"oauth":11.6,"chat":0.0,"score":7.6,"grade":"제외 검토"},{"dept":"미래혁신팀","div":"미래혁신팀","count":4,"login_rate":75,"drive":37.0,"create":24.2,"gws":34.8,"oauth":9.5,"chat":0.0,"score":7.0,"grade":"제외 검토"},{"dept":"IT운영팀","div":"기획관리본부","count":11,"login_rate":82,"drive":40.8,"create":16.3,"gws":14.9,"oauth":11.0,"chat":0.0,"score":6.9,"grade":"제외 검토"},{"dept":"성장전략팀","div":"기획관리본부","count":3,"login_rate":67,"drive":24.0,"create":11.0,"gws":23.0,"oauth":17.7,"chat":0.0,"score":6.7,"grade":"제외 검토"},{"dept":"총무팀","div":"기획관리본부","count":11,"login_rate":73,"drive":33.6,"create":19.5,"gws":12.1,"oauth":11.5,"chat":0.0,"score":6.5,"grade":"제외 검토"},{"dept":"신사업운영팀","div":"컨슈머사업총괄_CMO","count":4,"login_rate":75,"drive":14.2,"create":5.2,"gws":8.2,"oauth":9.2,"chat":0.0,"score":5.4,"grade":"제외 검토"},{"dept":"영업지원팀","div":"기획관리본부","count":18,"login_rate":50,"drive":38.0,"create":18.7,"gws":3.0,"oauth":4.2,"chat":0.0,"score":4.3,"grade":"제외 검토"}];
+
+const MAX_DRIVE = Math.max(...DATA.map(d => d.drive));
+const MAX_GWS = Math.max(...DATA.map(d => d.gws));
+const MAX_OAUTH = Math.max(...DATA.map(d => d.oauth));
+
+function divTag(div) {
+  if (div.includes('CMO')) return '<span class="dept-div cmo">CMO본부</span>';
+  if (div.includes('기획관리')) return '<span class="dept-div plan">기획관리본부</span>';
+  if (div === 'AI센터') return '<span class="dept-div ai">AI센터</span>';
+  return `<span class="dept-div other">${div}</span>`;
+}
+
+function badgeHtml(grade) {
+  const map = { '유지': 'keep', '연장 강력 추천': 'strong', '추가 관찰': 'watch', '제외 검토': 'out' };
+  return `<span class="badge ${map[grade]}">${grade}</span>`;
+}
+
+function barRow(label, val, max, color) {
+  const pct = max > 0 ? Math.min(100, (val / max) * 100).toFixed(1) : 0;
+  return `<div class="bar-row">
+    <span class="bar-label">${label}</span>
+    <div class="bar-track"><div class="bar-fill" style="width:${pct}%;background:${color}"></div></div>
+    <span class="bar-val">${val.toFixed(1)}</span>
+  </div>`;
+}
+
+function renderKeepCard(d) {
+  const reasons = {
+    'AI센터':    'PoC 운영 주체 — 전체 일정 관리 및 가이드 제작 담당',
+    '정보보호팀': '보안 정책 관리 주체 — 2단계 인증·정보보호 정책 총괄'
+  };
+  return `<div class="dept-card keep-card">
+    <div class="dept-name">${d.dept}</div>
+    ${divTag(d.div)}
+    <div class="dept-count"><b>${d.count}</b>명</div>
+    <div class="keep-reason">${reasons[d.dept] || 'PoC 운영 관련 고정 유지 부서'}</div>
+    <div></div>
+    ${badgeHtml(d.grade)}
+  </div>`;
+}
+
+function renderCard(d) {
+  const scoreColor = d.grade === '연장 강력 추천' ? '#1B7A58' : d.grade === '추가 관찰' ? '#B06A00' : '#A8A49E';
+  return `<div class="dept-card">
+    <div class="dept-name">${d.dept}</div>
+    ${divTag(d.div)}
+    <div class="dept-count"><b>${d.count}</b>명</div>
+    <div class="bar-area">
+      ${barRow('Drive', d.drive, MAX_DRIVE, '#378ADD')}
+      ${barRow('GWS 문서', d.gws, MAX_GWS, '#1D9E75')}
+      ${barRow('OAuth', d.oauth, MAX_OAUTH, '#7F77DD')}
+    </div>
+    <div class="dept-score">
+      <div class="score-num" style="color:${scoreColor}">${d.score.toFixed(1)}</div>
+      <div class="score-label">점</div>
+    </div>
+    ${badgeHtml(d.grade)}
+  </div>`;
+}
+
+document.getElementById('strong-list').innerHTML = DATA.filter(d => d.grade === '연장 강력 추천').map(renderCard).join('');
+document.getElementById('watch-list').innerHTML  = DATA.filter(d => d.grade === '추가 관찰').map(renderCard).join('');
+document.getElementById('out-list').innerHTML    = DATA.filter(d => d.grade === '제외 검토').map(renderCard).join('');
+
+// 차트: 유지 부서 제외
+const chartData = DATA.filter(d => d.grade !== '유지');
+const chartColors = chartData.map(d =>
+  d.grade === '연장 강력 추천' ? '#1B7A58' :
+  d.grade === '추가 관찰' ? '#B06A00' : '#C8C5BE'
+);
+
+new Chart(document.getElementById('mainChart'), {
+  type: 'bar',
+  data: {
+    labels: chartData.map(d => d.dept),
+    datasets: [{
+      label: '종합 활용도 점수',
+      data: chartData.map(d => d.score),
+      backgroundColor: chartColors,
+      borderRadius: 4,
+      borderSkipped: false
+    }]
+  },
+  options: {
+    indexAxis: 'y',
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        callbacks: {
+          label: ctx => {
+            const d = chartData[ctx.dataIndex];
+            return [
+              ` 종합점수: ${d.score}점`,
+              ` 인원: ${d.count}명 · 로그인율: ${d.login_rate}%`,
+              ` Drive(능동): ${d.drive} · GWS문서: ${d.gws}`,
+              ` OAuth: ${d.oauth} · Chat: ${d.chat}`
+            ];
+          }
+        }
+      }
+    },
+    scales: {
+      x: {
+        max: 100,
+        grid: { color: 'rgba(26,24,20,0.06)' },
+        ticks: { color: '#A8A49E', font: { size: 11 } }
+      },
+      y: {
+        grid: { display: false },
+        ticks: { color: '#6B6760', font: { size: 12, family: 'Noto Sans KR' } }
+      }
+    }
+  }
+});
+</script>
+</body>
+</html>
