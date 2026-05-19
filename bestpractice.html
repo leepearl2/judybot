@@ -1,0 +1,860 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>광동제약 Google AI 활용 우수사례</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --g-blue: #4285F4;
+    --g-red: #EA4335;
+    --g-yellow: #FBBC04;
+    --g-green: #34A853;
+    --bg: #F0F4FF;
+    --white: #ffffff;
+    --text: #1a1a2e;
+    --text-muted: #5f6b8a;
+    --radius: 20px;
+    --shadow: 0 8px 32px rgba(66,133,244,0.13);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Noto Sans KR', sans-serif;
+    background: var(--bg);
+    min-height: 100vh;
+    padding: 0;
+    overflow-x: hidden;
+  }
+
+  /* ── HERO HEADER ── */
+  .hero {
+    background: linear-gradient(135deg, #1557f0 0%, #2979FF 40%, #00BFA5 100%);
+    padding: 56px 40px 72px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-shapes {
+    position: absolute; inset: 0; pointer-events: none;
+  }
+
+  .hero-shapes circle, .hero-shapes rect {
+    opacity: 0.12;
+  }
+
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255,255,255,0.2);
+    color: #fff;
+    font-size: 13px;
+    font-weight: 500;
+    padding: 6px 18px;
+    border-radius: 30px;
+    border: 1px solid rgba(255,255,255,0.4);
+    margin-bottom: 22px;
+    backdrop-filter: blur(6px);
+  }
+
+  .hero-badge span {
+    width: 8px; height: 8px;
+    background: #FBBC04;
+    border-radius: 50%;
+    animation: blink 1.6s ease-in-out infinite;
+  }
+
+  @keyframes blink {
+    0%,100%{opacity:1;transform:scale(1)}
+    50%{opacity:0.4;transform:scale(0.7)}
+  }
+
+  .hero h1 {
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 40px;
+    font-weight: 900;
+    color: #fff;
+    line-height: 1.3;
+    margin-bottom: 14px;
+    letter-spacing: -0.5px;
+  }
+
+  .hero h1 .accent {
+    color: #FBBC04;
+  }
+
+  .hero-sub {
+    font-size: 16px;
+    color: rgba(255,255,255,0.88);
+    line-height: 1.6;
+    margin-bottom: 32px;
+  }
+
+  .hero-stats {
+    display: flex;
+    justify-content: center;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+
+  .stat-chip {
+    background: rgba(255,255,255,0.18);
+    border: 1px solid rgba(255,255,255,0.35);
+    border-radius: 14px;
+    padding: 10px 22px;
+    color: #fff;
+    text-align: center;
+    backdrop-filter: blur(8px);
+  }
+
+  .stat-chip .num {
+    font-size: 26px;
+    font-weight: 900;
+    line-height: 1;
+    display: block;
+  }
+
+  .stat-chip .lbl {
+    font-size: 11px;
+    opacity: 0.85;
+    margin-top: 3px;
+    display: block;
+  }
+
+  /* ── WAVE ── */
+  .wave {
+    display: block;
+    margin-top: -2px;
+    width: 100%;
+  }
+
+  /* ── BODY ── */
+  .body {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 24px 60px;
+  }
+
+  .section-title {
+    text-align: center;
+    margin: 48px 0 28px;
+  }
+
+  .section-title h2 {
+    font-size: 26px;
+    font-weight: 900;
+    color: var(--text);
+    margin-bottom: 6px;
+  }
+
+  .section-title p {
+    font-size: 14px;
+    color: var(--text-muted);
+  }
+
+  /* ── CASE CARD ── */
+  .case-card {
+    background: var(--white);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    margin-bottom: 28px;
+    overflow: hidden;
+    transition: transform 0.25s, box-shadow 0.25s;
+  }
+
+  .case-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 16px 48px rgba(66,133,244,0.18);
+  }
+
+  /* header band */
+  .card-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 20px 24px 16px;
+    border-bottom: 1.5px solid #f0f2f8;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .card-header::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 4px;
+  }
+
+  .hc-blue::before  { background: linear-gradient(90deg,#4285F4,#7BAEF8); }
+  .hc-green::before { background: linear-gradient(90deg,#34A853,#5DC778); }
+  .hc-yellow::before{ background: linear-gradient(90deg,#FBBC04,#FFD54F); }
+  .hc-red::before   { background: linear-gradient(90deg,#EA4335,#F28B82); }
+  .hc-teal::before  { background: linear-gradient(90deg,#00BFA5,#4DD0C4); }
+  .hc-purple::before{ background: linear-gradient(90deg,#7C4DFF,#B39DDB); }
+
+  .card-illust {
+    width: 72px; height: 72px;
+    border-radius: 16px;
+    flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    overflow: hidden;
+  }
+
+  .il-blue   { background: #E8F0FE; }
+  .il-green  { background: #E6F4EA; }
+  .il-yellow { background: #FFF8E1; }
+  .il-red    { background: #FCE8E6; }
+  .il-teal   { background: #E0F2F1; }
+  .il-purple { background: #EDE7F6; }
+
+  .card-meta { flex: 1; min-width: 0; }
+
+  .card-meta .team {
+    font-size: 18px;
+    font-weight: 900;
+    color: var(--text);
+    line-height: 1.2;
+  }
+
+  .card-meta .person {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-top: 3px;
+  }
+
+  .tool-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 12px;
+    font-weight: 700;
+    padding: 5px 13px;
+    border-radius: 20px;
+    flex-shrink: 0;
+  }
+
+  .tt-blue   { background: #E8F0FE; color: #1557C0; }
+  .tt-green  { background: #E6F4EA; color: #1A6B35; }
+  .tt-yellow { background: #FFF8E1; color: #7A4800; }
+  .tt-red    { background: #FCE8E6; color: #B31412; }
+  .tt-teal   { background: #E0F2F1; color: #00695C; }
+  .tt-purple { background: #EDE7F6; color: #4527A0; }
+
+  /* 3-step body */
+  .card-steps {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+
+  .step {
+    padding: 20px 22px;
+    position: relative;
+  }
+
+  .step + .step {
+    border-left: 1.5px solid #f0f2f8;
+  }
+
+  .step-head {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 10px;
+  }
+
+  .step-icon {
+    width: 28px; height: 28px;
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px;
+    flex-shrink: 0;
+  }
+
+  .si-prob   { background: #FCE8E6; }
+  .si-how    { background: #E8F0FE; }
+  .si-effect { background: #E6F4EA; }
+
+  .step-title {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+  }
+
+  .st-prob   { color: #C5221F; }
+  .st-how    { color: #1557C0; }
+  .st-effect { color: #1A6B35; }
+
+  .step-text {
+    font-size: 13px;
+    color: #3d4a63;
+    line-height: 1.75;
+  }
+
+  .step-text strong {
+    color: var(--text);
+    font-weight: 700;
+    background: linear-gradient(180deg, transparent 60%, rgba(251,188,4,0.35) 60%);
+  }
+
+  /* result pill */
+  .card-result {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    padding: 14px 24px;
+    background: #F8FAFE;
+    border-top: 1.5px solid #f0f2f8;
+  }
+
+  .result-main {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text);
+    flex: 1;
+  }
+
+  .result-tag {
+    font-size: 11px;
+    font-weight: 500;
+    padding: 3px 10px;
+    border-radius: 10px;
+    background: #EEF2FF;
+    color: #3D52D0;
+  }
+
+  /* ── CTA FOOTER ── */
+  .cta-box {
+    background: linear-gradient(135deg, #1557f0 0%, #2979FF 60%, #00BFA5 100%);
+    border-radius: var(--radius);
+    padding: 40px 36px;
+    text-align: center;
+    margin-top: 16px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .cta-box h3 {
+    font-size: 24px;
+    font-weight: 900;
+    color: #fff;
+    margin-bottom: 10px;
+  }
+
+  .cta-box p {
+    font-size: 14px;
+    color: rgba(255,255,255,0.88);
+    line-height: 1.7;
+    margin-bottom: 22px;
+  }
+
+  .cta-chips {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 24px;
+  }
+
+  .cta-chip {
+    background: rgba(255,255,255,0.2);
+    border: 1px solid rgba(255,255,255,0.4);
+    border-radius: 20px;
+    padding: 7px 18px;
+    font-size: 13px;
+    font-weight: 500;
+    color: #fff;
+  }
+
+  .cta-contact {
+    font-size: 13px;
+    color: rgba(255,255,255,0.78);
+  }
+
+  .cta-contact strong {
+    color: #FBBC04;
+  }
+
+  /* ── G-LOGO DOTS ── */
+  .g-dots {
+    display: inline-flex;
+    gap: 5px;
+    margin-bottom: 14px;
+  }
+
+  .g-dot {
+    width: 13px; height: 13px;
+    border-radius: 50%;
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 680px) {
+    .hero h1 { font-size: 28px; }
+    .card-steps { grid-template-columns: 1fr; }
+    .step + .step { border-left: none; border-top: 1.5px solid #f0f2f8; }
+    .card-header { flex-wrap: wrap; }
+    .hero-stats { gap: 12px; }
+    .stat-chip .num { font-size: 20px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════
+     HERO
+══════════════════════════════ -->
+<div class="hero">
+  <svg class="hero-shapes" viewBox="0 0 1000 340" preserveAspectRatio="xMidYMid slice">
+    <circle cx="80"  cy="60"  r="90"  fill="#fff"/>
+    <circle cx="940" cy="280" r="120" fill="#fff"/>
+    <circle cx="500" cy="20"  r="60"  fill="#FBBC04"/>
+    <rect x="820" y="30" width="80" height="80" rx="20" fill="#fff" transform="rotate(20 860 70)"/>
+    <rect x="50"  y="220" width="60" height="60" rx="14" fill="#FBBC04" transform="rotate(-15 80 250)"/>
+    <circle cx="300" cy="310" r="50" fill="#34A853"/>
+    <circle cx="720" cy="50"  r="40" fill="#EA4335"/>
+  </svg>
+
+  <div class="g-dots">
+    <div class="g-dot" style="background:#4285F4"></div>
+    <div class="g-dot" style="background:#EA4335"></div>
+    <div class="g-dot" style="background:#FBBC04"></div>
+    <div class="g-dot" style="background:#34A853"></div>
+  </div>
+
+  <div class="hero-badge">
+    <span></span>
+    광동제약 AI센터 · Google AI 업무 성공 활용 사례
+  </div>
+
+  <h1>동료들이 직접 경험한<br><span class="accent">Google AI</span> 활용 이야기</h1>
+  <p class="hero-sub">어떤 문제가 있었고 · 어떻게 해결했고 · 어떤 효과가 있었는지<br>6개 팀의 실제 사례를 소개합니다</p>
+
+  <div class="hero-stats">
+    <div class="stat-chip">
+      <span class="num">2h→5m</span>
+      <span class="lbl">최대 시간 단축</span>
+    </div>
+    <div class="stat-chip">
+      <span class="num">5/5</span>
+      <span class="lbl">만족도 최고점</span>
+    </div>
+    <div class="stat-chip">
+      <span class="num">100%</span>
+      <span class="lbl">동료 추천</span>
+    </div>
+  </div>
+</div>
+
+<svg class="wave" viewBox="0 0 1440 60" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+  <path d="M0,40 C360,80 1080,0 1440,40 L1440,60 L0,60 Z" fill="#F0F4FF"/>
+</svg>
+
+<!-- ══════════════════════════════
+     BODY
+══════════════════════════════ -->
+<div class="body">
+
+  <div class="section-title">
+    <h2>🏆 우수 활용 사례 6선</h2>
+    <p>문제 상황 · 해결 방법 · 업무 효과를 팀별로 확인해보세요</p>
+  </div>
+
+  <!-- ── CASE 1: 총무팀 ── -->
+  <div class="case-card">
+    <div class="card-header hc-blue">
+      <div class="card-illust il-blue">
+        <svg width="56" height="56" viewBox="0 0 56 56" fill="none">
+          <rect x="8" y="14" width="40" height="28" rx="4" fill="#4285F4" opacity="0.15"/>
+          <rect x="10" y="16" width="36" height="24" rx="3" fill="white" stroke="#4285F4" stroke-width="1.5"/>
+          <line x1="16" y1="23" x2="40" y2="23" stroke="#4285F4" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="16" y1="28" x2="34" y2="28" stroke="#B0C4F8" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="16" y1="33" x2="30" y2="33" stroke="#B0C4F8" stroke-width="1.5" stroke-linecap="round"/>
+          <circle cx="44" cy="38" r="10" fill="#34A853"/>
+          <path d="M40 38 L43 41 L48 35" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <div class="card-meta">
+        <div class="team">총무팀</div>
+        <div class="person">권세윤 님 (G2) · 경영지원 / 총무</div>
+      </div>
+      <span class="tool-tag tt-blue">📒 NotebookLM · ✨ Gemini</span>
+    </div>
+
+    <div class="card-steps">
+      <div class="step">
+        <div class="step-head">
+          <div class="step-icon si-prob">🔴</div>
+          <div class="step-title st-prob">문제 상황</div>
+        </div>
+        <div class="step-text">
+          차량 <strong>121대 보험청약서</strong>(PDF 121페이지)를 일일이 열어 원하는 양식으로 정리해야 했습니다. 방대한 분량에 <strong>2시간 이상</strong>이 소요되는 반복 작업이었고, 과천사옥 <strong>1층 웰컴보드용 영상</strong>도 저작권 문제로 자체 제작이 필요한 상황이었습니다.
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-head">
+          <div class="step-icon si-how">🔵</div>
+          <div class="step-title st-how">해결 방법</div>
+        </div>
+        <div class="step-text">
+          NotebookLM에 PDF 파일을 업로드하고 역할 지침(프롬프트)을 추가해 <strong>원하는 양식으로 정리</strong>를 요청했습니다. 웰컴보드 영상은 <strong>Gemini로 직접 제작</strong>했습니다. Sheets 수식도 Gemini에 질문해 바로 생성·적용했습니다.
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-head">
+          <div class="step-icon si-effect">🟢</div>
+          <div class="step-title st-effect">업무 효과</div>
+        </div>
+        <div class="step-text">
+          <strong>2시간 → 단 5분</strong>으로 96% 단축! 저작권 문제로 직접 만들어야 했던 웰컴보드 영상도 <strong>Gemini로 자체 제작</strong>할 수 있었습니다.
+        </div>
+      </div>
+    </div>
+
+    <div class="card-result">
+      <div class="result-main">⚡ 2시간 → 5분 · 시간 절약 96%</div>
+      <span class="result-tag">PDF 대량 정리</span>
+      <span class="result-tag">영상 자체 제작</span>
+      <span class="result-tag">Sheets 수식 자동화</span>
+    </div>
+  </div>
+
+  <!-- ── CASE 2: 성장전략팀 ── -->
+  <div class="case-card">
+    <div class="card-header hc-green">
+      <div class="card-illust il-green">
+        <svg width="56" height="56" viewBox="0 0 56 56" fill="none">
+          <rect x="10" y="30" width="8" height="16" rx="2" fill="#34A853" opacity="0.4"/>
+          <rect x="22" y="22" width="8" height="24" rx="2" fill="#34A853" opacity="0.65"/>
+          <rect x="34" y="14" width="8" height="32" rx="2" fill="#34A853"/>
+          <polyline points="14,28 26,20 38,12" stroke="#1A6B35" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          <circle cx="14" cy="28" r="3" fill="#1A6B35"/>
+          <circle cx="26" cy="20" r="3" fill="#1A6B35"/>
+          <circle cx="38" cy="12" r="3" fill="#FBBC04"/>
+          <path d="M36 10 L42 10 L42 16" stroke="#FBBC04" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+        </svg>
+      </div>
+      <div class="card-meta">
+        <div class="team">성장전략팀</div>
+        <div class="person">이규태 님 (G3) · 전략 / 신사업</div>
+      </div>
+      <span class="tool-tag tt-green">📊 Sheets + Gemini · 💎 Gems</span>
+    </div>
+
+    <div class="card-steps">
+      <div class="step">
+        <div class="step-head">
+          <div class="step-icon si-prob">🔴</div>
+          <div class="step-title st-prob">문제 상황</div>
+        </div>
+        <div class="step-text">
+          손익계산서·재무상태표 정리에 너무 많은 시간을 써 분석에 집중하기 어려웠습니다. 특히 <strong>병원·스타트업 등 처음 접하는 사업군</strong> 검토 시 일반 제조업과 다른 공익 비용 등 체크포인트를 파악하는 데만 <strong>수작업으로 1주일 이상</strong>이 걸렸습니다.
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-head">
+          <div class="step-icon si-how">🔵</div>
+          <div class="step-title st-how">해결 방법</div>
+        </div>
+        <div class="step-text">
+          Gemini에 <strong>"너는 재무 전문가야"</strong>로 역할을 지정한 뒤 매출·인건비·경비 등 원하는 양식으로 데이터 가공을 요청했습니다. Gems 브레인스토밍으로 사업군별 핵심 체크포인트를 AI와 함께 도출하고, 결과를 Sheets에 재정리했습니다.
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-head">
+          <div class="step-icon si-effect">🟢</div>
+          <div class="step-title st-effect">업무 효과</div>
+        </div>
+        <div class="step-text">
+          신규 사업군 체크포인트 파악에 걸리던 시간이 <strong>최소 1주일 → 당일</strong>로 단축됐습니다. Gems 브레인스토밍으로 <strong>기존에 생각 못했던 관점까지 발굴</strong>해 더 정교한 분석이 가능해졌습니다.
+        </div>
+      </div>
+    </div>
+
+    <div class="card-result">
+      <div class="result-main">🎯 신규 사업군 검토 1주일 → 당일 단축</div>
+      <span class="result-tag">재무 전문가 역할 지정</span>
+      <span class="result-tag">💡 Gems 브레인스토밍</span>
+    </div>
+  </div>
+
+  <!-- ── CASE 3: 삼다수마케팅팀 ── -->
+  <div class="case-card">
+    <div class="card-header hc-yellow">
+      <div class="card-illust il-yellow">
+        <svg width="56" height="56" viewBox="0 0 56 56" fill="none">
+          <rect x="10" y="12" width="28" height="36" rx="4" fill="white" stroke="#FBBC04" stroke-width="1.5"/>
+          <line x1="15" y1="21" x2="33" y2="21" stroke="#FBBC04" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="15" y1="27" x2="33" y2="27" stroke="#FFD54F" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="15" y1="33" x2="27" y2="33" stroke="#FFD54F" stroke-width="1.5" stroke-linecap="round"/>
+          <circle cx="40" cy="38" r="12" fill="#FBBC04"/>
+          <path d="M35 38 L39 42 L46 33" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <circle cx="38" cy="17" r="7" fill="#EA4335" opacity="0.85"/>
+          <text x="38" y="21" text-anchor="middle" font-size="10" font-weight="bold" fill="white" font-family="sans-serif">⚖</text>
+        </svg>
+      </div>
+      <div class="card-meta">
+        <div class="team">삼다수마케팅팀</div>
+        <div class="person">심웅섭 님 (G3) · 마케팅 / 기획</div>
+      </div>
+      <span class="tool-tag tt-yellow">✨ Gemini</span>
+    </div>
+
+    <div class="card-steps">
+      <div class="step">
+        <div class="step-head">
+          <div class="step-icon si-prob">🔴</div>
+          <div class="step-title st-prob">문제 상황</div>
+        </div>
+        <div class="step-text">
+          신규 사업권 개시로 <strong>처음부터 작성해야 하는 계약서</strong>가 대거 늘었습니다. 법무 검토 병목이 심해 계약 체결 일정 확보에 물리적 어려움이 컸습니다.
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-head">
+          <div class="step-icon si-how">🔵</div>
+          <div class="step-title st-how">해결 방법</div>
+        </div>
+        <div class="step-text">
+          Gemini를 <strong>'법률 비서'</strong>로 활용. 계약 주체·목적을 설명하고 기존 표준 양식을 제공해 맞춤 초안을 생성한 뒤, 각 조항의 법률 근거를 Gemini와 함께 팩트체크했습니다.
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-head">
+          <div class="step-icon si-effect">🟢</div>
+          <div class="step-title st-effect">업무 효과</div>
+        </div>
+        <div class="step-text">
+          완성도 높은 초안 선제공으로 <strong>CP팀(법무) 검토 시간 획기적 단축</strong>. 초안이 그대로 채택되지 않아도 커뮤니케이션 가이드라인 역할을 해 계약 공백을 없앴습니다.
+        </div>
+      </div>
+    </div>
+
+    <div class="card-result">
+      <div class="result-main">⚖️ 법무 검토 병목 해소 · 계약 프로세스 가속화</div>
+      <span class="result-tag">2시간+ 절약</span>
+      <span class="result-tag">만족도 5/5</span>
+    </div>
+  </div>
+
+  <!-- ── CASE 4: BM1팀 ── -->
+  <div class="case-card">
+    <div class="card-header hc-red">
+      <div class="card-illust il-red">
+        <svg width="56" height="56" viewBox="0 0 56 56" fill="none">
+          <rect x="8" y="10" width="24" height="24" rx="4" fill="white" stroke="#EA4335" stroke-width="1.5"/>
+          <rect x="10" y="12" width="20" height="20" rx="3" fill="#FCE8E6"/>
+          <circle cx="16" cy="18" r="3" fill="#EA4335" opacity="0.5"/>
+          <polygon points="10,28 20,17 25,23 30,18 30,30 10,30" fill="#EA4335" opacity="0.4"/>
+          <rect x="28" y="28" width="20" height="20" rx="4" fill="white" stroke="#FBBC04" stroke-width="1.5"/>
+          <rect x="30" y="30" width="16" height="16" rx="3" fill="#FFF8E1"/>
+          <circle cx="36" cy="36" r="3" fill="#FBBC04" opacity="0.6"/>
+          <polygon points="30,44 38,35 42,40 46,36 46,46 30,46" fill="#FBBC04" opacity="0.5"/>
+          <circle cx="30" cy="26" r="8" fill="#34A853"/>
+          <path d="M27 26 L29.5 28.5 L34 23" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <div class="card-meta">
+        <div class="team">BM1팀</div>
+        <div class="person">양윤서 님 (G3) · 마케팅 / 기획</div>
+      </div>
+      <span class="tool-tag tt-red">🖼️ Gemini 이미지 생성</span>
+    </div>
+
+    <div class="card-steps">
+      <div class="step">
+        <div class="step-head">
+          <div class="step-icon si-prob">🔴</div>
+          <div class="step-title st-prob">문제 상황</div>
+        </div>
+        <div class="step-text">
+          패키지·굿즈 디자인을 외부 업체에 의뢰하면 <strong>납기가 오래 걸리고</strong> 컬러·슬로건 변경 등 잦은 수정 요청이 어려워 원하는 결과물로 수렴하는 데 시간이 많이 소요됐습니다.
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-head">
+          <div class="step-icon si-how">🔵</div>
+          <div class="step-title st-how">해결 방법</div>
+        </div>
+        <div class="step-text">
+          Gemini로 <strong>다양한 디자인 시안을 자유롭게 생성</strong>하고, 생성된 이미지를 타 부서·외부 업체와 공유해 <strong>"이 방향으로 만들어 주세요"</strong>라는 레퍼런스로 활용했습니다.
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-head">
+          <div class="step-icon si-effect">🟢</div>
+          <div class="step-title st-effect">업무 효과</div>
+        </div>
+        <div class="step-text">
+          수정 커뮤니케이션 횟수가 줄고 <strong>업무 속도가 빨라졌습니다</strong>. 슬림핏 상세페이지 카피 검토에도 활용해 결과물 품질과 속도를 동시에 높였습니다.
+        </div>
+      </div>
+    </div>
+
+    <div class="card-result">
+      <div class="result-main">🎨 외부 소통 비용 절감 · 품질 동시 향상</div>
+      <span class="result-tag">디자인 배리에이션</span>
+      <span class="result-tag">만족도 5/5</span>
+    </div>
+  </div>
+
+  <!-- ── CASE 5: R&D사업추진팀 ── -->
+  <div class="case-card">
+    <div class="card-header hc-teal">
+      <div class="card-illust il-teal">
+        <svg width="56" height="56" viewBox="0 0 56 56" fill="none">
+          <rect x="14" y="8" width="12" height="30" rx="6" fill="white" stroke="#00BFA5" stroke-width="1.5"/>
+          <rect x="18" y="10" width="4" height="6" rx="2" fill="#B2DFDB"/>
+          <rect x="16" y="20" width="8" height="16" rx="1" fill="#E0F2F1"/>
+          <ellipse cx="20" cy="38" rx="6" ry="4" fill="#00BFA5" opacity="0.5"/>
+          <circle cx="36" cy="22" r="12" fill="white" stroke="#00BFA5" stroke-width="1.5"/>
+          <line x1="30" y1="22" x2="42" y2="22" stroke="#00BFA5" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="36" y1="16" x2="36" y2="28" stroke="#00BFA5" stroke-width="1.5" stroke-linecap="round"/>
+          <circle cx="36" cy="22" r="3" fill="#00BFA5"/>
+          <path d="M44 30 L50 36" stroke="#00695C" stroke-width="2.5" stroke-linecap="round"/>
+          <circle cx="50" cy="37" r="3" fill="#00695C"/>
+        </svg>
+      </div>
+      <div class="card-meta">
+        <div class="team">R&D사업추진팀</div>
+        <div class="person">도경록 님 (G3) · 전략 / 신사업</div>
+      </div>
+      <span class="tool-tag tt-teal">✨ Gemini + Google Docs</span>
+    </div>
+
+    <div class="card-steps">
+      <div class="step">
+        <div class="step-head">
+          <div class="step-icon si-prob">🔴</div>
+          <div class="step-title st-prob">문제 상황</div>
+        </div>
+        <div class="step-text">
+          신규 건기식 소재 과제마다 정해진 양식으로 사전검토 보고서를 작성해야 했습니다. <strong>혼자 많은 보고서를 작성해야 하는 상황</strong>에서 반복 초안 작업이 큰 부담이었습니다. 기존에는 회사 자료를 외부 AI에 올리는 것 자체가 <strong>비허가 행위</strong>라 활용이 막막했습니다.
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-head">
+          <div class="step-icon si-how">🔵</div>
+          <div class="step-title st-how">해결 방법</div>
+        </div>
+        <div class="step-text">
+          <strong>GWS 도입으로 Google Drive 자료를 Gemini에 직접 연동</strong>할 수 있게 됐습니다. 기존 보고서를 Drive에 올리고 Gemini에 "동일 형식으로 신규 보고서 초안 작성"을 지시. Drive 파일을 AI가 직접 참조해 초안을 자동 생성했습니다.
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-head">
+          <div class="step-icon si-effect">🟢</div>
+          <div class="step-title st-effect">업무 효과</div>
+        </div>
+        <div class="step-text">
+          빈칸 없는 초안이 자동 생성되어 <strong>문서 작성 부담이 크게 감소</strong>. GWS 단독 사용 대비 <strong>Drive+Gemini 연동의 시너지가 확연히 높다</strong>는 것을 직접 체감했습니다.
+        </div>
+      </div>
+    </div>
+
+    <div class="card-result">
+      <div class="result-main">📑 Drive→Gemini 직접 연동으로 초안 자동화</div>
+      <span class="result-tag">GWS 시너지 체감</span>
+      <span class="result-tag">1~2시간 절약</span>
+      <span class="result-tag">만족도 5/5</span>
+    </div>
+  </div>
+
+  <!-- ── CASE 6: 임상팀 ── -->
+  <div class="case-card">
+    <div class="card-header hc-purple">
+      <div class="card-illust il-purple">
+        <svg width="56" height="56" viewBox="0 0 56 56" fill="none">
+          <rect x="8" y="10" width="30" height="38" rx="4" fill="white" stroke="#7C4DFF" stroke-width="1.5"/>
+          <line x1="14" y1="19" x2="32" y2="19" stroke="#7C4DFF" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="14" y1="25" x2="32" y2="25" stroke="#B39DDB" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="14" y1="31" x2="26" y2="31" stroke="#B39DDB" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="14" y1="37" x2="28" y2="37" stroke="#B39DDB" stroke-width="1.5" stroke-linecap="round"/>
+          <circle cx="40" cy="36" r="14" fill="#7C4DFF"/>
+          <path d="M34 36 Q40 30 46 36" stroke="white" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+          <circle cx="40" cy="36" r="3" fill="white"/>
+          <circle cx="34" cy="36" r="2.5" fill="white" opacity="0.6"/>
+          <circle cx="46" cy="36" r="2.5" fill="white" opacity="0.6"/>
+          <path d="M38 39 L42 39" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
+          <rect x="36" y="20" width="8" height="3" rx="1.5" fill="white" opacity="0.5"/>
+        </svg>
+      </div>
+      <div class="card-meta">
+        <div class="team">임상팀</div>
+        <div class="person">이성희 팀장님 · 임상시험 / PMS 운영</div>
+      </div>
+      <span class="tool-tag tt-purple">📚 NotebookLM 챗봇</span>
+    </div>
+
+    <div class="card-steps">
+      <div class="step">
+        <div class="step-head">
+          <div class="step-icon si-prob">🔴</div>
+          <div class="step-title st-prob">문제 상황</div>
+        </div>
+        <div class="step-text">
+          임상시험·PMS 관련 SOP 문서가 <strong>약 120개</strong>에 달해, 특정 절차 확인 시 관련 문서를 일일이 검색·열람하는 데 시간이 많이 걸렸습니다.
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-head">
+          <div class="step-icon si-how">🔵</div>
+          <div class="step-title st-how">해결 방법</div>
+        </div>
+        <div class="step-text">
+          SOP 문서 <strong>120개를 NotebookLM에 모두 연동</strong>해 챗봇을 구축. 직원이 자연어로 질문하면 AI가 관련 SOP를 즉시 찾아 답변하는 구조를 만들었습니다.
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-head">
+          <div class="step-icon si-effect">🟢</div>
+          <div class="step-title st-effect">업무 효과</div>
+        </div>
+        <div class="step-text">
+          누구든 <strong>"이 절차는 어떻게 하나요?"라고 물으면 즉시 답변</strong>을 받을 수 있게 됐습니다. SOP 버전이 바뀌거나 변경사항이 생겨도 <strong>해당 문서만 삭제 후 새 문서를 추가</strong>하면 되어 챗봇 유지·관리도 매우 간편합니다. 현재 챗봇 답변의 <strong>정확도 검증(Validation) 작업을 진행 중</strong>입니다.
+        </div>
+      </div>
+    </div>
+
+    <div class="card-result">
+      <div class="result-main">🤖 SOP 120개 → 즉시 답변 AI 챗봇 구축</div>
+      <span class="result-tag">문서 검색 제로</span>
+      <span class="result-tag">버전 관리 간편</span>
+      <span class="result-tag">업무 표준화 기여</span>
+    </div>
+  </div>
+
+  <!-- ── CTA ── -->
+  <div class="cta-box">
+    <svg style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;opacity:0.1" viewBox="0 0 900 220" preserveAspectRatio="xMidYMid slice">
+      <circle cx="50"  cy="50"  r="80" fill="#fff"/>
+      <circle cx="850" cy="180" r="100" fill="#fff"/>
+      <circle cx="460" cy="10"  r="50" fill="#FBBC04"/>
+    </svg>
+    <div class="g-dots">
+      <div class="g-dot" style="background:rgba(255,255,255,0.9)"></div>
+      <div class="g-dot" style="background:#FBBC04"></div>
+      <div class="g-dot" style="background:rgba(255,255,255,0.9)"></div>
+      <div class="g-dot" style="background:#FBBC04"></div>
+    </div>
+    <h3>Google Workspace, 문서 도구가 아닙니다 ✨</h3>
+    <p>Google Workspace는 단순한 문서 편집·Drive 저장 도구가 아닙니다.<br>
+    <strong style="color:#FBBC04">Gemini AI를 업무에 연결하는 기반 플랫폼</strong>으로, 위 사례처럼<br>
+    계약서 초안·재무 분석·이미지 생성·문서 자동화까지 다양한 업무에 바로 적용할 수 있습니다.</p>
+    <div class="cta-chips">
+      <span class="cta-chip">📝 문서 초안 자동 작성</span>
+      <span class="cta-chip">📊 데이터 분석·요약</span>
+      <span class="cta-chip">🖼️ AI 이미지 생성</span>
+      <span class="cta-chip">🤖 팀 맞춤 AI 챗봇</span>
+      <span class="cta-chip">💡 아이디어 브레인스토밍</span>
+    </div>
+    <div class="cta-contact" style="font-size:15px;margin-top:4px">활용해보고 싶은 업무가 있거나, <strong style="color:#FBBC04">"이것도 AI로 가능할까?"</strong> 싶은 게 있다면<br>언제든 AI센터로 문의해주세요 → <strong style="color:#fff">AI센터 메신저</strong> 또는 <strong style="color:#fff">내부메일</strong></div>
+  </div>
+
+</div><!-- /body -->
+
+</body>
+</html>
